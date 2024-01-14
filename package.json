@@ -3,15 +3,35 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "next dev -p 3801",
+    "start01": "set PORT=3801 && next dev -p 3801",
+    "start02": "set PORT=3802 && next dev -p 3802",
+    "start03": "set PORT=3803 && next dev -p 3803",
+    "start04": "set PORT=3804 && next dev -p 3804",
+    "start11": "set PORT=3811 && next dev -p 3811",
+    "start12": "set PORT=3812 && next dev -p 3812",
+    "start13": "set PORT=3813 && next dev -p 3813",
+    "start14": "set PORT=3814 && next dev -p 3814",
+    "start16": "set PORT=3816 && next dev -p 3816",
+    "start17": "set PORT=3817 && next dev -p 3817",
     "build": "next build",
     "start": "next start",
     "lint": "next lint"
   },
   "dependencies": {
+    "@date-io/date-fns": "^3.0.0",
+    "@emotion/react": "^11.11.3",
+    "@emotion/styled": "^11.11.0",
+    "@mui/icons-material": "^5.15.4",
+    "@mui/material": "^5.15.4",
+    "@mui/system": "^5.15.4",
+    "axios": "^1.6.5",
+    "date-fns": "^3.2.0",
+    "material-ui-colors": "^1.0.0",
+    "next": "14.0.4",
+    "next-auth": "^4.24.5",
     "react": "^18",
-    "react-dom": "^18",
-    "next": "14.0.4"
+    "react-dom": "^18"
   },
   "devDependencies": {
     "eslint": "^8",
