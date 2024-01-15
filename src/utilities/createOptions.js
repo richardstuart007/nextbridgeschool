@@ -5,8 +5,8 @@ import rowCrud from './rowCrud'
 //
 //  Debug Settings
 //
-import debugSettings from '../debug/debugSettings'
-import consoleLogTime from '../../debug/consoleLogTime'
+import debugSettings from '@/debug/debugSettings'
+import consoleLogTime from '@/debug/consoleLogTime'
 const debugLog = debugSettings()
 const debugModule = 'createOptions'
 //...................................................................................

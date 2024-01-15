@@ -21,17 +21,17 @@ import QuizIcon from '@mui/icons-material/Quiz'
 //
 //  Controls
 //
-import MyButton from '../../components/controls/MyButton'
-import MyInput from '../../components/controls/MyInput'
-import MySelect from '../../components/controls/MySelect'
-import PageHeader from '../../components/controls/PageHeader'
-import useMyTable from '../../components/controls/useMyTable'
-import MyActionButton from '../../components/controls/MyActionButton'
+import MyButton from '@/components/controls/MyButton'
+import MyInput from '@/components/controls/MyInput'
+import MySelect from '@/components/controls/MySelect'
+import PageHeader from '@/components/controls/PageHeader'
+import useMyTable from '@/components/controls/useMyTable'
+import MyActionButton from '@/components/controls/MyActionButton'
 //
 //  Services
 //
-import rowCrud from '../../utilities/rowCrud'
-import buildDataQuiz from '../../services/buildDataQuiz'
+import rowCrud from '@/utilities/rowCrud'
+import buildDataQuiz from '@/services/buildDataQuiz'
 //
 //  Routing
 //
@@ -39,8 +39,8 @@ import { useRouter } from 'next/navigation'
 //
 //  Debug Settings
 //
-import debugSettings from '../../debug/debugSettings'
-import consoleLogTime from '../../debug/consoleLogTime'
+import debugSettings from '@/debug/debugSettings'
+import consoleLogTime from '@/debug/consoleLogTime'
 //...........................................................................
 // Global CONSTANTS
 //...........................................................................
@@ -49,6 +49,8 @@ import consoleLogTime from '../../debug/consoleLogTime'
 //
 const debugLog = debugSettings()
 const debugModule = 'Library'
+
+let recordsFiltered = null
 //
 //  Table Heading
 //
@@ -88,7 +90,6 @@ export default function Library() {
   //...........................................................................
   // Module STATE
   //...........................................................................
-
   //
   //  State
   //
@@ -118,7 +119,6 @@ export default function Library() {
   if (ScreenSmall) {
     headCells = headCellsSmall
     searchTypeOptions = searchTypeOptionsSmall
-
     buttonTextView = null
     buttonTextQuiz = null
   }
@@ -231,6 +231,7 @@ export default function Library() {
       //
       //  Filter
       //
+      if (debugLog) console.log(consoleLogTime(debugModule, `Page_Lib_Data`), Page_Lib_Data)
       handleSearch()
       return
     })
@@ -352,6 +353,8 @@ export default function Library() {
     startPage0,
     setStartPage0
   )
+  recordsFiltered = recordsAfterPagingAndSorting()
+  if (debugLog) console.log(consoleLogTime(debugModule, `recordsFiltered`), recordsFiltered)
   //...................................................................................
   //.  Render the form
   //...................................................................................
@@ -411,38 +414,40 @@ export default function Library() {
 
         <TblContainer>
           <TblHead />
-          <TableBody>
-            {recordsAfterPagingAndSorting().map(row => (
-              <TableRow key={row.lrlid}>
-                {ScreenSmall ? null : <TableCell>{row.lrlid}</TableCell>}
-                {ScreenSmall ? null : <TableCell>{row.lrowner}</TableCell>}
-                {ScreenSmall ? null : <TableCell>{row.lrgroup}</TableCell>}
-                {ScreenSmall ? null : <TableCell>{row.lrref}</TableCell>}
-                <TableCell>{row.lrdesc}</TableCell>
-                {ScreenSmall ? null : <TableCell>{row.lrwho}</TableCell>}
-                {ScreenSmall ? null : <TableCell>{row.lrtype}</TableCell>}
-                <TableCell>
-                  <MyActionButton
-                    startIcon={<PreviewIcon fontSize='small' />}
-                    text={buttonTextView}
-                    color='warning'
-                    onClick={() => openHyperlink(row.lrlink)}
-                  ></MyActionButton>
-                </TableCell>
-                {ScreenSmall ? null : <TableCell>{row.ogcntquestions}</TableCell>}
-                <TableCell>
-                  {row.ogcntquestions > 0 ? (
+          {recordsFiltered === undefined || recordsFiltered === null ? null : (
+            <TableBody>
+              {recordsFiltered.map(row => (
+                <TableRow key={row.lrlid}>
+                  {ScreenSmall ? null : <TableCell>{row.lrlid}</TableCell>}
+                  {ScreenSmall ? null : <TableCell>{row.lrowner}</TableCell>}
+                  {ScreenSmall ? null : <TableCell>{row.lrgroup}</TableCell>}
+                  {ScreenSmall ? null : <TableCell>{row.lrref}</TableCell>}
+                  <TableCell>{row.lrdesc}</TableCell>
+                  {ScreenSmall ? null : <TableCell>{row.lrwho}</TableCell>}
+                  {ScreenSmall ? null : <TableCell>{row.lrtype}</TableCell>}
+                  <TableCell>
                     <MyActionButton
-                      startIcon={<QuizIcon fontSize='small' />}
-                      text={buttonTextQuiz}
+                      startIcon={<PreviewIcon fontSize='small' />}
+                      text={buttonTextView}
                       color='warning'
-                      onClick={() => LibraryRow(row)}
+                      onClick={() => openHyperlink(row.lrlink)}
                     ></MyActionButton>
-                  ) : null}
-                </TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
+                  </TableCell>
+                  {ScreenSmall ? null : <TableCell>{row.ogcntquestions}</TableCell>}
+                  <TableCell>
+                    {row.ogcntquestions > 0 ? (
+                      <MyActionButton
+                        startIcon={<QuizIcon fontSize='small' />}
+                        text={buttonTextQuiz}
+                        color='warning'
+                        onClick={() => LibraryRow(row)}
+                      ></MyActionButton>
+                    ) : null}
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          )}
         </TblContainer>
         <TblPagination />
         {/*.................................................................................................*/}

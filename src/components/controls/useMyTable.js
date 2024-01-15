@@ -10,7 +10,7 @@ import {
   TablePagination,
   TableSortLabel
 } from '@mui/material'
-
+let recordsLength = 0
 //=====================================================================================
 export default function useMyTable(records, headCells, filterFn, startPage0, setStartPage0) {
   //
@@ -21,6 +21,8 @@ export default function useMyTable(records, headCells, filterFn, startPage0, set
   const [rowsPerPage, setRowsPerPage] = useState(pages[page])
   const [order, setOrder] = useState()
   const [orderBy, setOrderBy] = useState()
+
+  records ? (recordsLength = records.length) : 0
   //
   //  Start at Page 0
   //
@@ -93,7 +95,7 @@ export default function useMyTable(records, headCells, filterFn, startPage0, set
       page={page}
       rowsPerPageOptions={pages}
       rowsPerPage={rowsPerPage}
-      count={records.length}
+      count={recordsLength}
       onPageChange={handleChangePage}
       onRowsPerPageChange={handleChangeRowsPerPage}
       labelRowsPerPage='RPP'
@@ -131,6 +133,7 @@ export default function useMyTable(records, headCells, filterFn, startPage0, set
   //.  Filter, Slice a page, sort
   //.....................................................................................
   const recordsAfterPagingAndSorting = () => {
+    if (!records) return
     return stableSort(filterFn.fn(records), getComparator(order, orderBy)).slice(
       page * rowsPerPage,
       (page + 1) * rowsPerPage

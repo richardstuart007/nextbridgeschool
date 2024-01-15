@@ -6,7 +6,7 @@ import { teal } from 'material-ui-colors'
 //
 //  Components
 //
-import MyButton from '../../components/controls/MyButton'
+import MyButton from '@/components/controls/MyButton'
 //===================================================================================
 export default function QuizQuestion(params) {
   //...................................................................................

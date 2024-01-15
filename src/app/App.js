@@ -6,12 +6,12 @@ import useMediaQuery from '@mui/material/useMediaQuery'
 //
 //  Utilities
 //
-import writeApp_Env from '../utilities/writeApp_Env'
+import writeApp_Env from '@/utilities/writeApp_Env'
 //
 //  Debug Settings
 //
-import debugSettings from '../debug/debugSettings'
-import consoleLogTime from '../debug/consoleLogTime'
+import debugSettings from '@/debug/debugSettings'
+import consoleLogTime from '@/debug/consoleLogTime'
 //...........................................................................
 // Global CONSTANTS
 //...........................................................................

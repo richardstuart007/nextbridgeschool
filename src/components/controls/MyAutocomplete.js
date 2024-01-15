@@ -6,8 +6,8 @@ import Autocomplete from '@mui/material/Autocomplete'
 //
 //  Debug Settings
 //
-import debugSettings from '../../debug/debugSettings'
-import consoleLogTime from '../../debug/consoleLogTime'
+import debugSettings from '@/debug/debugSettings'
+import consoleLogTime from '@/debug/consoleLogTime'
 let debugLog
 const debugModule = 'MyAutocomplete'
 //...................................................................................

@@ -1,12 +1,12 @@
 //
 //  Utilities
 //
-import apiAxios from '../../utilities/apiAxios'
+import apiAxios from '@/utilities/apiAxios'
 //
 //  Debug Settings
 //
-import debugSettings from '../../debug/debugSettings'
-import consoleLogTime from '../../debug/consoleLogTime'
+import debugSettings from '@/debug/debugSettings'
+import consoleLogTime from '@/debug/consoleLogTime'
 const debugLog = debugSettings()
 const debugModule = 'registerUser'
 //--------------------------------------------------------------------

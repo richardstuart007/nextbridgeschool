@@ -1,15 +1,9 @@
 //
 //  Libraries
 //
-import { Avatar, TableCell, TableHead, TableRow } from '@mui/material'
-//
-//  Sub Components
-//
-import spade from '../../assets/images/spade.svg'
-import heart from '../../assets/images/heart.svg'
-import diamond from '../../assets/images/diamond.svg'
-import club from '../../assets/images/club.svg'
-
+import { TableCell, TableHead, TableRow } from '@mui/material'
+import Image from 'next/image'
+import styles from './quizhandstableheader.module.css'
 //...................................................................................
 //.  Main Line
 //...................................................................................
@@ -23,16 +17,22 @@ export default function QuizHandsTableHeader() {
         <TableRow>
           <TableCell sx={{ padding: '0px' }} align='left' style={{ width: 100 }}></TableCell>
           <TableCell sx={{ padding: '0px' }} align='left' style={{ width: 100 }}>
-            <Avatar src={spade} sx={{ height: '1rem', width: '1rem' }} />
+            <Image src='/spade.svg' width={15} height={15} className={styles.icon} alt='spade' />
           </TableCell>
           <TableCell sx={{ padding: '0px' }} align='left' style={{ width: 100 }}>
-            <Avatar src={heart} sx={{ height: '1rem', width: '1rem' }} />
+            <Image src='/heart.svg' width={15} height={15} className={styles.icon} alt='heart' />
           </TableCell>
           <TableCell sx={{ padding: '0px' }} align='left' style={{ width: 100 }}>
-            <Avatar src={diamond} sx={{ height: '1rem', width: '1rem' }} />
+            <Image
+              src='/diamond.svg'
+              width={15}
+              height={15}
+              className={styles.icon}
+              alt='diamond'
+            />
           </TableCell>
           <TableCell sx={{ padding: '0px' }} align='left' style={{ width: 100 }}>
-            <Avatar src={club} sx={{ height: '1rem', width: '1rem' }} />
+            <Image src='/club.svg' width={15} height={15} className={styles.icon} alt='club' />
           </TableCell>
         </TableRow>
       </TableHead>

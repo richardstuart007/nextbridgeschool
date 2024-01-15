@@ -7,14 +7,14 @@ import { Typography, Box } from '@mui/material'
 //
 //  Controls
 //
-import MyButton from '../../components/controls/MyButton'
+import MyButton from '@/components/controls/MyButton'
 //
 //  Sub Components
 //
-import QuizReviewAnswers from './QuizReviewAnswers'
-import QuizHands from '../QuizHands/page'
-import QuizBidding from '../QuizBidding/page'
-import QuizQuestion from '../Quiz/QuizQuestion'
+import QuizReviewAnswers from '@/components/Quiz/QuizReviewAnswers/QuizReviewAnswers'
+import QuizHands from '@/components/Quiz/QuizHands/QuizHands'
+import QuizBidding from '@/components/Quiz/QuizBidding/QuizBidding'
+import QuizQuestion from '@/components/Quiz/QuizQuestion'
 //
 //  Routing
 //
@@ -22,8 +22,8 @@ import { useRouter } from 'next/navigation'
 //
 //  Debug Settings
 //
-import debugSettings from '../../debug/debugSettings'
-import consoleLogTime from '../../debug/consoleLogTime'
+import debugSettings from '@/debug/debugSettings'
+import consoleLogTime from '@/debug/consoleLogTime'
 const debugLog = debugSettings()
 const debugModule = 'QuizReview'
 //...................................................................................

@@ -7,17 +7,17 @@ import { Paper, Grid, Typography } from '@mui/material'
 //
 //  Utilities
 //
-import apiAxios from '../../utilities/apiAxios'
-import writeSession from '../../services/writeSession'
+import apiAxios from '@/utilities/apiAxios'
+import writeSession from '@/services/writeSession'
 //
 //  Controls
 //
-import MyButton from '../../components/controls/MyButton'
+import MyButton from '@/components/controls/MyButton'
 //
 //  Debug Settings
 //
-import debugSettings from '../../debug/debugSettings'
-import consoleLogTime from '../../debug/consoleLogTime'
+import debugSettings from '@/debug/debugSettings'
+import consoleLogTime from '@/debug/consoleLogTime'
 //
 //  Routing
 //

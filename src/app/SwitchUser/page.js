@@ -12,16 +12,16 @@ import SwitchAccountIcon from '@mui/icons-material/SwitchAccount'
 //
 //  Controls
 //
-import MyActionButton from '../../components/controls/MyActionButton'
-import MyButton from '../../components/controls/MyButton'
-import MyInput from '../../components/controls/MyInput'
-import MySelect from '../../components/controls/MySelect'
-import PageHeader from '../../components/controls/PageHeader'
-import useMyTable from '../../components/controls/useMyTable'
+import MyActionButton from '@/components/controls/MyActionButton'
+import MyButton from '@/components/controls/MyButton'
+import MyInput from '@/components/controls/MyInput'
+import MySelect from '@/components/controls/MySelect'
+import PageHeader from '@/components/controls/PageHeader'
+import useMyTable from '@/components/controls/useMyTable'
 //
 //  Services
 //
-import rowCrud from '../../utilities/rowCrud'
+import rowCrud from '@/utilities/rowCrud'
 //
 //  Routing
 //
@@ -29,8 +29,8 @@ import { useRouter } from 'next/navigation'
 //
 //  Debug Settings
 //
-import debugSettings from '../../debug/debugSettings'
-import consoleLogTime from '../../debug/consoleLogTime'
+import debugSettings from '@/debug/debugSettings'
+import consoleLogTime from '@/debug/consoleLogTime'
 const debugLog = debugSettings()
 const debugModule = 'SwitchUser'
 

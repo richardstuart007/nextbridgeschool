@@ -8,15 +8,15 @@ import { Card } from '@mui/material'
 //
 //  Controls
 //
-import MyButton from '../../components/controls/MyButton'
+import MyButton from '@/components/controls/MyButton'
 //
 //  Sub Components
 //
-import QuizPanel from './QuizPanel'
-import QuizHands from '../QuizHands/page'
-import QuizBidding from '../QuizBidding/page'
-import QuizQuestion from './QuizQuestion'
-import QuizLinearProgress from './QuizLinearProgress'
+import QuizChoice from './QuizChoice'
+import QuizHands from '@/components/Quiz/QuizHands/QuizHands'
+import QuizBidding from '@/components/Quiz/QuizBidding/QuizBidding'
+import QuizQuestion from '@/components/Quiz/QuizQuestion'
+import QuizLinearProgress from '@/components/Quiz/QuizLinearProgress'
 //
 //  Routing
 //
@@ -24,8 +24,8 @@ import { useRouter } from 'next/navigation'
 //
 //  Debug Settings
 //
-import debugSettings from '../../debug/debugSettings'
-import consoleLogTime from '../../debug/consoleLogTime'
+import debugSettings from '@/debug/debugSettings'
+import consoleLogTime from '@/debug/consoleLogTime'
 let debugLog
 const debugModule = 'Quiz'
 //.............................................................................
@@ -158,7 +158,7 @@ export default function Quiz() {
       <QuizBidding qqid={quizRow.qqid} />
       <QuizHands qqid={quizRow.qqid} />
       <Card sx={{ maxWidth: 600, marginTop: '16px' }} style={{ backgroundColor: 'LightGray' }}>
-        <QuizPanel
+        <QuizChoice
           quizRow={quizRow}
           value={value}
           setValue={setValue}

@@ -1,13 +1,13 @@
 //
 //  Services
 //
-import rowCrud from '../utilities/rowCrud'
-import writeUsersSessions from '../services/writeUsersSessions'
+import rowCrud from '@/utilities/rowCrud'
+import writeUsersSessions from '@/services/writeUsersSessions'
 //
 //  Debug Settings
 //
-import debugSettings from '../debug/debugSettings'
-import consoleLogTime from '../debug/consoleLogTime'
+import debugSettings from '@/debug/debugSettings'
+import consoleLogTime from '@/debug/consoleLogTime'
 const debugLog = debugSettings()
 const debugModule = 'buildDataUser'
 //

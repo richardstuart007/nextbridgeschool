@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 //
 //  Sub Components
 //
-import MyRadioGroup from '../../components/controls/MyRadioGroup'
+import MyRadioGroup from '@/components/controls/MyRadioGroup'
 //..............................................................................
 //.  Initialisation
 //.............................................................................
@@ -13,7 +13,7 @@ let j = 0
 let Answers = []
 let label = 'Select your answer'
 //===================================================================================
-export default function QuizPanel({ quizRow, value, setValue, setId, setShowSubmit }) {
+export default function QuizChoice({ quizRow, value, setValue, setId, setShowSubmit }) {
   //
   //  State
   //

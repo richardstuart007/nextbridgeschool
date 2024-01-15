@@ -2,11 +2,12 @@ import { useState } from 'react'
 import Box from '@mui/material/Box'
 import TextField from '@mui/material/TextField'
 import Autocomplete from '@mui/material/Autocomplete'
+import Image from 'next/image'
 //
 //  Debug Settings
 //
-import debugSettings from '../../debug/debugSettings'
-import consoleLogTime from '../../debug/consoleLogTime'
+import debugSettings from '@/debug/debugSettings'
+import consoleLogTime from '@/debug/consoleLogTime'
 let debugLog
 const debugModule = 'SelectCountry'
 //...................................................................................
@@ -25,7 +26,7 @@ export default function SelectCountry(props) {
   //
   //  Countries
   //
-  const { COUNTRIES } = require('../../services/countries.js')
+  const { COUNTRIES } = require('@/services/countries.js')
   let countryObj = COUNTRIES.find(country => country.code === countryCode)
   if (!countryObj) {
     countryObj = { code: 'ZZ', label: 'World', phone: '999' }
@@ -60,13 +61,21 @@ export default function SelectCountry(props) {
       noOptionsText={'No match'}
       renderOption={(props, option) => (
         <Box component='li' sx={{ '& > img': { mr: 2, flexShrink: 0 } }} {...props}>
-          <img
+          <Image
+            src={`https://flagcdn.com/w20/${option.code.toLowerCase()}.png`}
+            width={20}
+            height={20}
+            alt='flag'
+            loading='lazy'
+            srcSet={`https://flagcdn.com/w40/${option.code.toLowerCase()}.png 2x`}
+          />
+          {/* <img
             loading='lazy'
             width='20'
             src={`https://flagcdn.com/w20/${option.code.toLowerCase()}.png`}
             srcSet={`https://flagcdn.com/w40/${option.code.toLowerCase()}.png 2x`}
             alt=''
-          />
+          /> */}
           {option.label} ({option.code}) +{option.phone}
         </Box>
       )}

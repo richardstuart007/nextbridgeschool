@@ -5,8 +5,8 @@ import apiAxios from './apiAxios'
 //
 //  Debug Settings
 //
-import debugSettings from '../debug/debugSettings'
-import consoleLogTime from '../debug/consoleLogTime'
+import debugSettings from '@/debug/debugSettings'
+import consoleLogTime from '@/debug/consoleLogTime'
 let debugLog
 const debugModule = 'rowCrud'
 //--------------------------------------------------------------------

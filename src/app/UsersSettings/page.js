@@ -8,14 +8,14 @@ import { Paper, Grid } from '@mui/material'
 //
 //  Controls
 //
-import MyButton from '../../components/controls/MyButton'
-import MyInput from '../../components/controls/MyInput'
-import MyCheckbox from '../../components/controls/MyCheckbox'
-import { useMyForm, MyForm } from '../../components/controls/useMyForm'
+import MyButton from '@/components/controls/MyButton'
+import MyInput from '@/components/controls/MyInput'
+import MyCheckbox from '@/components/controls/MyCheckbox'
+import { useMyForm, MyForm } from '@/components/controls/useMyForm'
 //
 //  Services
 //
-import rowCrud from '../../utilities/rowCrud'
+import rowCrud from '@/utilities/rowCrud'
 //
 //  Routing
 //
@@ -23,8 +23,8 @@ import { useRouter } from 'next/navigation'
 //
 //  Debug Settings
 //
-import debugSettings from '../../debug/debugSettings'
-import consoleLogTime from '../../debug/consoleLogTime'
+import debugSettings from '@/debug/debugSettings'
+import consoleLogTime from '@/debug/consoleLogTime'
 let debugLog
 const debugModule = 'UsersSettings'
 //

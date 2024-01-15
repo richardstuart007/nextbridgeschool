@@ -1,16 +1,14 @@
 //
 //  Libraries
 //
-import { Typography, Avatar, Grid } from '@mui/material'
-//
-//  Components
-//
-import cards from '../../assets/images/cards.svg'
+import { Typography, Grid } from '@mui/material'
+import Image from 'next/image'
+import styles from './layout.module.css'
 //
 //  Debug Settings
 //
-import debugSettings from '../../debug/debugSettings'
-import consoleLogTime from '../../debug/consoleLogTime'
+import debugSettings from '@/debug/debugSettings'
+import consoleLogTime from '@/debug/consoleLogTime'
 //...........................................................................
 // Global CONSTANTS
 //...........................................................................
@@ -73,7 +71,7 @@ export default function Layout() {
       <Grid container alignItems='center'>
         {/* .......................................................................................... */}
         <Grid item>
-          <Avatar src={cards} />
+          <Image src='/cards.svg' width={35} height={35} className={styles.icon} alt='cards' />
         </Grid>
         {/* .......................................................................................... */}
         {User_SignedIn ? (

@@ -20,7 +20,7 @@ export default function QuizHands({ qqid }) {
   //
   //  No data, return
   //
-  if (Page_Quiz_HandsJSON === []) return null
+  if (!Page_Quiz_HandsJSON) return null
   //
   //  Parse data
   //

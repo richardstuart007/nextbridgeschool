@@ -1,7 +1,7 @@
 'use client'
 import React from 'react'
 import styles from './navbar.module.css'
-import DarkModeToggle from '../DarkModeToggle/DarkModeToggle'
+import DarkModeToggle from '@/components/DarkModeToggle/DarkModeToggle'
 import { signOut, useSession } from 'next-auth/react'
 //
 //  Libraries
@@ -17,11 +17,11 @@ import SwitchAccountIcon from '@mui/icons-material/SwitchAccount'
 //
 //  Common Components
 //
-import Layout from '../Layout/Layout'
+import Layout from '@/components/Layout/Layout'
 //
 //  Components
 //
-import MyActionButton from '../controls/MyActionButton'
+import MyActionButton from '@/components/controls/MyActionButton'
 //
 //  Routing
 //
@@ -29,8 +29,8 @@ import { useRouter } from 'next/navigation'
 //
 //  Debug Settings
 //
-import debugSettings from '../../debug/debugSettings'
-import consoleLogTime from '../../debug/consoleLogTime'
+import debugSettings from '@/debug/debugSettings'
+import consoleLogTime from '@/debug/consoleLogTime'
 //...........................................................................
 // Global CONSTANTS
 //...........................................................................

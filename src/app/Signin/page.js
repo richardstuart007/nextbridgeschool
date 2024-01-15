@@ -7,19 +7,19 @@ import { Paper, Grid, Typography } from '@mui/material'
 //
 //  Utilities
 //
-import apiAxios from '../../utilities/apiAxios'
-import buildDataUser from '../../services/buildDataUser'
+import apiAxios from '@/utilities/apiAxios'
+import buildDataUser from '@/services/buildDataUser'
 //
 //  Controls
 //
-import MyButton from '../../components/controls/MyButton'
-import MyInput from '../../components/controls/MyInput'
-import { useMyForm, MyForm } from '../../components/controls/useMyForm'
+import MyButton from '@/components/controls/MyButton'
+import MyInput from '@/components/controls/MyInput'
+import { useMyForm, MyForm } from '@/components/controls/useMyForm'
 //
 //  Debug Settings
 //
-import debugSettings from '../../debug/debugSettings'
-import consoleLogTime from '../../debug/consoleLogTime'
+import debugSettings from '@/debug/debugSettings'
+import consoleLogTime from '@/debug/consoleLogTime'
 //
 //  Routing
 //

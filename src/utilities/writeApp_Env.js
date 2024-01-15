@@ -1,8 +1,8 @@
 //
 //  Debug Settings
 //
-import debugSettings from '../debug/debugSettings'
-import consoleLogTime from '../debug/consoleLogTime'
+import debugSettings from '@/debug/debugSettings'
+import consoleLogTime from '@/debug/consoleLogTime'
 //
 //  Debug Settings
 //

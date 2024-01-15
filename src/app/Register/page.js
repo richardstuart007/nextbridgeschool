@@ -7,14 +7,14 @@ import { Paper, Grid, Typography } from '@mui/material'
 //
 //  Utilities
 //
-import registerUser from './registerUser'
+import registerUser from '@/services/registerUser'
 //
 //  Controls
 //
-import MyButton from '../../components/controls/MyButton'
-import MyInput from '../../components/controls/MyInput'
-import { useMyForm, MyForm } from '../../components/controls/useMyForm'
-import SelectCountry from './SelectCountry'
+import MyButton from '@/components/controls/MyButton'
+import MyInput from '@/components/controls/MyInput'
+import { useMyForm, MyForm } from '@/components/controls/useMyForm'
+import SelectCountry from '@/components/controls/SelectCountry'
 //
 //  Routing
 //
@@ -22,8 +22,8 @@ import { useRouter } from 'next/navigation'
 //
 //  Debug Settings
 //
-import debugSettings from '../../debug/debugSettings'
-import consoleLogTime from '../../debug/consoleLogTime'
+import debugSettings from '@/debug/debugSettings'
+import consoleLogTime from '@/debug/consoleLogTime'
 let debugLog
 const debugModule = 'Register'
 //.............................................................................

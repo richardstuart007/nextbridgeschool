@@ -21,7 +21,7 @@ export default function QuizBidding({ qqid }) {
   //
   //  No Bidding, return
   //
-  if (Page_Quiz_BidJSON === []) return null
+  if (!Page_Quiz_BidJSON) return null
   //
   //  Parse data
   //
