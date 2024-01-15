@@ -247,7 +247,7 @@ export default function QuizHistoryDetail() {
           variant='contained'
           sx={{ float: 'right' }}
           onClick={() => {
-            router?.push('/QuizHistory')
+            router.push('/QuizHistory')
           }}
         />
         {/* .......................................................................................... */}

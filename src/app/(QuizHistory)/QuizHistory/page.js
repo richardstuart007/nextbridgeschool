@@ -281,7 +281,7 @@ export default function QuizHistory() {
     //  Get data
     //
     buildDataHistDtl(row)
-    router?.push('/QuizHistoryDetail')
+    router.push('/QuizHistoryDetail')
   }
   //...................................................................................
   //.  Prepare Row before switching to Quiz
@@ -300,7 +300,7 @@ export default function QuizHistory() {
       p_group: row.r_group
     }
     buildDataQuiz(params)
-    router?.push('/Quiz')
+    router.push('/Quiz')
   }
 
   //.............................................................................

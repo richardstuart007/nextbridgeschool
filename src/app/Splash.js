@@ -235,7 +235,7 @@ export default function Splash() {
                 value='Submit'
                 onClick={() => {
                   writeSession()
-                  router?.push('/Signin')
+                  router.push('/Signin')
                 }}
               />
             </Grid>

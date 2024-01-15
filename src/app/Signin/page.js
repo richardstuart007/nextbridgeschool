@@ -255,7 +255,7 @@ export default function Signin() {
     //
     //  Start Page
     //
-    router?.push('/Library')
+    router.push('/Library')
   }
   //...................................................................................
   //.  Render the form
@@ -324,7 +324,7 @@ export default function Signin() {
             <MyButton
               color='warning'
               onClick={() => {
-                router?.push('/Register')
+                router.push('/Register')
               }}
               text='Register'
             />

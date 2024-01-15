@@ -3,6 +3,7 @@ import React from 'react'
 import styles from './navbar.module.css'
 import DarkModeToggle from '@/components/DarkModeToggle/DarkModeToggle'
 import { signOut, useSession } from 'next-auth/react'
+import { usePathname } from 'next/navigation'
 //
 //  Libraries
 //
@@ -55,6 +56,7 @@ export default function Navbar() {
   let User_Admin = false
   let showButton_SwitchUser
   let showButton_Signout
+  const PageCurrent = usePathname()
   //...........................................................................
   // Module Main Line
   //...........................................................................
@@ -63,9 +65,13 @@ export default function Navbar() {
   //
   try {
     //
-    //  Get State
+    //  Change of Page ?
     //
-    const PageCurrent = JSON.parse(sessionStorage.getItem('Nav_Page_Current'))
+    const Nav_Page_Current = JSON.parse(sessionStorage.getItem('Nav_Page_Current'))
+    if (PageCurrent !== Nav_Page_Current) {
+      sessionStorage.setItem('Nav_Page_Previous', JSON.stringify(Nav_Page_Current))
+      sessionStorage.setItem('Nav_Page_Current', JSON.stringify(PageCurrent))
+    }
     const User_SignedIn = JSON.parse(sessionStorage.getItem('User_SignedIn'))
     //
     //  Small screen
@@ -82,26 +88,26 @@ export default function Navbar() {
     //
     //  Show Settings Button ?
     //
-    User_SignedIn && (PageCurrent === 'QuizHistory' || PageCurrent === 'Library')
+    User_SignedIn && (PageCurrent === '/QuizHistory' || PageCurrent === '/Library')
       ? (showButton_UsersSettings = true)
       : (showButton_UsersSettings = false)
     //
     //  Show History Button ?
     //
     User_SignedIn &&
-    PageCurrent !== 'QuizHistory' &&
-    PageCurrent !== 'QuizHistoryDetail' &&
-    PageCurrent !== 'UsersSettings' &&
-    PageCurrent !== 'Quiz'
+    PageCurrent !== '/QuizHistory' &&
+    PageCurrent !== '/QuizHistoryDetail' &&
+    PageCurrent !== '/UsersSettings' &&
+    PageCurrent !== '/Quiz'
       ? (showButton_QuizHistory = true)
       : (showButton_QuizHistory = false)
     //
     //  Show Library Button ?
     //
     User_SignedIn &&
-    PageCurrent !== 'Library' &&
-    PageCurrent !== 'Quiz' &&
-    PageCurrent !== 'UsersSettings'
+    PageCurrent !== '/Library' &&
+    PageCurrent !== '/Quiz' &&
+    PageCurrent !== '/UsersSettings'
       ? (showButton_Library = true)
       : (showButton_Library = false)
     //
@@ -135,7 +141,7 @@ export default function Navbar() {
               <MyActionButton
                 startIcon={<ScoreboardIcon fontSize='small' />}
                 color='warning'
-                onClick={() => router?.push('/Library')}
+                onClick={() => router.push('/Library')}
                 text='Library'
               ></MyActionButton>
             ) : null}
@@ -145,7 +151,7 @@ export default function Navbar() {
               <MyActionButton
                 startIcon={<ScoreboardIcon fontSize='small' />}
                 color='warning'
-                onClick={() => router?.push('/QuizHistory')}
+                onClick={() => router.push('/QuizHistory')}
                 text='History'
               ></MyActionButton>
             ) : null}
@@ -154,7 +160,7 @@ export default function Navbar() {
               <MyActionButton
                 startIcon={<SettingsApplicationsIcon fontSize='small' />}
                 color='warning'
-                onClick={() => router?.push('/UsersSettings')}
+                onClick={() => router.push('/UsersSettings')}
                 text={buttonTextSettings}
               ></MyActionButton>
             ) : null}
@@ -164,7 +170,7 @@ export default function Navbar() {
               <MyActionButton
                 startIcon={<SwitchAccountIcon fontSize='small' />}
                 color='warning'
-                onClick={() => router?.push('/SwitchUser')}
+                onClick={() => router.push('/SwitchUser')}
                 text='Switch User'
               ></MyActionButton>
             ) : null}
@@ -176,7 +182,7 @@ export default function Navbar() {
                 onClick={() => {
                   const OwnersString = JSON.parse(sessionStorage.getItem('User_OwnersString'))
                   sessionStorage.setItem('User_OwnersString_Prev', JSON.stringify(OwnersString))
-                  router?.push('/Signin')
+                  router.push('/Signin')
                 }}
                 text={buttonTextSignout}
               ></MyActionButton>

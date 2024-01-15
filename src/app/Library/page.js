@@ -257,7 +257,7 @@ export default function Library() {
       p_group: row.lrgroup
     }
     buildDataQuiz(params)
-    router?.push('/Quiz')
+    router.push('/Quiz')
   }
   //.............................................................................
   //  Search/Filter

@@ -140,7 +140,7 @@ export default function Quiz() {
     //  End of data
     //
     if (g_Idx + 1 >= g_questCount) {
-      router?.push('/QuizReview')
+      router.push('/QuizReview')
     }
     //
     //  Next row
@@ -192,7 +192,7 @@ export default function Quiz() {
           text='Back'
           color='warning'
           variant='contained'
-          onClick={() => router?.push('/Library')}
+          onClick={() => router.back()}
         />
         {/* .......................................................................................... */}
         {g_Idx > 0 ? (
@@ -202,7 +202,7 @@ export default function Quiz() {
             color='warning'
             variant='contained'
             sx={{ float: 'right' }}
-            onClick={() => router?.push('/QuizReview')}
+            onClick={() => router.push('/QuizReview')}
           />
         ) : null}
       </Box>

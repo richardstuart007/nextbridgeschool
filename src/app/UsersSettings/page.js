@@ -146,7 +146,7 @@ export default function UsersSettings() {
       //
       //  return to previous
       //
-      router?.push('/Library')
+      router.back()
     }
   }
   //.............................................................................
@@ -333,7 +333,7 @@ export default function UsersSettings() {
             text='Back'
             color='warning'
             variant='contained'
-            onClick={() => router?.push('/Library')}
+            onClick={() => router.back()}
           />
         </Grid>
         {/* .......................................................................................... */}

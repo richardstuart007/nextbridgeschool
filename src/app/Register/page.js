@@ -170,7 +170,7 @@ function Register() {
         const Usersrow = rtnObj.rtnRows[0]
         setForm_message(`Data updated in Database with ID(${Usersrow.u_uid})`)
         sessionStorage.setItem('User_User', JSON.stringify(Usersrow))
-        router?.push('/Signin')
+        router.push('/Signin')
       } else {
         //
         //  Error
@@ -323,7 +323,7 @@ function Register() {
             <MyButton
               color='warning'
               onClick={() => {
-                router?.push('/Signin')
+                router.push('/Signin')
               }}
               text='Signin'
             />

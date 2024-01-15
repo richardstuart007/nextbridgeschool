@@ -227,7 +227,8 @@ export default function QuizReview() {
           variant='contained'
           sx={{ float: 'right' }}
           onClick={() => {
-            router?.push('/QuizHistory')
+            sessionStorage.setItem('Page_Quiz_Reset', true)
+            router.back()
           }}
         />
         {/*.................................................................................................*/}

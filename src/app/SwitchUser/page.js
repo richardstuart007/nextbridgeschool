@@ -188,7 +188,7 @@ export default function SwitchUser() {
     //  Force Rebuild History
     //
     sessionStorage.setItem('Page_History_Rebuild', true)
-    router?.push('/QuizHistory')
+    router.push('/QuizHistory')
   }
   //...................................................................................
   //.  Render the form
