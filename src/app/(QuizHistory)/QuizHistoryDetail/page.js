@@ -2,19 +2,17 @@
 //
 //  Libraries
 //
-import { useState, useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Typography, Box } from '@mui/material'
 //
 //  Controls
 //
-import MyButton from '@/components/controls/MyButton'
-//
-//  Sub Components
-//
+import MyButton from '@/components/Controls/MyButton'
 import QuizReviewAnswers from '@/components/Quiz/QuizReviewAnswers/QuizReviewAnswers'
 import QuizHands from '@/components/Quiz/QuizHands/QuizHands'
 import QuizBidding from '@/components/Quiz/QuizBidding/QuizBidding'
 import QuizQuestion from '@/components/Quiz/QuizQuestion'
+import sessionStorageGet from '@/services/sessionStorage/sessionStorageGet'
 //
 //  Routing
 //
@@ -54,7 +52,7 @@ export default function QuizHistoryDetail() {
   //
   //  Signed in User
   //
-  const User_User = JSON.parse(sessionStorage.getItem('User_User'))
+  const User_User = sessionStorageGet({ caller: debugModule, itemName: 'User_User' })
   //
   //  Load the data array from the store
   //
@@ -98,7 +96,7 @@ export default function QuizHistoryDetail() {
     //
     //  Get Row Values
     //
-    const row = JSON.parse(sessionStorage.getItem('Page_Qd_Row'))
+    const row = sessionStorageGet({ caller: debugModule, itemName: 'Page_Qd_Row' })
     updateSelection(row)
   }
   //...................................................................................
@@ -108,7 +106,7 @@ export default function QuizHistoryDetail() {
     //
     //  Get Stored Data
     //
-    const Page_Quiz_Q_Flt = JSON.parse(sessionStorage.getItem('Page_Quiz_Q_Flt'))
+    const Page_Quiz_Q_Flt = sessionStorageGet({ caller: debugModule, itemName: 'Page_Quiz_Q_Flt' })
     const Hist_r_ans = row.r_ans
     //
     //  Questions
@@ -222,7 +220,6 @@ export default function QuizHistoryDetail() {
       <Box sx={{ mt: 2, maxWidth: 600 }}>
         {hideNextButton ? null : (
           <MyButton
-            type='submit'
             text='Next'
             color='primary'
             variant='contained'
@@ -232,7 +229,6 @@ export default function QuizHistoryDetail() {
         {/* .......................................................................................... */}
         {hidePreviousButton ? null : (
           <MyButton
-            type='submit'
             text='Previous'
             color='primary'
             variant='contained'
@@ -241,7 +237,6 @@ export default function QuizHistoryDetail() {
         )}
         {/* .......................................................................................... */}
         <MyButton
-          type='submit'
           text='Back'
           color='warning'
           variant='contained'

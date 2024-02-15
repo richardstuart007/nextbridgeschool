@@ -1,18 +1,19 @@
 //
 //  Sub Components
 //
+import React from 'react'
 import MyButton from './MyButton'
 
 //=====================================================================================
 export default function MyActionButton(props) {
-  const { color, children, onClick, ...other } = props
+  const { children, onClick, ...other } = props
 
   return (
     <MyButton
       sx={{
         ':hover': {
-          bgcolor: 'yellow'
-        }
+          bgcolor: 'yellow',
+        },
       }}
       onClick={onClick}
       {...other}

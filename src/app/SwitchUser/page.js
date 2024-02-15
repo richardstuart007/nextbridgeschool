@@ -2,7 +2,7 @@
 //
 //  Libraries
 //
-import { useState, useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import PeopleOutlineTwoToneIcon from '@mui/icons-material/PeopleOutlineTwoTone'
 import { Paper, TableBody, TableRow, TableCell, Toolbar, InputAdornment, Box } from '@mui/material'
 import SearchIcon from '@mui/icons-material/Search'
@@ -12,16 +12,17 @@ import SwitchAccountIcon from '@mui/icons-material/SwitchAccount'
 //
 //  Controls
 //
-import MyActionButton from '@/components/controls/MyActionButton'
-import MyButton from '@/components/controls/MyButton'
-import MyInput from '@/components/controls/MyInput'
-import MySelect from '@/components/controls/MySelect'
-import PageHeader from '@/components/controls/PageHeader'
-import useMyTable from '@/components/controls/useMyTable'
+import MyActionButton from '@/components/Controls/MyActionButton'
+import MyButton from '@/components/Controls/MyButton'
+import MyInput from '@/components/Controls/MyInput'
+import MySelect from '@/components/Controls/MySelect'
+import PageHeader from '@/components/Controls/PageHeader'
+import useMyTable from '@/components/Controls/useMyTable'
 //
 //  Services
 //
-import rowCrud from '@/utilities/rowCrud'
+import apiRowCrud from '@/services/dbApi/apiRowCrud'
+import sessionStorageSet from '@/services/sessionStorage/sessionStorageSet'
 //
 //  Routing
 //
@@ -31,9 +32,8 @@ import { useRouter } from 'next/navigation'
 //
 import debugSettings from '@/debug/debugSettings'
 import consoleLogTime from '@/debug/consoleLogTime'
-const debugLog = debugSettings()
+let debugLog
 const debugModule = 'SwitchUser'
-
 //
 //  Table Heading
 //
@@ -45,19 +45,20 @@ const headCells = [
   { id: 'u_fedid', label: 'Bridge ID' },
   { id: 'u_fedcountry', label: 'Country' },
   { id: 'u_dftmaxquestions', label: 'Max Questions' },
-  { id: 'actions', label: 'Actions', disableSorting: true }
+  { id: 'actions', label: 'Actions', disableSorting: true },
 ]
 const searchTypeOptions = [
   { id: 'u_email', title: 'Email' },
   { id: 'u_user', title: 'User' },
   { id: 'u_uid', title: 'ID' },
   { id: 'u_name', title: 'Name' },
-  { id: 'u_fedid', title: 'Bridge ID' }
+  { id: 'u_fedid', title: 'Bridge ID' },
 ]
 //...................................................................................
 //.  Main Line
 //...................................................................................
 export default function SwitchUser() {
+  debugLog = debugSettings()
   if (debugLog) console.log(consoleLogTime(debugModule, 'Start'))
   const router = useRouter()
   //.............................................................................
@@ -68,7 +69,7 @@ export default function SwitchUser() {
   const [filterFn, setFilterFn] = useState({
     fn: items => {
       return items
-    }
+    },
   })
   const [searchType, setSearchType] = useState('u_name')
   const [searchValue, setSearchValue] = useState('')
@@ -104,9 +105,9 @@ export default function SwitchUser() {
       AxCaller: debugModule,
       AxTable: 'users',
       AxAction: 'SELECTSQL',
-      AxString: AxString
+      AxString: AxString,
     }
-    var myPromiseGet = rowCrud(rowCrudparams)
+    var myPromiseGet = apiRowCrud(rowCrudparams)
     //
     //  Resolve Status
     //
@@ -175,19 +176,31 @@ export default function SwitchUser() {
           default:
         }
         return itemsFilter
-      }
+      },
     })
   }
   //.............................................................................
   //  Switch User
   //.............................................................................
   function submitSwitchUser(row) {
-    sessionStorage.setItem('User_User', JSON.stringify(row))
-    sessionStorage.setItem('User_UserSwitch', JSON.stringify(true))
+    sessionStorageSet({
+      caller: debugModule,
+      itemName: 'User_User',
+      itemValue: row,
+    })
+    sessionStorageSet({
+      caller: debugModule,
+      itemName: 'User_UserSwitch',
+      itemValue: true,
+    })
     //
     //  Force Rebuild History
     //
-    sessionStorage.setItem('Page_History_Rebuild', true)
+    sessionStorageSet({
+      caller: debugModule,
+      itemName: 'Page_History_Rebuild',
+      itemValue: true,
+    })
     router.push('/QuizHistory')
   }
   //...................................................................................
@@ -211,7 +224,7 @@ export default function SwitchUser() {
                 <InputAdornment position='start'>
                   <SearchIcon />
                 </InputAdornment>
-              )
+              ),
             }}
             onChange={e => setSearchValue(e.target.value)}
           />

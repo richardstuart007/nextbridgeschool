@@ -1,8 +1,8 @@
-import { useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 //
 //  Sub Components
 //
-import MyRadioGroup from '@/components/controls/MyRadioGroup'
+import MyRadioGroup from '@/components/Controls/MyRadioGroup'
 //..............................................................................
 //.  Initialisation
 //.............................................................................
@@ -23,7 +23,6 @@ export default function QuizChoice({ quizRow, value, setValue, setId, setShowSub
   //
   useEffect(() => {
     newRow()
-    // eslint-disable-next-line
   }, [quizRow])
   //...................................................................................
   //  Load Answers array with answer element
@@ -76,7 +75,7 @@ export default function QuizChoice({ quizRow, value, setValue, setId, setShowSub
         random: Math.random(),
         id: j,
         idnum: j,
-        title: answer
+        title: answer,
       }
       Answers.push(ansObj)
     }

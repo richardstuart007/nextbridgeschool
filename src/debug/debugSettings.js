@@ -1,24 +1,33 @@
+'use client'
+//
+//  Default values & Environment values combined
+//
+let DEBUG_LOG_OVERRIDE = false
+let DEBUG_LOG = false
+let g_firstTime = true
 export default function debugSettings(debug = false) {
   //
-  //  Default values
+  //  Environment Variables
   //
-  let DEBUG_LOG_OVERRIDE = false
-  let DEBUG_LOG = false
-  //
-  //  Application Environment Variables
-  //
-  const jsonApp_Env = sessionStorage.getItem('App_Env')
-  //
-  //  Apply stored values
-  //
-  if (jsonApp_Env) {
-    const App_Env = JSON.parse(jsonApp_Env)
-    DEBUG_LOG_OVERRIDE = App_Env.DEBUG_LOG_OVERRIDE
-    DEBUG_LOG = App_Env.DEBUG_LOG
+  if (g_firstTime) {
+    g_firstTime = false
+    if (process.env.NEXT_PUBLIC_DEBUG_LOG_OVERRIDE) {
+      process.env.NEXT_PUBLIC_DEBUG_LOG_OVERRIDE === 'true'
+        ? (DEBUG_LOG_OVERRIDE = true)
+        : (DEBUG_LOG_OVERRIDE = false)
+    }
+    if (process.env.NEXT_PUBLIC_DEBUG_LOG) {
+      process.env.NEXT_PUBLIC_DEBUG_LOG === 'true' ? (DEBUG_LOG = true) : (DEBUG_LOG = false)
+    }
+    console.log('DEBUG_LOG_OVERRIDE ', DEBUG_LOG_OVERRIDE)
+    console.log('DEBUG_LOG ', DEBUG_LOG)
   }
+  //
+  //  Override set at environment level ?
+  //
   if (DEBUG_LOG_OVERRIDE) return DEBUG_LOG
   //
-  // No Override - return incomming parameter (or default of false)
+  // No Override - return incomming parameter
   //
   return debug
 }

@@ -1,27 +1,29 @@
 //
-//  Utilities
+//  services
 //
 import apiAxios from './apiAxios'
+import sessionStorageGet from '@/services/sessionStorage/sessionStorageGet'
 //
 //  Debug Settings
 //
 import debugSettings from '@/debug/debugSettings'
 import consoleLogTime from '@/debug/consoleLogTime'
 let debugLog
-const debugModule = 'rowCrud'
+const debugModule = 'apiRowCrud'
 //--------------------------------------------------------------------
 //-  Main Line
 //--------------------------------------------------------------------
-export default async function rowCrud(props) {
-  if (debugLog) console.log(consoleLogTime(debugModule, 'Start'))
+export default async function apiRowCrud(props) {
   //
   //  Debug Settings
   //
   debugLog = debugSettings()
+  if (debugLog) console.log(consoleLogTime(debugModule, 'Start'))
+  if (debugLog) console.log(consoleLogTime(debugModule, 'props'), props)
   //
   //  Application Environment Variables
   //
-  const App_Env = JSON.parse(sessionStorage.getItem('App_Env'))
+  const App_Env = sessionStorageGet({ caller: debugModule, itemName: 'App_Env' })
   //
   //  Define returned object (for errors)
   //
@@ -33,7 +35,7 @@ export default async function rowCrud(props) {
     rtnCatchFunction: '',
     rtnCatch: false,
     rtnCatchMsg: '',
-    rtnRows: []
+    rtnRows: [],
   }
   //
   //  Deconstruct
@@ -49,9 +51,9 @@ export default async function rowCrud(props) {
     AxKeyName,
     AxOrderBy,
     AxOrderByRaw,
-    AxTimeout
+    AxTimeout,
   } = props
-  if (debugLog) console.log(consoleLogTime(debugModule, 'Props'), { ...props })
+  if (debugLog) console.log(consoleLogTime(debugModule, 'Props'), props)
   const AxClient = `${debugModule}/${AxCaller}`
   //
   //  Try
@@ -79,7 +81,7 @@ export default async function rowCrud(props) {
     //
     //  Return value from Server
     //
-    if (debugLog) console.log(consoleLogTime(debugModule, 'rtnObjServer'), { ...rtnObjServer })
+    if (debugLog) console.log(consoleLogTime(debugModule, 'rtnObjServer'), rtnObjServer)
     return rtnObjServer
     //
     //  Catch Errors
@@ -88,8 +90,8 @@ export default async function rowCrud(props) {
     if (debugLog) console.log(consoleLogTime(debugModule, 'Catch'))
     console.log(e)
     rtnErr.rtnCatch = true
-    rtnErr.rtnCatchMsg = 'rowCrud catch error'
-    if (debugLog) console.log(consoleLogTime(debugModule, 'rtnErr'), { ...rtnErr })
+    rtnErr.rtnCatchMsg = 'apiRowCrud catch error'
+    if (debugLog) console.log(consoleLogTime(debugModule, 'rtnErr'), rtnErr)
     return rtnErr
   }
   //--------------------------------------------------------------------
@@ -156,12 +158,12 @@ export default async function rowCrud(props) {
         AxRow: AxRow,
         AxKeyName: AxKeyName,
         AxOrderBy: AxOrderBy,
-        AxOrderByRaw: AxOrderByRaw
+        AxOrderByRaw: AxOrderByRaw,
       }
       //
       //  Base URL
       //
-      const App_URL = JSON.parse(sessionStorage.getItem('App_URL'))
+      const App_URL = sessionStorageGet({ caller: debugModule, itemName: 'App_URL' })
       //
       //  Full URL
       //
@@ -183,10 +185,10 @@ export default async function rowCrud(props) {
         AxUrl: URL,
         AxData: body,
         AxTimeout: AxTimeout,
-        AxInfo: info
+        AxInfo: info,
       }
       const rtnObjServer = await apiAxios(apiAxiosProps)
-      if (debugLog) console.log(consoleLogTime(debugModule, 'rtnObjServer'), { ...rtnObjServer })
+      if (debugLog) console.log(consoleLogTime(debugModule, 'rtnObjServer'), rtnObjServer)
       return rtnObjServer
       //
       // Errors
@@ -202,7 +204,7 @@ export default async function rowCrud(props) {
         rtnCatchFunction: debugModule,
         rtnCatch: true,
         rtnCatchMsg: 'Catch calling apiAxios',
-        rtnRows: []
+        rtnRows: [],
       }
       return rtnErr
     }

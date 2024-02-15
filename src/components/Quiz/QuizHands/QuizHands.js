@@ -2,7 +2,12 @@
 //
 //  Libraries
 //
+import React from 'react'
 import { Table, TableBody, Card } from '@mui/material'
+//
+//  services
+//
+import sessionStorageGet from '@/services/sessionStorage/sessionStorageGet'
 //
 //  Sub Components
 //
@@ -16,15 +21,14 @@ export default function QuizHands({ qqid }) {
   //
   //  Get hands
   //
-  const Page_Quiz_HandsJSON = sessionStorage.getItem('Page_Quiz_Hands')
+  const Page_Quiz_Hands = sessionStorageGet({
+    caller: debugModule,
+    itemName: 'Page_Quiz_Hands',
+  })
   //
   //  No data, return
   //
-  if (!Page_Quiz_HandsJSON) return null
-  //
-  //  Parse data
-  //
-  const Page_Quiz_Hands = JSON.parse(Page_Quiz_HandsJSON)
+  if (!Page_Quiz_Hands) return null
   //
   //  Find the HandsRow for this ID
   //
@@ -51,7 +55,7 @@ export default function QuizHands({ qqid }) {
     const handObj = {
       rowCount: 'RowCount' + RowCount.toString(),
       position: 'North',
-      hand: []
+      hand: [],
     }
     handObj.hand = [...HandsRow.hnorth]
     HandObjArray.push(handObj)
@@ -64,7 +68,7 @@ export default function QuizHands({ qqid }) {
     const handObj = {
       rowCount: 'RowCount' + RowCount.toString(),
       position: 'East',
-      hand: []
+      hand: [],
     }
     handObj.hand = [...HandsRow.heast]
     HandObjArray.push(handObj)
@@ -77,7 +81,7 @@ export default function QuizHands({ qqid }) {
     const handObj = {
       rowCount: 'RowCount' + RowCount.toString(),
       position: 'South',
-      hand: []
+      hand: [],
     }
     handObj.hand = [...HandsRow.hsouth]
     HandObjArray.push(handObj)
@@ -90,7 +94,7 @@ export default function QuizHands({ qqid }) {
     const handObj = {
       rowCount: 'RowCount' + RowCount.toString(),
       position: 'West',
-      hand: []
+      hand: [],
     }
     handObj.hand = [...HandsRow.hwest]
     HandObjArray.push(handObj)

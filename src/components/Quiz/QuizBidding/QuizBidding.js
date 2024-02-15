@@ -2,7 +2,12 @@
 //
 //  Libraries
 //
+import React from 'react'
 import { Table, TableBody, Card } from '@mui/material'
+//
+//  services
+//
+import sessionStorageGet from '@/services/sessionStorage/sessionStorageGet'
 //
 //  Sub Components
 //
@@ -17,15 +22,14 @@ export default function QuizBidding({ qqid }) {
   //
   //  Get Bidding
   //
-  const Page_Quiz_BidJSON = sessionStorage.getItem('Page_Quiz_Bid')
+  const Page_Quiz_Bid = sessionStorageGet({
+    caller: debugModule,
+    itemName: 'Page_Quiz_Bid',
+  })
   //
   //  No Bidding, return
   //
-  if (!Page_Quiz_BidJSON) return null
-  //
-  //  Parse data
-  //
-  const Page_Quiz_Bid = JSON.parse(Page_Quiz_BidJSON)
+  if (!Page_Quiz_Bid) return null
   //
   //  Find the BiddingRow
   //
@@ -59,7 +63,7 @@ export default function QuizBidding({ qqid }) {
       //
       const bidObj = {
         bqid: '',
-        suit: ''
+        suit: '',
       }
       const level = bqid.substr(0, 1)
       switch (level) {
@@ -116,7 +120,7 @@ export default function QuizBidding({ qqid }) {
     //
     const objTemp = {
       roundCount: '',
-      innerArray: []
+      innerArray: [],
     }
     RoundCount++
     objTemp.roundCount = 'Round' + RoundCount.toString()

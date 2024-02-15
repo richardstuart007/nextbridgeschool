@@ -1,49 +1,41 @@
 //
-//  Utilities
+//  services
 //
-import apiAxios from '@/utilities/apiAxios'
+import apiAxios from '@/services/dbApi/apiAxios'
+import sessionStorageGet from '@/services/sessionStorage/sessionStorageGet'
 //
 //  Debug Settings
 //
-import debugSettings from '@/debug/debugSettings'
-import consoleLogTime from '@/debug/consoleLogTime'
-const debugLog = debugSettings()
-const debugModule = 'registerUser'
+import debugSettings from '../../debug/debugSettings'
+import consoleLogTime from '../../debug/consoleLogTime'
+let debugLog
+const debugModule = 'writeUsersPwd'
 //--------------------------------------------------------------------
 //-  Main Line
 //--------------------------------------------------------------------
-export default async function registerUser(props) {
+export default async function writeUsersPwd(props) {
+  debugLog = debugSettings()
   if (debugLog) console.log(consoleLogTime(debugModule, 'Start'))
   //
   //  Application Environment Variables
   //
-  const App_Env = JSON.parse(sessionStorage.getItem('App_Env'))
+  const App_Env = sessionStorageGet({
+    caller: debugModule,
+    itemName: 'App_Env',
+  })
   if (debugLog) console.log(consoleLogTime(debugModule, 'App_Env'), { ...App_Env })
   //
   //  Deconstruct props
   //
-  const {
-    AxCaller,
-    user,
-    email,
-    password,
-    name,
-    fedid,
-    fedcountry,
-    dftmaxquestions,
-    dftowner,
-    showprogress,
-    showscore,
-    sortquestions,
-    skipcorrect,
-    admin,
-    dev
-  } = props
+  const { AxCaller, user, password } = props
   let AxClient = `${debugModule}/${AxCaller}`
   //
   //  Get the URL
   //
-  const App_URL = JSON.parse(sessionStorage.getItem('App_URL'))
+  const App_URL = sessionStorageGet({
+    caller: debugModule,
+    itemName: 'App_URL',
+  })
   //
   // Fetch the data
   //
@@ -60,27 +52,15 @@ export default async function registerUser(props) {
       //
       body = {
         AxClient: AxClient,
-        AxTable: 'users',
+        AxTable: 'userspwd',
         user: user,
-        email: email,
         password: password,
-        name: name,
-        fedid: fedid,
-        fedcountry: fedcountry,
-        dftmaxquestions: dftmaxquestions,
-        dftowner: dftowner,
-        showprogress: showprogress,
-        showscore: showscore,
-        sortquestions: sortquestions,
-        skipcorrect: skipcorrect,
-        admin: admin,
-        dev: dev
       }
-      const URL = App_URL + App_Env.URL_REGISTER
+      const URL = App_URL + App_Env.URL_REGISTERPWD
       //
       //  Info
       //
-      const info = `Client(${AxClient}) Action(Register)`
+      const info = `Client(${AxClient}) Action(RegisterPwd)`
       //
       //  SQL database
       //
@@ -88,7 +68,7 @@ export default async function registerUser(props) {
         AxUrl: URL,
         AxData: body,
         AxTimeout: 2500,
-        AxInfo: info
+        AxInfo: info,
       }
       rtnObj = await apiAxios(apiAxiosProps)
       return rtnObj
@@ -105,7 +85,7 @@ export default async function registerUser(props) {
         rtnCatchFunction: debugModule,
         rtnCatch: true,
         rtnCatchMsg: 'Catch calling apiAxios',
-        rtnRows: []
+        rtnRows: [],
       }
       return rtnObj
     }

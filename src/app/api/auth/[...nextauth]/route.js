@@ -1,6 +1,6 @@
 import NextAuth from 'next-auth'
-import GithubProvider from 'next-auth/providers/github'
-import GoogleProvider from 'next-auth/providers/google'
+// import GithubProvider from 'next-auth/providers/github'
+// import GoogleProvider from 'next-auth/providers/google'
 // import CredentialsProvider from 'next-auth/providers/credentials'
 // import User from '@/models/User'
 // import connect from '@/utils/db'
@@ -14,16 +14,13 @@ const handler = NextAuth({
     //   async authorize(credentials) {
     //     //Check if the user exists.
     //     await connect()
-
     //     try {
     //       const user = await User.findOne({
     //         email: credentials.email
     //       })
-
     //       if (user) {
     //         // const isPasswordCorrect = await bcrypt.compare(credentials.password, user.password)
     //         const isPasswordCorrect = true
-
     //         if (isPasswordCorrect) {
     //           return user
     //         } else {
@@ -37,18 +34,18 @@ const handler = NextAuth({
     //     }
     //   }
     // }),
-    GithubProvider({
-      clientId: process.env.GITHUB_ID,
-      clientSecret: process.env.GITHUB_SECRET
-    }),
-    GoogleProvider({
-      clientId: process.env.GOOGLE_CLIENT_ID,
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET
-    })
+    // GithubProvider({
+    //   clientId: process.env.GITHUB_ID,
+    //   clientSecret: process.env.GITHUB_SECRET,
+    // }),
+    // GoogleProvider({
+    //   clientId: process.env.GOOGLE_CLIENT_ID,
+    //   clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+    // }),
   ],
   pages: {
-    error: '/dashboard/login'
-  }
+    error: '/',
+  },
 })
 
 export { handler as GET, handler as POST }

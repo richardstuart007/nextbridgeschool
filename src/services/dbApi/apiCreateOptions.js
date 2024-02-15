@@ -1,18 +1,21 @@
+'use client'
 //
-//  Utilities
+//  services
 //
-import rowCrud from './rowCrud'
+import apiRowCrud from './apiRowCrud'
+import sessionStorageSet from '@/services/sessionStorage/sessionStorageSet'
 //
 //  Debug Settings
 //
 import debugSettings from '@/debug/debugSettings'
 import consoleLogTime from '@/debug/consoleLogTime'
-const debugLog = debugSettings()
-const debugModule = 'createOptions'
+let debugLog
+const debugModule = 'apiCreateOptions'
 //...................................................................................
 //.  Main Line
 //...................................................................................
-export default function createOptions(props) {
+export default function apiCreateOptions(props) {
+  debugLog = debugSettings()
   if (debugLog) console.log(consoleLogTime(debugModule, 'Start'))
   const {
     cop_AxTable,
@@ -21,12 +24,16 @@ export default function createOptions(props) {
     cop_id,
     cop_title,
     cop_store,
-    cop_received
+    cop_received,
   } = props
   //
   //  Received flag
   //
-  sessionStorage.setItem(cop_received, false)
+  sessionStorageSet({
+    caller: debugModule,
+    itemName: cop_received,
+    itemValue: false,
+  })
   //
   //  Process promise
   //
@@ -37,9 +44,9 @@ export default function createOptions(props) {
     AxCaller: debugModule,
     AxTable: cop_AxTable,
     AxAction: 'SELECTSQL',
-    AxString: AxString
+    AxString: AxString,
   }
-  const myPromiseGet = rowCrud(rowCrudparams)
+  const myPromiseGet = apiRowCrud(rowCrudparams)
   //
   //  Resolve Status
   //
@@ -74,7 +81,7 @@ export default function createOptions(props) {
       data.forEach(item => {
         const itemObj = {
           id: item[cop_id],
-          title: item[cop_title]
+          title: item[cop_title],
         }
         Options.push(itemObj)
       })
@@ -87,7 +94,7 @@ export default function createOptions(props) {
         const itemObj = {
           owner: item[cop_owner],
           id: item[cop_id],
-          title: item[cop_title]
+          title: item[cop_title],
         }
         Options.push(itemObj)
       })
@@ -95,11 +102,19 @@ export default function createOptions(props) {
     //
     //  Store
     //
-    sessionStorage.setItem(cop_store, JSON.stringify(Options))
+    sessionStorageSet({
+      caller: debugModule,
+      itemName: cop_store,
+      itemValue: Options,
+    })
     //
     //  Received flag
     //
-    sessionStorage.setItem(cop_received, true)
+    sessionStorageSet({
+      caller: debugModule,
+      itemName: cop_received,
+      itemValue: true,
+    })
   }
   //...................................................................................
 }

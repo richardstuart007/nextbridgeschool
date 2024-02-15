@@ -1,14 +1,62 @@
+import sessionStorageSet from '@/services/sessionStorage/sessionStorageSet'
 //
 //  Debug Settings
 //
 import debugSettings from '@/debug/debugSettings'
 import consoleLogTime from '@/debug/consoleLogTime'
+let debugLog = false
+const debugModule = 'Appwrite_App_Env'
 //
-//  Debug Settings
-//
-let debugLog
-const debugModule = 'writeApp_Env'
-export default function writeApp_Env() {
+import {
+  DEBUG_LOG_OVERRIDE,
+  DEBUG_LOG,
+  PAGESTART,
+  SERVER_DATABASE,
+  NODE_ENV,
+  TIMEOUT,
+  TIMEOUT_EXTRA,
+  TIMEOUT_RETRY,
+  SERVER01,
+  DATABASE01,
+  SERVERURL01,
+  SERVER02,
+  DATABASE02,
+  SERVERURL02,
+  SERVER03,
+  DATABASE03,
+  SERVERURL03,
+  SERVER04,
+  DATABASE04,
+  SERVERURL04,
+  SERVER11,
+  SERVERURL11,
+  SERVER12,
+  SERVERURL12,
+  SERVER13,
+  SERVERURL13,
+  SERVER14,
+  SERVERURL14,
+  SERVER16,
+  DATABASE6,
+  SERVERURL16,
+  SERVER17,
+  DATABASE7,
+  SERVERURL17,
+  DFT_USER_MAXQUESTIONS,
+  DFT_USER_OWNER,
+  DFT_USER_SHOWPROGRESS,
+  DFT_USER_SHOWSCORE,
+  DFT_USER_SORTQUESTIONS,
+  DFT_USER_SKIPCORRECT,
+  URL_HELLO,
+  URL_REGISTER,
+  URL_REGISTERPWD,
+  URL_SIGNIN,
+  URL_TABLES,
+} from './AppConstants'
+
+//...........................................................................
+export default function Appwrite_App_Env() {
   //
   //  Debug Settings
   //
@@ -17,57 +65,57 @@ export default function writeApp_Env() {
   //  Defaults
   //...........................................................................
   const App_Env = {
-    DEBUG_LOG_OVERRIDE: false,
-    DEBUG_LOG: false,
-    PAGESTART: '/Library',
-    SERVER_DATABASE: '04',
-    NODE_ENV: 'production',
-    TIMEOUT: 1000,
-    TIMEOUT_EXTRA: 1500,
-    TIMEOUT_RETRY: 2,
-    SERVER01: 'REMOTE:Render/3901',
-    DATABASE01: 'REMOTE-1:Elephant',
-    SERVERURL01: 'https://bridgeserver01.onrender.com',
-    SERVER02: 'REMOTE:Render/3902',
-    DATABASE02: 'REMOTE-2:Railway',
-    SERVERURL02: 'https://bridgeserver02.onrender.com',
-    SERVER03: 'REMOTE:Cyclic/3903',
-    DATABASE03: 'REMOTE-3:Elephant',
-    SERVERURL03: 'https://bridgeserver03.cyclic.app',
-    SERVER04: 'REMOTE:Cyclic/3904',
-    DATABASE04: 'REMOTE-4:Railway04',
-    SERVERURL04: 'https://bridgeserver04.cyclic.app',
-    SERVER11: 'LOCAL:3911',
-    SERVERURL11: 'http://localhost:3911',
-    SERVER12: 'LOCAL:3912',
-    SERVERURL12: 'http://localhost:3912',
-    SERVER13: 'LOCAL:3913',
-    SERVERURL13: 'http://localhost:3913',
-    SERVER14: 'LOCAL:3914',
-    SERVERURL14: 'http://localhost:3914',
-    SERVER16: 'LOCAL:3916',
-    DATABASE6: 'http://localhost:3916',
-    SERVERURL16: 'LOCAL:bridge6',
-    SERVER17: 'LOCAL:3917',
-    DATABASE7: 'http://localhost:3917',
-    SERVERURL17: 'LOCAL:bridge7',
-    DFT_USER_MAXQUESTIONS: 20,
-    DFT_USER_OWNER: 'Richard',
-    DFT_USER_SHOWPROGRESS: true,
-    DFT_USER_SHOWSCORE: true,
-    DFT_USER_SORTQUESTIONS: true,
-    DFT_USER_SKIPCORRECT: true,
-    URL_HELLO: '/QuizHello',
-    URL_REGISTER: '/QuizRegister',
-    URL_SIGNIN: '/QuizSignin',
-    URL_TABLES: '/QuizTables'
+    DEBUG_LOG_OVERRIDE: DEBUG_LOG_OVERRIDE,
+    DEBUG_LOG: DEBUG_LOG,
+    PAGESTART: PAGESTART,
+    SERVER_DATABASE: SERVER_DATABASE,
+    NODE_ENV: NODE_ENV,
+    TIMEOUT: TIMEOUT,
+    TIMEOUT_EXTRA: TIMEOUT_EXTRA,
+    TIMEOUT_RETRY: TIMEOUT_RETRY,
+    SERVER01: SERVER01,
+    DATABASE01: DATABASE01,
+    SERVERURL01: SERVERURL01,
+    SERVER02: SERVER02,
+    DATABASE02: DATABASE02,
+    SERVERURL02: SERVERURL02,
+    SERVER03: SERVER03,
+    DATABASE03: DATABASE03,
+    SERVERURL03: SERVERURL03,
+    SERVER04: SERVER04,
+    DATABASE04: DATABASE04,
+    SERVERURL04: SERVERURL04,
+    SERVER11: SERVER11,
+    SERVERURL11: SERVERURL11,
+    SERVER12: SERVER12,
+    SERVERURL12: SERVERURL12,
+    SERVER13: SERVER13,
+    SERVERURL13: SERVERURL13,
+    SERVER14: SERVER14,
+    SERVERURL14: SERVERURL14,
+    SERVER16: SERVER16,
+    DATABASE6: DATABASE6,
+    SERVERURL16: SERVERURL16,
+    SERVER17: SERVER17,
+    DATABASE7: DATABASE7,
+    SERVERURL17: SERVERURL17,
+    DFT_USER_MAXQUESTIONS: DFT_USER_MAXQUESTIONS,
+    DFT_USER_OWNER: DFT_USER_OWNER,
+    DFT_USER_SHOWPROGRESS: DFT_USER_SHOWPROGRESS,
+    DFT_USER_SHOWSCORE: DFT_USER_SHOWSCORE,
+    DFT_USER_SORTQUESTIONS: DFT_USER_SORTQUESTIONS,
+    DFT_USER_SKIPCORRECT: DFT_USER_SKIPCORRECT,
+    URL_HELLO: URL_HELLO,
+    URL_REGISTER: URL_REGISTER,
+    URL_REGISTERPWD: URL_REGISTERPWD,
+    URL_SIGNIN: URL_SIGNIN,
+    URL_TABLES: URL_TABLES,
   }
   //
   //  Save
   //
-  const JSON1 = JSON.stringify(App_Env)
-  if (debugLog) console.log(consoleLogTime(debugModule, 'App_EnvJSON defaults'), JSON1)
-  sessionStorage.setItem('App_Env', JSON1)
+  if (debugLog) console.log(consoleLogTime(debugModule, 'App_Env'), App_Env)
+  sessionStorageSet({ caller: debugModule, itemName: 'App_Env', itemValue: App_Env })
   //...........................................................................
   //  Override Process.env variables
   //...........................................................................
@@ -90,7 +138,7 @@ export default function writeApp_Env() {
   //
   if (process.env.NEXT_PUBLIC_PAGESTART) App_Env.PAGESTART = process.env.NEXT_PUBLIC_PAGESTART
   //
-  //  Environment
+  //  Environment (Development/Production)
   //
   if (process.env.NODE_ENV) App_Env.NODE_ENV = process.env.NODE_ENV
   //
@@ -201,7 +249,6 @@ export default function writeApp_Env() {
   //
   //  Save
   //
-  const JSON2 = JSON.stringify(App_Env)
-  if (debugLog) console.log(consoleLogTime(debugModule, 'App_EnvJSON Env Variables '), JSON2)
-  sessionStorage.setItem('App_Env', JSON2)
+  if (debugLog) console.log(consoleLogTime(debugModule, 'App_Env'), App_Env)
+  sessionStorageSet({ caller: debugModule, itemName: 'App_Env', itemValue: App_Env })
 }

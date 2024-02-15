@@ -1,6 +1,7 @@
 //
 //  Libraries
 //
+import React from 'react'
 import { FormControl, FormControlLabel, Checkbox } from '@mui/material'
 //=====================================================================================
 export default function MyCheckbox(props) {
@@ -11,8 +12,8 @@ export default function MyCheckbox(props) {
   const convertToDefEventPara = (name, value) => ({
     target: {
       name,
-      value
-    }
+      value,
+    },
   })
 
   return (

@@ -1,4 +1,9 @@
 //
+//  services
+//
+import sessionStorageGet from '@/services/sessionStorage/sessionStorageGet'
+import sessionStorageSet from '@/services/sessionStorage/sessionStorageSet'
+//
 //  Debug Settings
 //
 import debugSettings from '@/debug/debugSettings'
@@ -30,7 +35,10 @@ export default function buildDataQuiz(props) {
     //
     //  Signed in User
     //
-    User_User = JSON.parse(sessionStorage.getItem('User_User'))
+    User_User = sessionStorageGet({
+      caller: debugModule,
+      itemName: 'User_User',
+    })
     MaxQuestions = User_User.u_dftmaxquestions
     //
     //  Deconstruct props
@@ -40,18 +48,61 @@ export default function buildDataQuiz(props) {
     //
     //  Store Owner/group
     //
-    sessionStorage.setItem('Page_Quiz_Owner', JSON.stringify(p_owner))
-    sessionStorage.setItem('Page_Quiz_OwnerGroup', JSON.stringify(p_group))
+    sessionStorageSet({
+      caller: debugModule,
+      itemName: 'Page_Quiz_Owner',
+      itemValue: p_owner,
+    })
+    sessionStorageSet({
+      caller: debugModule,
+      itemName: 'Page_Quiz_OwnerGroup',
+      itemValue: p_group,
+    })
     //
     //  Reset the Data
     //
-    sessionStorage.setItem('Page_Quiz_CatchMessage', '')
-    sessionStorage.setItem('Page_Quiz_Reset', true)
-    sessionStorage.setItem('Page_Quiz_Bid', [])
-    sessionStorage.setItem('Page_Quiz_Hands', [])
-    sessionStorage.setItem('Page_Quiz_Q_Flt', [])
-    sessionStorage.setItem('Page_Quiz_Q_Flt_Cnt', 0)
-    sessionStorage.setItem('Page_Quiz_Q_Flt_qqid', [])
+
+    sessionStorageSet({
+      caller: debugModule,
+      itemName: 'Page_Quiz_CatchMessage',
+      itemValue: '',
+    })
+
+    sessionStorageSet({
+      caller: debugModule,
+      itemName: 'Page_Quiz_Reset',
+      itemValue: true,
+    })
+
+    sessionStorageSet({
+      caller: debugModule,
+      itemName: 'Page_Quiz_Bid',
+      itemValue: [],
+    })
+
+    sessionStorageSet({
+      caller: debugModule,
+      itemName: 'Page_Quiz_Hands',
+      itemValue: [],
+    })
+
+    sessionStorageSet({
+      caller: debugModule,
+      itemName: 'Page_Quiz_Q_Flt',
+      itemValue: [],
+    })
+
+    sessionStorageSet({
+      caller: debugModule,
+      itemName: 'Page_Quiz_Q_Flt_Cnt',
+      itemValue: [],
+    })
+
+    sessionStorageSet({
+      caller: debugModule,
+      itemName: 'Page_Quiz_Q_Flt_qqid',
+      itemValue: [],
+    })
     //
     //  Load data
     //
@@ -68,7 +119,10 @@ export default function buildDataQuiz(props) {
     //
     //  Question Data
     //
-    const User_Questions = JSON.parse(sessionStorage.getItem('User_Questions'))
+    const User_Questions = sessionStorageGet({
+      caller: debugModule,
+      itemName: 'User_Questions',
+    })
     //
     //  Filter Owner/group
     //
@@ -82,15 +136,31 @@ export default function buildDataQuiz(props) {
     //
     //  Load related Bids
     //
-    const User_Bid = JSON.parse(sessionStorage.getItem('User_Bid'))
+    const User_Bid = sessionStorageGet({
+      caller: debugModule,
+      itemName: 'User_Bid',
+    })
+
     Page_Quiz_Bid = User_Bid.filter(x => Page_Quiz_Q_Flt_qqid.includes(x.bqid))
-    sessionStorage.setItem('Page_Quiz_Bid', JSON.stringify(Page_Quiz_Bid))
+
+    sessionStorageSet({
+      caller: debugModule,
+      itemName: 'Page_Quiz_Bid',
+      itemValue: Page_Quiz_Bid,
+    })
     //
     //  Load related Hands
     //
-    const User_Hands = JSON.parse(sessionStorage.getItem('User_Hands'))
+    const User_Hands = sessionStorageGet({
+      caller: debugModule,
+      itemName: 'User_Hands',
+    })
     Page_Quiz_Hands = User_Hands.filter(x => Page_Quiz_Q_Flt_qqid.includes(x.hqid))
-    sessionStorage.setItem('Page_Quiz_Hands', JSON.stringify(Page_Quiz_Hands))
+    sessionStorageSet({
+      caller: debugModule,
+      itemName: 'Page_Quiz_Hands',
+      itemValue: Page_Quiz_Hands,
+    })
   }
   //...................................................................................
   //.  Output Page_Quiz_Q_Flt
@@ -127,9 +197,24 @@ export default function buildDataQuiz(props) {
     //
     //  Session Storage
     //
-    sessionStorage.setItem('Page_Quiz_Q_Flt', JSON.stringify(Page_Quiz_Q_Flt))
-    sessionStorage.setItem('Page_Quiz_Q_Flt_Cnt', JSON.stringify(Page_Quiz_Q_Flt.length))
-    sessionStorage.setItem('Page_Quiz_Q_Flt_qqid', JSON.stringify(Page_Quiz_Q_Flt_qqid))
+
+    sessionStorageSet({
+      caller: debugModule,
+      itemName: 'Page_Quiz_Q_Flt',
+      itemValue: Page_Quiz_Q_Flt,
+    })
+
+    sessionStorageSet({
+      caller: debugModule,
+      itemName: 'Page_Quiz_Q_Flt_Cnt',
+      itemValue: Page_Quiz_Q_Flt.length,
+    })
+
+    sessionStorageSet({
+      caller: debugModule,
+      itemName: 'Page_Quiz_Q_Flt_qqid',
+      itemValue: Page_Quiz_Q_Flt_qqid,
+    })
   }
   //...................................................................................
 }

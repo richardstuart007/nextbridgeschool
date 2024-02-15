@@ -2,48 +2,51 @@
 //
 //  Libraries
 //
-import { useState } from 'react'
+import React, { useState } from 'react'
 import { Paper, Grid, Typography } from '@mui/material'
 //
-//  Utilities
+//  services
 //
-import apiAxios from '@/utilities/apiAxios'
-import buildDataUser from '@/services/buildDataUser'
+import apiAxios from '@/services/dbApi/apiAxios'
+import buildDataUser from '@/services/builds/buildDataUser'
+import sessionStorageGet from '@/services/sessionStorage/sessionStorageGet'
+import sessionStorageSet from '@/services/sessionStorage/sessionStorageSet'
 //
 //  Controls
 //
-import MyButton from '@/components/controls/MyButton'
-import MyInput from '@/components/controls/MyInput'
-import { useMyForm, MyForm } from '@/components/controls/useMyForm'
-//
-//  Debug Settings
-//
-import debugSettings from '@/debug/debugSettings'
-import consoleLogTime from '@/debug/consoleLogTime'
+import MyButton from '@/components/Controls/MyButton'
+import MyInput from '@/components/Controls/MyInput'
+import { useMyForm, MyForm } from '@/components/Controls/useMyForm'
 //
 //  Routing
 //
 import { useRouter } from 'next/navigation'
 //
-//  Debug
+//  Debug Settings
 //
-const debugLog = debugSettings()
+import debugSettings from '@/debug/debugSettings'
+import consoleLogTime from '@/debug/consoleLogTime'
+let debugLog
 const debugModule = 'Signin'
 //
 //  Initial Values
 //
 const initialFValues = {
   user: '',
-  password: ''
+  password: '',
 }
 //...................................................................................
 //.  Main Line
 //...................................................................................
 export default function Signin() {
+  debugLog = debugSettings()
   //
   //  Application Environment Variables
   //
-  const App_Env = JSON.parse(sessionStorage.getItem('App_Env'))
+  const App_Env = sessionStorageGet({
+    caller: debugModule,
+    itemName: 'App_Env',
+  })
   //
   // State
   //
@@ -62,7 +65,10 @@ export default function Signin() {
     //
     //  Restore previous signin info
     //
-    const User_User = JSON.parse(sessionStorage.getItem('User_User'))
+    const User_User = sessionStorageGet({
+      caller: debugModule,
+      itemName: 'User_User',
+    })
     if (User_User) initialFValues.user = User_User.u_user
   } catch (e) {
     if (debugLog) console.log(consoleLogTime(debugModule, 'Catch'))
@@ -90,14 +96,14 @@ export default function Signin() {
     //  Set the errors
     //
     setErrors({
-      ...temp
+      ...temp,
     })
     if (fieldValues === values) return Object.values(temp).every(x => x === '')
   }
   //...................................................................................
   //.  Form Submit
   //...................................................................................
-  function FormSubmit(e) {
+  function FormSubmit() {
     if (debugLog) console.log(consoleLogTime(debugModule, 'FormSubmit'))
     if (validate()) {
       FormUpdate()
@@ -157,7 +163,10 @@ export default function Signin() {
     //
     //  Get the URL
     //
-    const App_URL = JSON.parse(sessionStorage.getItem('App_URL'))
+    const App_URL = sessionStorageGet({
+      caller: debugModule,
+      itemName: 'App_URL',
+    })
     if (debugLog) console.log(consoleLogTime(debugModule, 'App_URL'), App_URL)
     let body
     //
@@ -171,7 +180,7 @@ export default function Signin() {
         AxClient: debugModule,
         AxTable: 'users',
         user: user,
-        password: password
+        password: password,
       }
       const URL = App_URL + App_Env.URL_SIGNIN
       if (debugLog) console.log(consoleLogTime(debugModule, 'URL'), URL)
@@ -185,7 +194,7 @@ export default function Signin() {
       const apiAxiosProps = {
         AxUrl: URL,
         AxData: body,
-        AxInfo: info
+        AxInfo: info,
       }
       const rtnObj = await apiAxios(apiAxiosProps)
       return rtnObj
@@ -202,7 +211,7 @@ export default function Signin() {
         rtnCatchFunction: debugModule,
         rtnCatch: true,
         rtnCatchMsg: 'Catch calling apiAxios',
-        rtnRows: []
+        rtnRows: [],
       }
       return rtnObj
     }
@@ -227,9 +236,22 @@ export default function Signin() {
     //
     //  User Info
     //
-    sessionStorage.setItem('User_User', JSON.stringify(userRow))
-    sessionStorage.setItem('User_UserSwitch', JSON.stringify(false))
-    sessionStorage.setItem('User_Owners', JSON.stringify(userownerRows))
+
+    sessionStorageSet({
+      caller: debugModule,
+      itemName: 'User_User',
+      itemValue: userRow,
+    })
+    sessionStorageSet({
+      caller: debugModule,
+      itemName: 'User_UserSwitch',
+      itemValue: false,
+    })
+    sessionStorageSet({
+      caller: debugModule,
+      itemName: 'User_Owners',
+      itemValue: userownerRows,
+    })
     //
     //  Userowners string
     //
@@ -243,11 +265,19 @@ export default function Signin() {
       }
     }
     if (debugLog) console.log(consoleLogTime(debugModule, 'ownersString'), ownersString)
-    sessionStorage.setItem('User_OwnersString', JSON.stringify(ownersString))
+    sessionStorageSet({
+      caller: debugModule,
+      itemName: 'User_OwnersString',
+      itemValue: ownersString,
+    })
     //
     //  Signed In
     //
-    sessionStorage.setItem('User_SignedIn', true)
+    sessionStorageSet({
+      caller: debugModule,
+      itemName: 'User_SignedIn',
+      itemValue: true,
+    })
     //
     //  Build User Data into Storage
     //
@@ -268,7 +298,7 @@ export default function Signin() {
             margin: 1,
             padding: 1,
             maxWidth: 400,
-            backgroundColor: 'whitesmoke'
+            backgroundColor: 'whitesmoke',
           }}
         >
           <Grid container spacing={1} justify='center' alignItems='center' direction='column'>
@@ -324,7 +354,7 @@ export default function Signin() {
             <MyButton
               color='warning'
               onClick={() => {
-                router.push('/Register')
+                router.push('/RegisterPwd')
               }}
               text='Register'
             />

@@ -1,6 +1,7 @@
 //
 //  Libraries
 //
+import React from 'react'
 import { LocalizationProvider, DatePicker } from '@mui/lab'
 import DateFnsUtils from '@date-io/date-fns'
 import { TextField } from '@mui/material'
@@ -9,10 +10,11 @@ import { TextField } from '@mui/material'
 //
 import debugSettings from '@/debug/debugSettings'
 import consoleLogTime from '@/debug/consoleLogTime'
-const debugLog = debugSettings()
+let debugLog
 const debugModule = 'MyDatePicker'
 //=====================================================================================
 export default function MyDatePicker(props) {
+  debugLog = debugSettings()
   if (debugLog) console.log(consoleLogTime(debugModule, 'Start'))
 
   const { name, label, value, onChange, ...other } = props
@@ -22,8 +24,8 @@ export default function MyDatePicker(props) {
   const convertToDefEventPara = (name, value) => ({
     target: {
       name,
-      value
-    }
+      value,
+    },
   })
 
   return (

@@ -2,6 +2,7 @@ import TableRow from '@mui/material/TableRow'
 //
 //  Sub Components
 //
+import React from 'react'
 import QuizBiddingTableLineCell from './QuizBiddingTableLineCell'
 //...................................................................................
 //.  Main Line
@@ -18,7 +19,7 @@ export default function QuizBiddingTableLine(props) {
     north: null,
     east: null,
     south: null,
-    west: null
+    west: null,
   }
   if (round[0]) roundBid.north = round[0].bqid
   if (round[1]) roundBid.east = round[1].bqid
@@ -31,7 +32,7 @@ export default function QuizBiddingTableLine(props) {
     north: null,
     east: null,
     south: null,
-    west: null
+    west: null,
   }
   if (round[0]) roundSuit.north = round[0].suit
   if (round[1]) roundSuit.east = round[1].suit

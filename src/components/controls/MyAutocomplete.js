@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react'
 import Box from '@mui/material/Box'
 import TextField from '@mui/material/TextField'
 import Autocomplete from '@mui/material/Autocomplete'
-
 //
 //  Debug Settings
 //
@@ -87,7 +86,7 @@ export default function MyAutocomplete(props) {
           label={searchLable}
           inputProps={{
             ...params.inputProps,
-            autoComplete: 'new-password' // disable autocomplete and autofill
+            autoComplete: 'new-password', // disable autocomplete and autofill
           }}
         />
       )}

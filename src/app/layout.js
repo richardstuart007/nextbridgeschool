@@ -1,7 +1,8 @@
+import React from 'react'
 import { Inter } from 'next/font/google'
 import './globals.css'
-import Navbar from '@/components/navbar/Navbar'
-import Footer from '@/components/footer/Footer'
+import Navbar from '@/components/Navbar/Navbar'
+import Footer from '@/components/Footer/Footer'
 import { ThemeProvider } from '@/context/ThemeContext'
 import AuthProvider from '@/components/AuthProvider/AuthProvider'
 
@@ -9,7 +10,7 @@ const inter = Inter({ subsets: ['latin'] })
 
 export const metadata = {
   title: 'Next Bridge School',
-  description: 'Next Bridge School'
+  description: 'Next Bridge School',
 }
 
 export default function RootLayout({ children }) {

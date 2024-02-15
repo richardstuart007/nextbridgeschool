@@ -1,6 +1,7 @@
 //
 //  Libraries
 //
+import React from 'react'
 import { TableCell, TableHead, TableRow } from '@mui/material'
 import Image from 'next/image'
 import styles from './quizhandstableheader.module.css'

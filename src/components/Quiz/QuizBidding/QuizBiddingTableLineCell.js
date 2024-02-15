@@ -2,6 +2,7 @@ import TableCell from '@mui/material/TableCell'
 //
 //  Libraries
 //
+import React from 'react'
 import { Typography, Grid } from '@mui/material'
 import Image from 'next/image'
 import styles from './quizbiddingtablelinecell.module.css'

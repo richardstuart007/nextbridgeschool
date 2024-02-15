@@ -2,20 +2,21 @@
 //
 //  Libraries
 //
-import { useEffect } from 'react'
+import React, { useEffect } from 'react'
 import { Paper, Grid } from '@mui/material'
-
 //
 //  Controls
 //
-import MyButton from '@/components/controls/MyButton'
-import MyInput from '@/components/controls/MyInput'
-import MyCheckbox from '@/components/controls/MyCheckbox'
-import { useMyForm, MyForm } from '@/components/controls/useMyForm'
+import MyButton from '@/components/Controls/MyButton'
+import MyInput from '@/components/Controls/MyInput'
+import MyCheckbox from '@/components/Controls/MyCheckbox'
+import { useMyForm, MyForm } from '@/components/Controls/useMyForm'
 //
 //  Services
 //
-import rowCrud from '@/utilities/rowCrud'
+import apiRowCrud from '@/services/dbApi/apiRowCrud'
+import sessionStorageGet from '@/services/sessionStorage/sessionStorageGet'
+import sessionStorageSet from '@/services/sessionStorage/sessionStorageSet'
 //
 //  Routing
 //
@@ -25,7 +26,7 @@ import { useRouter } from 'next/navigation'
 //
 import debugSettings from '@/debug/debugSettings'
 import consoleLogTime from '@/debug/consoleLogTime'
-let debugLog
+let debugLog = false
 const debugModule = 'UsersSettings'
 //
 //  Form Initial Values
@@ -39,35 +40,59 @@ const initialFValues = {
   u_skipcorrect: true,
   u_dftmaxquestions: 5,
   u_fedcountry: '',
-  u_fedid: ''
+  u_fedid: '',
 }
 
 //...................................................................................
 //.  Main Line
 //...................................................................................
 export default function UsersSettings() {
-  if (debugLog) console.log(consoleLogTime(debugModule, 'Start'))
   const router = useRouter()
   //
-  //  Debug Settings
-  //
-  debugLog = debugSettings()
-  //
-  //  On change of record, set State
+  //  First Time
   //
   useEffect(() => {
+    clientFirstTime()
+  }, [])
+  //
+  //  Every Time
+  //
+  useEffect(() => {
+    clientLoad()
+  })
+  //...........................................................................
+  // First Time
+  //...........................................................................
+  function clientFirstTime() {
+    //
+    //  Debug Settings
+    //
+    debugLog = debugSettings()
+    if (debugLog) console.log(consoleLogTime(debugModule, 'Start'))
     //
     //  Get User
     //
-    const recordForEdit = JSON.parse(sessionStorage.getItem('User_User'))
+    const recordForEdit = sessionStorageGet({
+      caller: debugModule,
+      itemName: 'User_User',
+    })
     //
     //  Update form values
     //
     setValues({
-      ...recordForEdit
+      ...recordForEdit,
     })
-    // eslint-disable-next-line
-  }, [])
+  }
+  //...........................................................................
+  // Client Code
+  //...........................................................................
+  function clientLoad() {
+    try {
+    } catch (e) {
+      if (debugLog) console.log(consoleLogTime(debugModule, 'Catch'))
+      console.log(e)
+    }
+  }
   //...................................................................................
   //
   // Validate the fields
@@ -100,7 +125,7 @@ export default function UsersSettings() {
     //  Set the errors
     //
     setErrors({
-      ...errorsUpd
+      ...errorsUpd,
     })
     //
     //  Check if every element within the errorsUpd object is blank, then return true (valid), but only on submit when the fieldValues=values
@@ -138,7 +163,11 @@ export default function UsersSettings() {
       //
       //  Store
       //
-      sessionStorage.setItem('User_User', JSON.stringify(UpdateValues))
+      sessionStorageSet({
+        caller: debugModule,
+        itemName: 'User_User',
+        itemValue: UpdateValues,
+      })
       //
       //  Update database
       //
@@ -166,9 +195,9 @@ export default function UsersSettings() {
       AxTable: 'users',
       AxAction: 'UPDATE',
       AxWhere: `u_user = '${u_user}'`,
-      AxRow: nokeyData
+      AxRow: nokeyData,
     }
-    const myPromiseUpdate = rowCrud(rowCrudparams)
+    const myPromiseUpdate = apiRowCrud(rowCrudparams)
     //
     //  Resolve Status
     //
@@ -203,7 +232,7 @@ export default function UsersSettings() {
             padding: 0,
             maxWidth: 400,
             backgroundColor: 'whitesmoke',
-            elevation: 12
+            elevation: 12,
           }}
         >
           <Grid
@@ -317,7 +346,6 @@ export default function UsersSettings() {
             <Grid item xs={12}>
               <MyButton
                 sx={{ mt: 2 }}
-                type='submit'
                 text='Update'
                 color='primary'
                 variant='contained'
@@ -329,11 +357,11 @@ export default function UsersSettings() {
         {/* .......................................................................................... */}
         <Grid item xs={12}>
           <MyButton
-            type='submit'
             text='Back'
             color='warning'
-            variant='contained'
-            onClick={() => router.back()}
+            onClick={() => {
+              router.back()
+            }}
           />
         </Grid>
         {/* .......................................................................................... */}

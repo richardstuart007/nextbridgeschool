@@ -1,31 +1,28 @@
 //
-//  Utilities
+//  services
 //
-import rowCrud from '@/utilities/rowCrud'
+import apiRowCrud from '@/services/dbApi/apiRowCrud'
+import sessionStorageSet from '@/services/sessionStorage/sessionStorageSet'
 //
 //  Debug Settings
 //
 import debugSettings from '@/debug/debugSettings'
 import consoleLogTime from '@/debug/consoleLogTime'
-const debugLog = debugSettings()
-const debugModule = 'writeUsersSessions'
+let debugLog
+const debugModule = 'writeSession'
 //===================================================================================
-export default function writeUsersSessions() {
+export default function writeSession() {
+  //
+  //  Debug Settings
+  //
+  debugLog = debugSettings()
   if (debugLog) console.log(consoleLogTime(debugModule, 'Start'))
-  //
-  //  Get User
-  //
-  const User_User = JSON.parse(sessionStorage.getItem('User_User'))
   //
   //  Build row
   //
-  const usuid = User_User.u_uid
-  const ususer = User_User.u_user
   const usdatetime = new Date().toJSON()
   const AxRow = {
-    usuid: usuid,
-    usdatetime: usdatetime,
-    ususer: ususer
+    v_datetime: usdatetime,
   }
   if (debugLog) console.log(consoleLogTime(debugModule, 'AxRow'), { ...AxRow })
   //
@@ -35,13 +32,13 @@ export default function writeUsersSessions() {
     AxCaller: debugModule,
     AxMethod: 'post',
     AxAction: 'INSERT',
-    AxTable: 'userssessions',
-    AxRow: AxRow
+    AxTable: 'sessions',
+    AxRow: AxRow,
   }
   //
   //  Process promise
   //
-  const myPromiseInsert = rowCrud(props)
+  const myPromiseInsert = apiRowCrud(props)
   //
   //  Resolve Status
   //
@@ -57,11 +54,16 @@ export default function writeUsersSessions() {
     const data = rtnObj.rtnRows
     const newRow = data[0]
     if (debugLog)
-      console.log(consoleLogTime(debugModule, `Row (${newRow.ruid}) INSERTED in Database`))
+      console.log(consoleLogTime(debugModule, `Row (${newRow.v_vid}) INSERTED in Database`))
     //
     //  Update storage with new row
     //
-    sessionStorage.setItem('User_Session', JSON.stringify(newRow))
+    sessionStorageSet({
+      caller: debugModule,
+      itemName: 'App_Session',
+      itemValue: newRow,
+    })
+
     return
   })
   //

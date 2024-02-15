@@ -1,5 +1,5 @@
 'use client'
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import styles from './navbar.module.css'
 import DarkModeToggle from '@/components/DarkModeToggle/DarkModeToggle'
 import { signOut, useSession } from 'next-auth/react'
@@ -18,11 +18,10 @@ import SwitchAccountIcon from '@mui/icons-material/SwitchAccount'
 //
 //  Common Components
 //
-import Layout from '@/components/Layout/Layout'
-//
-//  Components
-//
-import MyActionButton from '@/components/controls/MyActionButton'
+import NavbarHeader from './NavbarHeader/NavbarHeader'
+import MyActionButton from '@/components/Controls/MyActionButton'
+// import sessionStorageSet from '@/services/sessionStorageSet'
+import sessionStorageGet from '@/services/sessionStorage/sessionStorageGet'
 //
 //  Routing
 //
@@ -32,105 +31,121 @@ import { useRouter } from 'next/navigation'
 //
 import debugSettings from '@/debug/debugSettings'
 import consoleLogTime from '@/debug/consoleLogTime'
-//...........................................................................
-// Global CONSTANTS
-//...........................................................................
-//
-//  Debug Settings
-//
-const debugLog = debugSettings()
+let debugLog = false
 const debugModule = 'Navbar'
-
+//...........................................................................
+// Module Main Line
+//...........................................................................
 export default function Navbar() {
   const session = useSession()
   const router = useRouter()
-  if (debugLog) console.log(consoleLogTime(debugModule, 'Start'))
-  //...........................................................................
-  // Module STATE
-  //...........................................................................
-  let showButton_Library
-  let buttonTextSignout = 'Signout'
-  let buttonTextSettings = 'Settings'
-  let showButton_UsersSettings
-  let showButton_QuizHistory
-  let User_Admin = false
-  let showButton_SwitchUser
-  let showButton_Signout
+  //
+  //  Current Page
+  //
   const PageCurrent = usePathname()
-  //...........................................................................
-  // Module Main Line
-  //...........................................................................
   //
-  //  Try
+  //  State
   //
-  try {
+  const [User_SignedIn, setUser_SignedIn] = useState(false)
+  const [ScreenSmall, setScreenSmall] = useState(false)
+  const [buttonTextSignout, setbuttonTextSignout] = useState('Signout')
+  const [buttonTextSettings, setbuttonTextSettings] = useState('Settings')
+  const [showButton_QuizHistory, setshowButton_QuizHistory] = useState(false)
+  const [showButton_Library, setshowButton_Library] = useState(false)
+  const [showButton_UsersSettings, setshowButton_UsersSettings] = useState(false)
+  const [User_Admin, setUser_Admin] = useState(false)
+  const [showButton_SwitchUser, setshowButton_SwitchUser] = useState(false)
+  //
+  //  First Time
+  //
+  useEffect(() => {
+    clientFirstTime()
+  }, [])
+  //
+  //  Every Time
+  //
+  useEffect(() => {
+    clientLoad()
+  })
+  //...........................................................................
+  // First Time
+  //...........................................................................
+  function clientFirstTime() {
     //
-    //  Change of Page ?
+    //  Debug Settings
     //
-    const Nav_Page_Current = JSON.parse(sessionStorage.getItem('Nav_Page_Current'))
-    if (PageCurrent !== Nav_Page_Current) {
-      sessionStorage.setItem('Nav_Page_Previous', JSON.stringify(Nav_Page_Current))
-      sessionStorage.setItem('Nav_Page_Current', JSON.stringify(PageCurrent))
-    }
-    const User_SignedIn = JSON.parse(sessionStorage.getItem('User_SignedIn'))
+    debugLog = debugSettings()
+    if (debugLog) console.log(consoleLogTime(debugModule, 'Start'))
     //
     //  Small screen
     //
-    const ScreenSmall = JSON.parse(sessionStorage.getItem('App_ScreenSmall'))
-    if (ScreenSmall) {
-      buttonTextSignout = null
-      buttonTextSettings = null
-    }
-    //
-    //  Show SignOut Button ?
-    //
-    User_SignedIn ? (showButton_Signout = true) : (showButton_Signout = false)
-    //
-    //  Show Settings Button ?
-    //
-    User_SignedIn && (PageCurrent === '/QuizHistory' || PageCurrent === '/Library')
-      ? (showButton_UsersSettings = true)
-      : (showButton_UsersSettings = false)
-    //
-    //  Show History Button ?
-    //
-    User_SignedIn &&
-    PageCurrent !== '/QuizHistory' &&
-    PageCurrent !== '/QuizHistoryDetail' &&
-    PageCurrent !== '/UsersSettings' &&
-    PageCurrent !== '/Quiz'
-      ? (showButton_QuizHistory = true)
-      : (showButton_QuizHistory = false)
-    //
-    //  Show Library Button ?
-    //
-    User_SignedIn &&
-    PageCurrent !== '/Library' &&
-    PageCurrent !== '/Quiz' &&
-    PageCurrent !== '/UsersSettings'
-      ? (showButton_Library = true)
-      : (showButton_Library = false)
-    //
-    //  Show SwitchUser Button ?
-    //
-    if (User_SignedIn) {
-      const User_User = JSON.parse(sessionStorage.getItem('User_User'))
-      User_Admin = User_User.u_admin
-    }
-    let User_UserSwitch = false
-    const User_UserSwitchJSON = sessionStorage.getItem('User_UserSwitch')
-    if (User_UserSwitchJSON) User_UserSwitch = JSON.parse(User_UserSwitchJSON)
+    const w_ScreenSmall = sessionStorageGet({ caller: debugModule, itemName: 'App_ScreenSmall' })
+    setScreenSmall(w_ScreenSmall)
 
-    User_SignedIn && !ScreenSmall && (User_Admin || User_UserSwitch)
-      ? (showButton_SwitchUser = true)
-      : (showButton_SwitchUser = false)
-  } catch (e) {
-    if (debugLog) console.log(consoleLogTime(debugModule, 'Catch'))
-    console.log(e)
+    if (ScreenSmall) {
+      setbuttonTextSignout(null)
+      setbuttonTextSettings(null)
+    }
   }
+  //...........................................................................
+  // Client Code
+  //...........................................................................
+  function clientLoad() {
+    try {
+      //
+      //  User Signed In ?
+      //
+      const w_User_SignedIn = sessionStorageGet({ caller: debugModule, itemName: 'User_SignedIn' })
+      setUser_SignedIn(w_User_SignedIn)
+      //
+      //  Show Settings Button ?
+      //
+      User_SignedIn && (PageCurrent === '/QuizHistory' || PageCurrent === '/Library')
+        ? setshowButton_UsersSettings(true)
+        : setshowButton_UsersSettings(false)
+      //
+      //  Show History Button ?
+      //
+      User_SignedIn &&
+      PageCurrent !== '/QuizHistory' &&
+      PageCurrent !== '/QuizHistoryDetail' &&
+      PageCurrent !== '/UsersSettings' &&
+      PageCurrent !== '/Quiz'
+        ? setshowButton_QuizHistory(true)
+        : setshowButton_QuizHistory(false)
+      //
+      //  Show Library Button ?
+      //
+      User_SignedIn &&
+      PageCurrent !== '/Library' &&
+      PageCurrent !== '/Quiz' &&
+      PageCurrent !== '/UsersSettings'
+        ? setshowButton_Library(true)
+        : setshowButton_Library(false)
+      //
+      //  Show SwitchUser Button ?
+      //
+      if (User_SignedIn) {
+        const User_User = sessionStorageGet({ caller: debugModule, itemName: 'User_User' })
+        setUser_Admin(User_User.u_admin)
+      }
+      const User_UserSwitch = sessionStorageGet({
+        caller: debugModule,
+        itemName: 'User_UserSwitch',
+      })
+
+      User_SignedIn && !ScreenSmall && (User_Admin || User_UserSwitch)
+        ? setshowButton_SwitchUser(true)
+        : setshowButton_SwitchUser(false)
+    } catch (e) {
+      if (debugLog) console.log(consoleLogTime(debugModule, 'Catch'))
+      console.log(e)
+    }
+  }
+  //...........................................................................
   return (
     <div className={styles.container}>
-      <Layout />
+      <NavbarHeader />
       <div className={styles.links}>
         <DarkModeToggle />
         <div>
@@ -175,13 +190,11 @@ export default function Navbar() {
               ></MyActionButton>
             ) : null}
             {/* .......................................................................................... */}
-            {showButton_Signout ? (
+            {User_SignedIn ? (
               <MyActionButton
                 startIcon={<LogoutIcon fontSize='small' />}
                 color='warning'
                 onClick={() => {
-                  const OwnersString = JSON.parse(sessionStorage.getItem('User_OwnersString'))
-                  sessionStorage.setItem('User_OwnersString_Prev', JSON.stringify(OwnersString))
                   router.push('/Signin')
                 }}
                 text={buttonTextSignout}

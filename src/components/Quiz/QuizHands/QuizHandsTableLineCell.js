@@ -1,3 +1,4 @@
+import React from 'react'
 import TableCell from '@mui/material/TableCell'
 //
 //  Libraries
@@ -6,7 +7,7 @@ import { Typography, Grid } from '@mui/material'
 //...................................................................................
 //.  Main Line
 //...................................................................................
-const QuizHandsTableLineCell = props => {
+export default function QuizHandsTableLineCell(props) {
   //
   //  Destructure props
   //
@@ -32,5 +33,3 @@ const QuizHandsTableLineCell = props => {
     </>
   )
 }
-
-export default QuizHandsTableLineCell

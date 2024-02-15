@@ -2,7 +2,7 @@
 //
 //  Libraries
 //
-import { useState, useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import PeopleOutlineTwoToneIcon from '@mui/icons-material/PeopleOutlineTwoTone'
 import {
   Paper,
@@ -12,7 +12,7 @@ import {
   Toolbar,
   InputAdornment,
   Box,
-  Typography
+  Typography,
 } from '@mui/material'
 import SearchIcon from '@mui/icons-material/Search'
 import FilterListIcon from '@mui/icons-material/FilterList'
@@ -21,17 +21,19 @@ import QuizIcon from '@mui/icons-material/Quiz'
 //
 //  Controls
 //
-import MyButton from '@/components/controls/MyButton'
-import MyInput from '@/components/controls/MyInput'
-import MySelect from '@/components/controls/MySelect'
-import PageHeader from '@/components/controls/PageHeader'
-import useMyTable from '@/components/controls/useMyTable'
-import MyActionButton from '@/components/controls/MyActionButton'
+import MyButton from '@/components/Controls/MyButton'
+import MyInput from '@/components/Controls/MyInput'
+import MySelect from '@/components/Controls/MySelect'
+import PageHeader from '@/components/Controls/PageHeader'
+import useMyTable from '@/components/Controls/useMyTable'
+import MyActionButton from '@/components/Controls/MyActionButton'
 //
 //  Services
 //
-import rowCrud from '@/utilities/rowCrud'
-import buildDataQuiz from '@/services/buildDataQuiz'
+import apiRowCrud from '@/services/dbApi/apiRowCrud'
+import buildDataQuiz from '@/services/builds/buildDataQuiz'
+import sessionStorageGet from '@/services/sessionStorage/sessionStorageGet'
+import sessionStorageSet from '@/services/sessionStorage/sessionStorageSet'
 //
 //  Routing
 //
@@ -41,15 +43,11 @@ import { useRouter } from 'next/navigation'
 //
 import debugSettings from '@/debug/debugSettings'
 import consoleLogTime from '@/debug/consoleLogTime'
+let debugLog = false
+const debugModule = 'Library'
 //...........................................................................
 // Global CONSTANTS
 //...........................................................................
-//
-//  Debug Settings
-//
-const debugLog = debugSettings()
-const debugModule = 'Library'
-
 let recordsFiltered = null
 //
 //  Table Heading
@@ -64,12 +62,12 @@ const headCellsLarge = [
   { id: 'lrtype', label: 'Type' },
   { id: 'learn', label: 'Learn', disableSorting: true },
   { id: 'ogcntquestions', label: 'Questions' },
-  { id: 'quiz', label: 'Quiz', disableSorting: true }
+  { id: 'quiz', label: 'Quiz', disableSorting: true },
 ]
 const headCellsSmall = [
   { id: 'lrdesc', label: 'Description' },
   { id: 'learn', label: 'Learn', disableSorting: true },
-  { id: 'quiz', label: 'Quiz', disableSorting: true }
+  { id: 'quiz', label: 'Quiz', disableSorting: true },
 ]
 const searchTypeOptionsLarge = [
   { id: 'lrlid', title: 'ID' },
@@ -78,7 +76,7 @@ const searchTypeOptionsLarge = [
   { id: 'lrref', title: 'Reference' },
   { id: 'lrdesc', title: 'Description' },
   { id: 'lrwho', title: 'Who' },
-  { id: 'lrtype', title: 'Type' }
+  { id: 'lrtype', title: 'Type' },
 ]
 const searchTypeOptionsSmall = [{ id: 'lrdesc', title: 'Description' }]
 
@@ -86,7 +84,6 @@ const searchTypeOptionsSmall = [{ id: 'lrdesc', title: 'Description' }]
 //= Exported Module
 //============================================================================
 export default function Library() {
-  if (debugLog) console.log(consoleLogTime(debugModule, 'Start'))
   //...........................................................................
   // Module STATE
   //...........................................................................
@@ -97,38 +94,58 @@ export default function Library() {
   const [filterFn, setFilterFn] = useState({
     fn: items => {
       return items
-    }
+    },
   })
   const [searchType, setSearchType] = useState('lrdesc')
   const [searchValue, setSearchValue] = useState('')
   const [startPage0, setStartPage0] = useState(false)
   const [form_message, setForm_message] = useState('')
+  const [ScreenSmall, setScreenSmall] = useState(false)
   const router = useRouter()
+  //
+  //  Default to large
+  //
+  let headCells = headCellsLarge
+  let searchTypeOptions = searchTypeOptionsLarge
+  let buttonTextView = 'View'
+  let buttonTextQuiz = 'Quiz'
   //...........................................................................
   // Module Main Line
   //...........................................................................
   //
-  //  Small Screen overrides
-  //
-  const ScreenSmall = JSON.parse(sessionStorage.getItem('App_ScreenSmall'))
-  let headCells = headCellsLarge
-  let searchTypeOptions = searchTypeOptionsLarge
-
-  let buttonTextView = 'View'
-  let buttonTextQuiz = 'Quiz'
-  if (ScreenSmall) {
-    headCells = headCellsSmall
-    searchTypeOptions = searchTypeOptionsSmall
-    buttonTextView = null
-    buttonTextQuiz = null
-  }
-  //
-  //  Initial Data Load
+  //  First Time
   //
   useEffect(() => {
-    loadData()
-    // eslint-disable-next-line
+    clientFirstTime()
   }, [])
+  //...........................................................................
+  // First Time
+  //...........................................................................
+  function clientFirstTime() {
+    //
+    //  Debug Settings
+    //
+    debugLog = debugSettings()
+    if (debugLog) console.log(consoleLogTime(debugModule, 'Start'))
+    //
+    //  Small Screen overrides
+    //
+    const w_ScreenSmall = sessionStorageGet({ caller: debugModule, itemName: 'App_ScreenSmall' })
+    setScreenSmall(w_ScreenSmall)
+    //
+    //  Override if small
+    //
+    if (ScreenSmall) {
+      headCells = headCellsSmall
+      searchTypeOptions = searchTypeOptionsSmall
+      buttonTextView = null
+      buttonTextQuiz = null
+    }
+    //
+    //  Initial Data Load
+    //
+    loadData()
+  }
   //.............................................................................
   //.  Load data from sessionStorage or Database
   //.............................................................................
@@ -142,12 +159,16 @@ export default function Library() {
     //
     //  Session Storage ?
     //
-    const OwnersString = JSON.parse(sessionStorage.getItem('User_OwnersString'))
-    const OwnersStringPrevJSON = sessionStorage.getItem('User_OwnersString_Prev')
-
-    let OwnersStringPrev
-    if (OwnersStringPrevJSON) OwnersStringPrev = JSON.parse(OwnersStringPrevJSON)
-    sessionStorage.setItem('User_OwnersString_Prev', JSON.stringify(OwnersString))
+    const OwnersString = sessionStorageGet({ caller: debugModule, itemName: 'User_OwnersString' })
+    const OwnersStringPrev = sessionStorageGet({
+      caller: debugModule,
+      itemName: 'User_OwnersString_Prev',
+    })
+    sessionStorageSet({
+      caller: debugModule,
+      itemName: 'User_OwnersString_Prev',
+      itemValue: OwnersString,
+    })
     //
     //  Change in owners string get from database, else store
     //
@@ -161,13 +182,18 @@ export default function Library() {
     //
     //  Update Table
     //
-    const Page_Lib_Data_JSON = sessionStorage.getItem('Page_Lib_Data')
-    const Page_Lib_Data = JSON.parse(Page_Lib_Data_JSON)
+    const Page_Lib_Data = sessionStorageGet({
+      caller: debugModule,
+      itemName: 'Page_Lib_Data',
+    })
     setRecords(Page_Lib_Data)
     //
     //  Form Saved Values - retrieve
     //
-    const selection = JSON.parse(sessionStorage.getItem('Page_Lib_Selection'))
+    const selection = sessionStorageGet({
+      caller: debugModule,
+      itemName: 'Page_Lib_Selection',
+    })
     if (debugLog) console.log(consoleLogTime(debugModule, 'Page_Lib_Selection'), selection)
     //
     //  Filter
@@ -192,7 +218,10 @@ export default function Library() {
     //
     //  Selection
     //
-    const OwnersString = JSON.parse(sessionStorage.getItem('User_OwnersString'))
+    const OwnersString = sessionStorageGet({
+      caller: debugModule,
+      itemName: 'User_OwnersString',
+    })
     const AxString = `* from library join ownergroup on lrowner = ogowner and lrgroup = oggroup where lrowner in (${OwnersString}) order by lrlid`
     if (debugLog) console.log(consoleLogTime(debugModule, 'AxString'), AxString)
     //
@@ -203,9 +232,9 @@ export default function Library() {
       AxCaller: debugModule,
       AxTable: 'library',
       AxAction: 'SELECTSQL',
-      AxString: AxString
+      AxString: AxString,
     }
-    const myPromiseGet = rowCrud(rowCrudparams)
+    const myPromiseGet = apiRowCrud(rowCrudparams)
     //
     //  Resolve Status
     //
@@ -222,7 +251,11 @@ export default function Library() {
       //
       //  Session Storage
       //
-      sessionStorage.setItem('Page_Lib_Data', JSON.stringify(Page_Lib_Data))
+      sessionStorageSet({
+        caller: debugModule,
+        itemName: 'Page_Lib_Data',
+        itemValue: Page_Lib_Data,
+      })
       //
       //  Update Table
       //
@@ -248,13 +281,17 @@ export default function Library() {
     //
     //  Store title
     //
-    sessionStorage.setItem('Page_Quiz_ogtitle', JSON.stringify(row.ogtitle))
+    sessionStorageSet({
+      caller: debugModule,
+      itemName: 'Page_Quiz_ogtitle',
+      itemValue: row.ogtitle,
+    })
     //
     //  buildDataQuiz
     //
     const params = {
       p_owner: row.lrowner,
-      p_group: row.lrgroup
+      p_group: row.lrgroup,
     }
     buildDataQuiz(params)
     router.push('/Quiz')
@@ -273,9 +310,13 @@ export default function Library() {
     //
     const selection = {
       searchType: p_searchType,
-      searchValue: p_searchValue
+      searchValue: p_searchValue,
     }
-    sessionStorage.setItem('Page_Lib_Selection', JSON.stringify(selection))
+    sessionStorageSet({
+      caller: debugModule,
+      itemName: 'Page_Lib_Selection',
+      itemValue: selection,
+    })
     if (debugLog) console.log(consoleLogTime(debugModule, `Page_Lib_Selection`), selection)
     //
     //  Filter
@@ -331,7 +372,7 @@ export default function Library() {
           default:
         }
         return itemsFilter
-      }
+      },
     })
   }
   //.............................................................................
@@ -381,7 +422,7 @@ export default function Library() {
                 <InputAdornment position='start'>
                   <SearchIcon />
                 </InputAdornment>
-              )
+              ),
             }}
             onChange={e => setSearchValue(e.target.value)}
           />

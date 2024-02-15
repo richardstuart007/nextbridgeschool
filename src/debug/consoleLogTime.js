@@ -1,3 +1,6 @@
+'use client'
+import sessionStorageGet from '@/services/sessionStorage/sessionStorageGet'
+import sessionStorageSet from '@/services/sessionStorage/sessionStorageSet'
 const storeName = 'App_consoleLogTime'
 //...................................................................................
 //.  Try/Catch/Finally logging
@@ -10,7 +13,7 @@ export default function consoleLogTime(debugModule, message = '') {
     let storeObj = {
       prevModule: null,
       prevCounter: null,
-      prevTime: null
+      prevTime: null,
     }
     //
     //  Default current values if no previous
@@ -22,9 +25,9 @@ export default function consoleLogTime(debugModule, message = '') {
     //
     //  Retrieve Previous
     //
-    const storeObj_Prev = sessionStorage.getItem(storeName)
+    const storeObj_Prev = sessionStorageGet({ caller: debugModule, itemName: storeName })
     if (storeObj_Prev) {
-      storeObj = JSON.parse(storeObj_Prev)
+      storeObj = { ...storeObj_Prev }
       prevModule = storeObj.prevModule
       prevCounter = storeObj.prevCounter
       prevTime = storeObj.prevTime
@@ -49,7 +52,7 @@ export default function consoleLogTime(debugModule, message = '') {
     prevCounter++
     storeObj.prevCounter = prevCounter
     storeObj.prevTime = timeCurrent
-    sessionStorage.setItem(storeName, JSON.stringify(storeObj))
+    sessionStorageSet({ caller: debugModule, itemName: storeName, itemValue: storeObj })
     //
     //  Build return string
     //

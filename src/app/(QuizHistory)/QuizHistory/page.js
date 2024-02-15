@@ -2,7 +2,7 @@
 //
 //  Libraries
 //
-import { useState, useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import PeopleOutlineTwoToneIcon from '@mui/icons-material/PeopleOutlineTwoTone'
 import {
   Paper,
@@ -12,7 +12,7 @@ import {
   Toolbar,
   InputAdornment,
   Box,
-  Typography
+  Typography,
 } from '@mui/material'
 import SearchIcon from '@mui/icons-material/Search'
 import FilterListIcon from '@mui/icons-material/FilterList'
@@ -23,18 +23,20 @@ import { format, parseISO } from 'date-fns'
 //
 //  Controls
 //
-import MyButton from '@/components/controls/MyButton'
-import MyInput from '@/components/controls/MyInput'
-import MySelect from '@/components/controls/MySelect'
-import PageHeader from '@/components/controls/PageHeader'
-import useMyTable from '@/components/controls/useMyTable'
-import MyActionButton from '@/components/controls/MyActionButton'
+import MyButton from '@/components/Controls/MyButton'
+import MyInput from '@/components/Controls/MyInput'
+import MySelect from '@/components/Controls/MySelect'
+import PageHeader from '@/components/Controls/PageHeader'
+import useMyTable from '@/components/Controls/useMyTable'
+import MyActionButton from '@/components/Controls/MyActionButton'
 //
 //  Services
 //
-import rowCrud from '@/utilities/rowCrud'
-import buildDataQuiz from '@/services/buildDataQuiz'
-import buildDataHistDtl from '@/services/buildDataHistDtl'
+import apiRowCrud from '@/services/dbApi/apiRowCrud'
+import buildDataQuiz from '@/services/builds/buildDataQuiz'
+import buildDataHistDtl from '@/services/builds/buildDataHistDtl'
+import sessionStorageGet from '@/services/sessionStorage/sessionStorageGet'
+import sessionStorageSet from '@/services/sessionStorage/sessionStorageSet'
 //
 //  Routing
 //
@@ -44,14 +46,11 @@ import { useRouter } from 'next/navigation'
 //
 import debugSettings from '@/debug/debugSettings'
 import consoleLogTime from '@/debug/consoleLogTime'
+let debugLog = false
+const debugModule = 'QuizHistory'
 //...........................................................................
 // Global CONSTANTS
 //...........................................................................
-//
-//  Debug Settings
-//
-const debugLog = debugSettings()
-const debugModule = 'QuizHistory'
 //
 //  Table Heading
 //
@@ -67,29 +66,27 @@ const headCellsLarge = [
   { id: 'r_maxpoints', label: 'Maximum' },
   { id: 'r_correctpercent', label: 'Score %' },
   { id: 'review', label: 'Review', disableSorting: true },
-  { id: 'quiz', label: 'Quiz', disableSorting: true }
+  { id: 'quiz', label: 'Quiz', disableSorting: true },
 ]
 const headCellsSmall = [
   { id: 'ogtitle', label: 'Group' },
   { id: 'review', label: 'Review', disableSorting: true },
-  { id: 'quiz', label: 'Quiz', disableSorting: true }
+  { id: 'quiz', label: 'Quiz', disableSorting: true },
 ]
 const searchTypeOptionsLarge = [
   { id: 'r_hid', title: 'ID' },
   { id: 'yymmdd', title: 'Date' },
   { id: 'r_owner', title: 'Owner' },
-  { id: 'ogtitle', title: 'Group' }
+  { id: 'ogtitle', title: 'Group' },
 ]
 const searchTypeOptionsSmall = [{ id: 'ogtitle', title: 'Group' }]
 
 let g_allUsers = false
 let g_allUsersText = 'ALL'
-if (debugLog) console.log(consoleLogTime(debugModule, 'QuizHistory Global'))
 //============================================================================
 //= Exported Module
 //============================================================================
 export default function QuizHistory() {
-  if (debugLog) console.log(consoleLogTime(debugModule, 'Start'))
   //...........................................................................
   // Module STATE
   //...........................................................................
@@ -100,7 +97,7 @@ export default function QuizHistory() {
   const [filterFn, setFilterFn] = useState({
     fn: items => {
       return items
-    }
+    },
   })
   const [searchType, setSearchType] = useState('ogtitle')
   const [searchValue, setSearchValue] = useState('')
@@ -108,53 +105,96 @@ export default function QuizHistory() {
   const [allUsersText, setAllUsersText] = useState('ALL')
   const [subtitle, setSubtitle] = useState('')
   const [form_message, setForm_message] = useState('')
+  const [ScreenSmall, setScreenSmall] = useState(false)
+  const [User_Admin, setUser_Admin] = useState(false)
   const router = useRouter()
+  let g_User_name = ''
+  let g_User_uid = 0
+  //
+  //  Default to large
+  //
+  let headCells = headCellsLarge
+  let searchTypeOptions = searchTypeOptionsLarge
+  let buttonTextView = 'View'
+  let buttonTextQuiz = 'Quiz'
   //...........................................................................
   // Module Main Line
   //...........................................................................
-  if (debugLog) console.log(consoleLogTime(debugModule, 'records'), records)
   //
-  //  Small Screen overrides
-  //
-  const ScreenSmall = JSON.parse(sessionStorage.getItem('App_ScreenSmall'))
-  let headCells = headCellsLarge
-  let searchTypeOptions = searchTypeOptionsLarge
-
-  let buttonTextView = 'View'
-  let buttonTextQuiz = 'Quiz'
-  if (ScreenSmall) {
-    headCells = headCellsSmall
-    searchTypeOptions = searchTypeOptionsSmall
-
-    buttonTextView = null
-    buttonTextQuiz = null
-  }
-  //
-  //  Get User
-  //
-  const User_User = JSON.parse(sessionStorage.getItem('User_User'))
-  const User_name = User_User.u_name
-  const User_uid = User_User.u_uid
-  const User_Admin = User_User.u_admin
-  //
-  //  Rebuild Data (switched user)
-  //
-  let Page_History_Rebuild = JSON.parse(sessionStorage.getItem('Page_History_Rebuild'))
-  if (!Page_History_Rebuild) Page_History_Rebuild = false
-  if (Page_History_Rebuild) {
-    sessionStorage.setItem('Page_History_Rebuild', false)
-    sessionStorage.removeItem('Page_History_Data')
-    setRecords([])
-    loadData()
-  }
-  //
-  //  Initial Data Load
+  //  First Time
   //
   useEffect(() => {
-    loadData()
-    // eslint-disable-next-line
+    clientFirstTime()
   }, [])
-
+  //
+  //  Every Time
+  //
+  useEffect(() => {
+    clientLoad()
+  })
+  //...........................................................................
+  // First Time
+  //...........................................................................
+  function clientFirstTime() {
+    //
+    //  Debug Settings
+    //
+    debugLog = debugSettings()
+    if (debugLog) console.log(consoleLogTime(debugModule, 'Start'))
+    //
+    //  Small Screen overrides
+    //
+    const w_ScreenSmall = sessionStorageGet({ caller: debugModule, itemName: 'App_ScreenSmall' })
+    setScreenSmall(w_ScreenSmall)
+    //
+    //  Override if small
+    //
+    if (ScreenSmall) {
+      headCells = headCellsSmall
+      searchTypeOptions = searchTypeOptionsSmall
+      buttonTextView = null
+      buttonTextQuiz = null
+    }
+    //
+    //  Get User
+    //
+    const User_User = sessionStorageGet({ caller: debugModule, itemName: 'User_User' })
+    g_User_name = User_User.u_name
+    g_User_uid = User_User.u_uid
+    setUser_Admin(User_User.u_admin)
+    //
+    //  Rebuild Data (switched user)
+    //
+    let Page_History_Rebuild = sessionStorageGet({
+      caller: debugModule,
+      itemName: 'Page_History_Rebuild',
+    })
+    if (!Page_History_Rebuild) Page_History_Rebuild = false
+    if (Page_History_Rebuild) {
+      sessionStorageSet({
+        caller: debugModule,
+        itemName: 'Page_History_Rebuild',
+        itemValue: false,
+      })
+      sessionStorage.removeItem('Page_History_Data')
+      setRecords([])
+      loadData()
+    }
+    //
+    //  Initial Data Load
+    //
+    loadData()
+  }
+  //...........................................................................
+  // Client Code
+  //...........................................................................
+  function clientLoad() {
+    try {
+    } catch (e) {
+      if (debugLog) console.log(consoleLogTime(debugModule, 'Catch'))
+      console.log(e)
+    }
+  }
   //...................................................................................
   //.  Reset the Data
   //...................................................................................
@@ -167,7 +207,7 @@ export default function QuizHistory() {
     //
     //  Restore saved search values
     //
-    const selection = JSON.parse(sessionStorage.getItem('Page_History_Selection'))
+    const selection = sessionStorageGet({ caller: debugModule, itemName: 'Page_History_Selection' })
     if (debugLog)
       console.log(consoleLogTime(debugModule, 'Page_History_Selection'), { ...selection })
     if (selection) {
@@ -179,7 +219,10 @@ export default function QuizHistory() {
     //
     //  Session Storage ?
     //
-    const Page_History_Data = JSON.parse(sessionStorage.getItem('Page_History_Data'))
+    const Page_History_Data = sessionStorageGet({
+      caller: debugModule,
+      itemName: 'Page_History_Data',
+    })
     if (debugLog) console.log(consoleLogTime(debugModule, 'Page_History_Data'), Page_History_Data)
     if (Page_History_Data) {
       setForm_message('Loading Data ....')
@@ -203,13 +246,13 @@ export default function QuizHistory() {
     //
     //  Selection
     //
-    let AxString = `r_hid, r_uid, coalesce(u_name, '${User_name}') as u_name, r_datetime, r_owner, r_group, ogtitle, r_qid, r_ans, r_questions, r_totalpoints, r_maxpoints, r_correctpercent from usershistory`
+    let AxString = `r_hid, r_uid, coalesce(u_name, '${g_User_name}') as u_name, r_datetime, r_owner, r_group, ogtitle, r_qid, r_ans, r_questions, r_totalpoints, r_maxpoints, r_correctpercent from usershistory`
     AxString = AxString + ` join ownergroup on r_owner = ogowner and r_group = oggroup`
     AxString = AxString + ` join users on r_uid = u_uid`
     //
     //  Select User (if not ALL)
     //
-    if (!g_allUsers) AxString = AxString + ` where r_uid = ${User_uid}`
+    if (!g_allUsers) AxString = AxString + ` where r_uid = ${g_User_uid}`
     AxString = AxString + ` order by r_hid desc`
     if (debugLog) console.log(consoleLogTime(debugModule, 'AxString'), AxString)
     //
@@ -220,9 +263,9 @@ export default function QuizHistory() {
       AxCaller: debugModule,
       AxTable: 'usershistory',
       AxAction: 'SELECTSQL',
-      AxString: AxString
+      AxString: AxString,
     }
-    const myPromiseGet = rowCrud(rowCrudparams)
+    const myPromiseGet = apiRowCrud(rowCrudparams)
     //
     //  Resolve Status
     //
@@ -241,12 +284,16 @@ export default function QuizHistory() {
       //
       const Page_History_Data_Update = Page_History_Data.map(record => ({
         ...record,
-        yymmdd: format(parseISO(record.r_datetime), 'yy-MM-dd')
+        yymmdd: format(parseISO(record.r_datetime), 'yy-MM-dd'),
       }))
       //
       //  Session Storage
       //
-      sessionStorage.setItem('Page_History_Data', JSON.stringify(Page_History_Data_Update))
+      sessionStorageSet({
+        caller: debugModule,
+        itemName: 'Page_History_Data',
+        itemValue: Page_History_Data_Update,
+      })
       //
       //  Update Table
       //
@@ -276,7 +323,11 @@ export default function QuizHistory() {
     //
     //  Store Row
     //
-    sessionStorage.setItem('Page_Qd_Row', JSON.stringify(row))
+    sessionStorageSet({
+      caller: debugModule,
+      itemName: 'Page_Qd_Row',
+      itemValue: row,
+    })
     //
     //  Get data
     //
@@ -290,14 +341,22 @@ export default function QuizHistory() {
     //
     //  Store Row
     //
-    sessionStorage.setItem('Page_Qd_Row', JSON.stringify(row))
-    sessionStorage.setItem('Page_Quiz_ogtitle', JSON.stringify(row.ogtitle))
+    sessionStorageSet({
+      caller: debugModule,
+      itemName: 'Page_Qd_Row',
+      itemValue: row,
+    })
+    sessionStorageSet({
+      caller: debugModule,
+      itemName: 'Page_Quiz_ogtitle',
+      itemValue: row.ogtitle,
+    })
     //
     //  buildDataQuiz
     //
     const params = {
       p_owner: row.r_owner,
-      p_group: row.r_group
+      p_group: row.r_group,
     }
     buildDataQuiz(params)
     router.push('/Quiz')
@@ -316,13 +375,17 @@ export default function QuizHistory() {
     //
     const selection = {
       searchType: p_searchType,
-      searchValue: p_searchValue
+      searchValue: p_searchValue,
     }
-    sessionStorage.setItem('Page_History_Selection', JSON.stringify(selection))
+    sessionStorageSet({
+      caller: debugModule,
+      itemName: 'Page_History_Selection',
+      itemValue: selection,
+    })
     //
     //  Subtitle
     //
-    g_allUsers ? setSubtitle('ALL USERS') : setSubtitle(`${User_name} (${User_uid})`)
+    g_allUsers ? setSubtitle('ALL USERS') : setSubtitle(`${g_User_name} (${g_User_uid})`)
     //
     //  Filter
     //
@@ -333,7 +396,7 @@ export default function QuizHistory() {
         //
         let userFilter = items
         if (!g_allUsers) {
-          userFilter = items.filter(x => x.r_uid === User_uid)
+          userFilter = items.filter(x => x.r_uid === g_User_uid)
         }
         //
         //  Nothing to search, return rows
@@ -373,7 +436,7 @@ export default function QuizHistory() {
         if (debugLog)
           console.log(consoleLogTime(debugModule, 'setFilterFn itemsFilter'), itemsFilter)
         return itemsFilter
-      }
+      },
     })
   }
   //.............................................................................
@@ -397,7 +460,7 @@ export default function QuizHistory() {
     //
     //  Subtitle
     //
-    g_allUsers ? setSubtitle('ALL USERS') : setSubtitle(`${User_name} (${User_uid})`)
+    g_allUsers ? setSubtitle('ALL USERS') : setSubtitle(`${g_User_name} (${g_User_uid})`)
     //
     //  Refresh data
     //
@@ -441,7 +504,7 @@ export default function QuizHistory() {
                 <InputAdornment position='start'>
                   <SearchIcon />
                 </InputAdornment>
-              )
+              ),
             }}
             onChange={e => setSearchValue(e.target.value)}
           />

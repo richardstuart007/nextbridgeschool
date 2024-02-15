@@ -1,27 +1,37 @@
 //
-//  Utilities
+//  services
 //
-import rowCrud from '@/utilities/rowCrud'
+import apiRowCrud from '@/services/dbApi/apiRowCrud'
+import sessionStorageGet from '@/services/sessionStorage/sessionStorageGet'
+import sessionStorageSet from '@/services/sessionStorage/sessionStorageSet'
 //
 //  Debug Settings
 //
 import debugSettings from '@/debug/debugSettings'
 import consoleLogTime from '@/debug/consoleLogTime'
 let debugLog
-const debugModule = 'writeSession'
+const debugModule = 'writeUsersSessions'
 //===================================================================================
-export default function writeSession() {
+export default function writeUsersSessions() {
+  debugLog = debugSettings()
   if (debugLog) console.log(consoleLogTime(debugModule, 'Start'))
   //
-  //  Debug Settings
+  //  Get User
   //
-  debugLog = debugSettings()
+  const User_User = sessionStorageGet({
+    caller: debugModule,
+    itemName: 'User_User',
+  })
   //
   //  Build row
   //
+  const usuid = User_User.u_uid
+  const ususer = User_User.u_user
   const usdatetime = new Date().toJSON()
   const AxRow = {
-    v_datetime: usdatetime
+    usuid: usuid,
+    usdatetime: usdatetime,
+    ususer: ususer,
   }
   if (debugLog) console.log(consoleLogTime(debugModule, 'AxRow'), { ...AxRow })
   //
@@ -31,13 +41,13 @@ export default function writeSession() {
     AxCaller: debugModule,
     AxMethod: 'post',
     AxAction: 'INSERT',
-    AxTable: 'sessions',
-    AxRow: AxRow
+    AxTable: 'userssessions',
+    AxRow: AxRow,
   }
   //
   //  Process promise
   //
-  const myPromiseInsert = rowCrud(props)
+  const myPromiseInsert = apiRowCrud(props)
   //
   //  Resolve Status
   //
@@ -53,11 +63,15 @@ export default function writeSession() {
     const data = rtnObj.rtnRows
     const newRow = data[0]
     if (debugLog)
-      console.log(consoleLogTime(debugModule, `Row (${newRow.v_vid}) INSERTED in Database`))
+      console.log(consoleLogTime(debugModule, `Row (${newRow.ruid}) INSERTED in Database`))
     //
     //  Update storage with new row
     //
-    sessionStorage.setItem('App_Session', JSON.stringify(newRow))
+    sessionStorageSet({
+      caller: debugModule,
+      itemName: 'User_Session',
+      itemValue: newRow,
+    })
     return
   })
   //

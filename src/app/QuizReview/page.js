@@ -2,12 +2,12 @@
 //
 //  Libraries
 //
-import { useState, useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Typography, Box } from '@mui/material'
 //
 //  Controls
 //
-import MyButton from '@/components/controls/MyButton'
+import MyButton from '@/components/Controls/MyButton'
 //
 //  Sub Components
 //
@@ -20,17 +20,31 @@ import QuizQuestion from '@/components/Quiz/QuizQuestion'
 //
 import { useRouter } from 'next/navigation'
 //
+//  services
+//
+import sessionStorageGet from '@/services/sessionStorage/sessionStorageGet'
+import sessionStorageSet from '@/services/sessionStorage/sessionStorageSet'
+//
 //  Debug Settings
 //
 import debugSettings from '@/debug/debugSettings'
 import consoleLogTime from '@/debug/consoleLogTime'
-const debugLog = debugSettings()
+let debugLog = false
 const debugModule = 'QuizReview'
+//
+//  Globals
+//
+let g_ArrQuestions = []
+let g_ArrAns = []
+let g_ArrAnsNum = []
+let g_CountPass = 0
+let g_CountAns = 0
+let g_ArrAnsQuestIdx = -1
+let g_CountReview = 0
 //...................................................................................
 //.  Main Line
 //...................................................................................
 export default function QuizReview() {
-  if (debugLog) console.log(consoleLogTime(debugModule, 'Start'))
   const router = useRouter()
   //
   //  Counts
@@ -38,8 +52,11 @@ export default function QuizReview() {
   const [countPass, setCountPass] = useState(0)
   const [countAns, setCountAns] = useState(0)
   const [countReview, setCountReview] = useState(0)
-  const [mark, setMark] = useState(0)
   const [quizRow, setQuizRow] = useState(null)
+  const [noData, setnoData] = useState(true)
+  const [reviewMessage, setreviewMessage] = useState('')
+  const [hidePreviousButton, sethidePreviousButton] = useState(true)
+  const [hideNextButton, sethideNextButton] = useState(false)
   //
   //  Arrays & Index
   //
@@ -48,37 +65,67 @@ export default function QuizReview() {
   const [arrAnsNum, setArrAnsNum] = useState([])
   const [ansIdx, setAnsIdx] = useState(0)
   //
-  //  Signed in User
-  //
-  const User_User = JSON.parse(sessionStorage.getItem('User_User'))
-  //
-  //  Load the data array from the store
+  //  First Time
   //
   useEffect(() => {
-    firstLoad()
-    // eslint-disable-next-line
+    clientFirstTime()
   }, [])
   //
-  //  Quiz Message
+  //  Every Time
   //
-  let nothingToReview = false
-  let reviewMessage = `Result (${mark}%) ${countPass} out of ${countAns}.`
-  //
-  //  No Questions to review
-  //
-  if (!quizRow) {
-    nothingToReview = true
-    countAns === 0
-      ? (reviewMessage = 'No questions answered, nothing to review')
-      : (reviewMessage = `Result (${mark}%) ${countPass} out of ${countAns}.  WELL DONE!!`)
+  useEffect(() => {
+    clientLoad()
+  })
+  //...........................................................................
+  // First Time
+  //...........................................................................
+  function clientFirstTime() {
+    //
+    //  Debug Settings
+    //
+    debugLog = debugSettings()
+    if (debugLog) console.log(consoleLogTime(debugModule, 'Start'))
+
+    //
+    //  Load the data array from the store
+    //
+    firstLoad()
+    //
+    //  Mark%
+    //
+    let mark = 0
+    if (g_CountAns > 0) mark = Math.round((100 * g_CountPass) / g_CountAns)
+    //
+    //  No Questions to review
+    //
+    if (debugLog) console.log(consoleLogTime(debugModule, 'g_CountReview'), g_CountReview)
+    if (g_CountReview === 0) {
+      g_CountAns === 0
+        ? setreviewMessage('No questions answered, nothing to review')
+        : setreviewMessage(`Result (${mark}%) ${g_CountPass} out of ${g_CountAns}.  WELL DONE!!`)
+    } else {
+      //
+      //  Quiz Message
+      //
+      setnoData(false)
+      setreviewMessage(`Result (${mark}%) ${g_CountPass} out of ${g_CountAns}.`)
+    }
   }
-  //
-  //  Hide/Show Previous/Next Buttons
-  //
-  let hidePreviousButton
-  ansIdx + 1 === 1 ? (hidePreviousButton = true) : (hidePreviousButton = false)
-  let hideNextButton
-  ansIdx + 1 === countReview ? (hideNextButton = true) : (hideNextButton = false)
+  //...........................................................................
+  // Client Code
+  //...........................................................................
+  function clientLoad() {
+    try {
+      //
+      //  Hide/Show Previous/Next Buttons
+      //
+      ansIdx + 1 === 1 ? sethidePreviousButton(true) : sethidePreviousButton(false)
+      ansIdx + 1 === countReview ? sethideNextButton(true) : sethideNextButton(false)
+    } catch (e) {
+      if (debugLog) console.log(consoleLogTime(debugModule, 'Catch'))
+      console.log(e)
+    }
+  }
   //...................................................................................
   //.  First time data received
   //...................................................................................
@@ -86,64 +133,74 @@ export default function QuizReview() {
     //
     //  Get Store Values
     //
-    const Page_Quiz_Q_Flt = JSON.parse(sessionStorage.getItem('Page_Quiz_Q_Flt'))
-    const Page_Quiz_A = JSON.parse(sessionStorage.getItem('Page_Quiz_A'))
+    //
+    //  Signed in User
+    //
+    const User_User = sessionStorageGet({
+      caller: debugModule,
+      itemName: 'User_User',
+    })
+    const Page_Quiz_Q_Flt = sessionStorageGet({
+      caller: debugModule,
+      itemName: 'Page_Quiz_Q_Flt',
+    })
+    const Page_Quiz_A = sessionStorageGet({
+      caller: debugModule,
+      itemName: 'Page_Quiz_A',
+    })
     //
     //  Questions
     //
-    let ArrQuestions = []
+    g_ArrQuestions = []
     Page_Quiz_Q_Flt.forEach(row => {
       const rowData = { ...row }
-      ArrQuestions.push(rowData)
+      g_ArrQuestions.push(rowData)
     })
-    setArrQuest(ArrQuestions)
-    //
-    //  Answers
-    //
-    let Ans = []
-    let AnsNum = []
-    let AnsPass = 0
-    let AnsCount = 0
-    let AnsQuestIdx = -1
-    let AnsReview = 0
+    setArrQuest(g_ArrQuestions)
 
+    g_ArrAns = []
+    g_ArrAnsNum = []
+    g_CountPass = 0
+    g_CountAns = 0
+    g_ArrAnsQuestIdx = -1
+    g_CountReview = 0
     Page_Quiz_A.forEach(id => {
-      AnsCount++
-      AnsQuestIdx++
+      g_CountAns++
+      g_ArrAnsQuestIdx++
       //
       //  Only show failed answers ?
       //
       const ReviewSkipPass = User_User.u_skipcorrect
       if (id !== 1 || !ReviewSkipPass) {
-        Ans.push(id)
-        AnsNum.push(AnsQuestIdx)
-        AnsReview++
+        g_ArrAns.push(id)
+        g_ArrAnsNum.push(g_ArrAnsQuestIdx)
+        g_CountReview++
       }
-      if (id === 1) AnsPass++
+      if (id === 1) g_CountPass++
     })
     //
     //  Set State
     //
-    setCountReview(AnsReview)
-    setCountAns(AnsCount)
-    setCountPass(AnsPass)
-    setArrAns(Ans)
-    setArrAnsNum(AnsNum)
-    //
-    //  Mark%
-    //
-    if (AnsCount > 0) setMark(Math.round((100 * AnsPass) / AnsCount))
+    if (debugLog) console.log(consoleLogTime(debugModule, 'g_CountReview'), g_CountReview)
+    if (debugLog) console.log(consoleLogTime(debugModule, 'g_CountAns'), g_CountAns)
+    if (debugLog) console.log(consoleLogTime(debugModule, 'g_CountPass'), g_CountPass)
+    setCountReview(g_CountReview)
+    setCountAns(g_CountAns)
+    setCountPass(g_CountPass)
+    setArrAns(g_ArrAns)
+    setArrAnsNum(g_ArrAnsNum)
+
     //
     //  Nothing to review
     //
-    if (AnsReview === 0) return
+    if (g_CountReview === 0) return
     //
     // Start at Answer Row 0
     //
     const AnsIdx = 0
     setAnsIdx(AnsIdx)
-    const QuizIdx = AnsNum[AnsIdx]
-    setQuizRow(ArrQuestions[QuizIdx])
+    const QuizIdx = g_ArrAnsNum[AnsIdx]
+    setQuizRow(g_ArrQuestions[QuizIdx])
   }
   //...................................................................................
   //.  Next Question
@@ -185,7 +242,7 @@ export default function QuizReview() {
         </Typography>
       </Box>
 
-      {nothingToReview ? null : (
+      {noData ? null : (
         <QuizQuestion
           quizRow={quizRow}
           quizQuestion={arrAnsNum[ansIdx] + 1}
@@ -193,16 +250,15 @@ export default function QuizReview() {
           QorA='A'
         />
       )}
-      {nothingToReview ? null : <QuizBidding qqid={quizRow.qqid} />}
-      {nothingToReview ? null : <QuizHands qqid={quizRow.qqid} />}
-      {nothingToReview ? null : <QuizReviewAnswers quizRow={quizRow} AnswerNum={arrAns[ansIdx]} />}
+      {noData ? null : <QuizBidding qqid={quizRow.qqid} />}
+      {noData ? null : <QuizHands qqid={quizRow.qqid} />}
+      {noData ? null : <QuizReviewAnswers quizRow={quizRow} AnswerNum={arrAns[ansIdx]} />}
 
       {/* .......................................................................................... */}
       <Box sx={{ mt: 2, maxWidth: 600 }}>
         {/*.................................................................................................*/}
-        {nothingToReview || hideNextButton ? null : (
+        {noData || hideNextButton ? null : (
           <MyButton
-            type='submit'
             text='Next'
             color='primary'
             variant='contained'
@@ -210,9 +266,8 @@ export default function QuizReview() {
           />
         )}
         {/* .......................................................................................... */}
-        {nothingToReview || hidePreviousButton ? null : (
+        {noData || hidePreviousButton ? null : (
           <MyButton
-            type='submit'
             text='Previous'
             color='primary'
             variant='contained'
@@ -221,13 +276,16 @@ export default function QuizReview() {
         )}
         {/* .......................................................................................... */}
         <MyButton
-          type='submit'
           text='ReStart'
           color='warning'
           variant='contained'
           sx={{ float: 'right' }}
           onClick={() => {
-            sessionStorage.setItem('Page_Quiz_Reset', true)
+            sessionStorageSet({
+              caller: debugModule,
+              itemName: 'Page_Quiz_Reset',
+              itemValue: true,
+            })
             router.back()
           }}
         />

@@ -1,14 +1,16 @@
 //
 //  Services
 //
-import rowCrud from '@/utilities/rowCrud'
-import writeUsersSessions from '@/services/writeUsersSessions'
+import apiRowCrud from '@/services/dbApi/apiRowCrud'
+import writeUsersSessions from '@/services/dbApi/writeUsersSessions'
+import sessionStorageGet from '@/services/sessionStorage/sessionStorageGet'
+import sessionStorageSet from '@/services/sessionStorage/sessionStorageSet'
 //
 //  Debug Settings
 //
 import debugSettings from '@/debug/debugSettings'
 import consoleLogTime from '@/debug/consoleLogTime'
-const debugLog = debugSettings()
+let debugLog
 const debugModule = 'buildDataUser'
 //
 //  Global Variables
@@ -22,6 +24,7 @@ let User_Hands = []
 //.  Main Line
 //...................................................................................
 export default function buildDataUser() {
+  debugLog = debugSettings()
   //
   //  Try
   //
@@ -34,10 +37,30 @@ export default function buildDataUser() {
     //
     //  Reset the Data
     //
-    sessionStorage.setItem('User_Questions', JSON.stringify(User_Questions))
-    sessionStorage.setItem('User_Questions_Id', JSON.stringify(User_Questions_Id))
-    sessionStorage.setItem('User_Bid', JSON.stringify(User_Bid))
-    sessionStorage.setItem('User_Hands', JSON.stringify(User_Hands))
+
+    sessionStorageSet({
+      caller: debugModule,
+      itemName: 'User_Questions',
+      itemValue: User_Questions,
+    })
+
+    sessionStorageSet({
+      caller: debugModule,
+      itemName: 'User_Questions_Id',
+      itemValue: User_Questions_Id,
+    })
+
+    sessionStorageSet({
+      caller: debugModule,
+      itemName: 'User_Bid',
+      itemValue: User_Bid,
+    })
+
+    sessionStorageSet({
+      caller: debugModule,
+      itemName: 'User_Hands',
+      itemValue: User_Hands,
+    })
     //
     //  Load data
     //
@@ -54,7 +77,10 @@ export default function buildDataUser() {
     //
     //  SqlString
     //
-    const OwnersString = JSON.parse(sessionStorage.getItem('User_OwnersString'))
+    const OwnersString = sessionStorageGet({
+      caller: debugModule,
+      itemName: 'User_OwnersString',
+    })
     const SqlString = `* from questions where qowner in (${OwnersString})`
     if (debugLog) console.log(consoleLogTime(debugModule, 'SqlString ', SqlString))
     //
@@ -65,9 +91,9 @@ export default function buildDataUser() {
       AxCaller: debugModule,
       AxTable: 'questions',
       AxAction: 'SELECTSQL',
-      AxString: SqlString
+      AxString: SqlString,
     }
-    const myPromiseQuestions = rowCrud(rowCrudparams)
+    const myPromiseQuestions = apiRowCrud(rowCrudparams)
     //
     //  Resolve Status
     //
@@ -91,7 +117,11 @@ export default function buildDataUser() {
       //  Session Storage
       //
       if (debugLog) console.log(consoleLogTime(debugModule, 'User_Questions ', User_Questions))
-      sessionStorage.setItem('User_Questions', JSON.stringify(User_Questions))
+      sessionStorageSet({
+        caller: debugModule,
+        itemName: 'User_Questions',
+        itemValue: User_Questions,
+      })
       //
       //  No Questions
       //
@@ -137,7 +167,11 @@ export default function buildDataUser() {
     //
     //  Session Storage
     //
-    sessionStorage.setItem('User_Questions_Id', JSON.stringify(User_Questions_Id))
+    sessionStorageSet({
+      caller: debugModule,
+      itemName: 'User_Questions_Id',
+      itemValue: User_Questions_Id,
+    })
   }
   //...................................................................................
   //.  Load Server - Bidding
@@ -157,9 +191,9 @@ export default function buildDataUser() {
       AxCaller: debugModule,
       AxTable: 'bidding',
       AxAction: 'SELECTSQL',
-      AxString: AxString
+      AxString: AxString,
     }
-    const myPromiseBidding = rowCrud(rowCrudparams)
+    const myPromiseBidding = apiRowCrud(rowCrudparams)
     //
     //  Resolve Status
     //
@@ -185,7 +219,11 @@ export default function buildDataUser() {
       //  Session Storage
       //
       if (debugLog) console.log(consoleLogTime(debugModule, 'User_Bid '), [...User_Bid])
-      sessionStorage.setItem('User_Bid', JSON.stringify(User_Bid))
+      sessionStorageSet({
+        caller: debugModule,
+        itemName: 'User_Bid',
+        itemValue: User_Bid,
+      })
       return
     })
     return
@@ -209,9 +247,9 @@ export default function buildDataUser() {
       AxTable: 'hands',
       AxAction: 'SELECTSQL',
       AxString: AxString,
-      timeout: null
+      timeout: null,
     }
-    const myPromiseHands = rowCrud(rowCrudparams)
+    const myPromiseHands = apiRowCrud(rowCrudparams)
     //
     //  Resolve Status
     //
@@ -237,7 +275,11 @@ export default function buildDataUser() {
       //  Session Storage
       //
       if (debugLog) console.log(consoleLogTime(debugModule, 'User_Hands '), [...User_Hands])
-      sessionStorage.setItem('User_Hands', JSON.stringify(User_Hands))
+      sessionStorageSet({
+        caller: debugModule,
+        itemName: 'User_Hands',
+        itemValue: User_Hands,
+      })
       return
     })
 

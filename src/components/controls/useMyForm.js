@@ -1,6 +1,7 @@
 //
 //  Libraries
 //
+import React from 'react'
 import { useState } from 'react'
 //=====================================================================================
 //=  useMyForm
@@ -19,7 +20,7 @@ export function useMyForm(initialFValues, validateOnChange = false, validate) {
     const { name, value } = e.target
     setValues({
       ...values,
-      [name]: value
+      [name]: value,
     })
     if (validateOnChange) validate({ [name]: value })
   }
@@ -41,7 +42,7 @@ export function useMyForm(initialFValues, validateOnChange = false, validate) {
     errors,
     setErrors,
     handleInputChange,
-    resetForm
+    resetForm,
   }
 }
 //=====================================================================================

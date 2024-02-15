@@ -2,70 +2,96 @@
 //
 //  Libraries
 //
-import { useState, useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Paper, Grid, Typography } from '@mui/material'
 //
-//  Utilities
+//  services
 //
-import apiAxios from '@/utilities/apiAxios'
-import writeSession from '@/services/writeSession'
+import apiAxios from '@/services/dbApi/apiAxios'
+import writeSession from '@/services/dbApi/writeSession'
+import apiCreateOptions from '@/services/dbApi/apiCreateOptions'
+import sessionStorageGet from '@/services/sessionStorage/sessionStorageGet'
 //
 //  Controls
 //
-import MyButton from '@/components/controls/MyButton'
-//
-//  Debug Settings
-//
-import debugSettings from '@/debug/debugSettings'
-import consoleLogTime from '@/debug/consoleLogTime'
+import MyButton from '@/components/Controls/MyButton'
 //
 //  Routing
 //
 import { useRouter } from 'next/navigation'
 //
-//  Debug
+//  Debug Settings
 //
-let debugLog
+import debugSettings from '@/debug/debugSettings'
+import consoleLogTime from '@/debug/consoleLogTime'
+let debugLog = false
 const debugModule = 'Splash'
+let App_Env
 //===================================================================================
 export default function Splash() {
-  if (debugLog) console.log(consoleLogTime(debugModule, 'Start'))
-  //
-  //  Debug Settings
-  //
-  debugLog = debugSettings()
-  //
-  //  Application Environment Variables
-  //
-  const App_Env = JSON.parse(sessionStorage.getItem('App_Env'))
-  if (debugLog) console.log(consoleLogTime(debugModule, 'App_Env'), App_Env)
   //
   // State
   //
   const [form_message, setForm_message] = useState('')
   const [showContinue, setshowContinue] = useState(false)
   const [showConnect, setshowConnect] = useState(false)
+  const [ScreenSmall, setScreenSmall] = useState(false)
   const router = useRouter()
   //
-  //  Screen Width
-  //
-  const ScreenSmall = JSON.parse(sessionStorage.getItem('App_ScreenSmall'))
-  //
-  //  Say Hello to server
+  //  First Time
   //
   useEffect(() => {
-    sayHello(false)
-    // eslint-disable-next-line
+    clientFirstTime()
   }, [])
+  //
+  //  Every Time
+  //
+  useEffect(() => {
+    clientLoad()
+  })
+  //...........................................................................
+  // First Time
+  //...........................................................................
+  function clientFirstTime() {
+    //
+    //  Debug Settings
+    //
+    debugLog = debugSettings()
+    if (debugLog) console.log(consoleLogTime(debugModule, 'Start'))
+    //
+    //  Screen Width
+    //
+    const w_App_ScreenSmall = sessionStorageGet({
+      caller: debugModule,
+      itemName: 'App_ScreenSmall',
+    })
+    setScreenSmall(w_App_ScreenSmall)
+    //
+    //  Application Environment Variables
+    //
+    App_Env = sessionStorageGet({ caller: debugModule, itemName: 'App_Env' })
+    if (debugLog) console.log(consoleLogTime(debugModule, 'App_Env'), App_Env)
+    sayHello()
+  }
+  //...........................................................................
+  // Client Code
+  //...........................................................................
+  function clientLoad() {
+    try {
+    } catch (e) {
+      if (debugLog) console.log(consoleLogTime(debugModule, 'Catch'))
+      console.log(e)
+    }
+  }
   //...................................................................................
   //.  Check Server is responding
   //...................................................................................
-  function sayHello(signin) {
+  function sayHello() {
     if (debugLog) console.log(consoleLogTime(debugModule, 'sayHello'))
     //
     //  Check if errors
     //
-    const App_Server = JSON.parse(sessionStorage.getItem('App_Server'))
+    const App_Server = sessionStorageGet({ caller: debugModule, itemName: 'App_Server' })
     if (App_Server === 'Error') {
       setForm_message('Invalid Setup parameters')
       return
@@ -104,10 +130,9 @@ export default function Splash() {
       //-----------------
       //  OK
       //-----------------
-      if (!signin) {
-        setForm_message('')
-        setshowContinue(true)
-      }
+      createOptionsOwner()
+      setForm_message('')
+      setshowContinue(true)
     })
   }
   //--------------------------------------------------------------------
@@ -117,7 +142,7 @@ export default function Splash() {
     //
     //  Get the URL
     //
-    const App_URL = JSON.parse(sessionStorage.getItem('App_URL'))
+    const App_URL = sessionStorageGet({ caller: debugModule, itemName: 'App_URL' })
     if (debugLog) console.log(consoleLogTime(debugModule, 'App_URL'), App_URL)
     let body
     //
@@ -129,7 +154,7 @@ export default function Splash() {
       //
       body = {
         AxClient: debugModule,
-        AxTable: 'dbstats'
+        AxTable: 'dbstats',
       }
       const URL = App_URL + App_Env.URL_HELLO
       if (debugLog) console.log(consoleLogTime(debugModule, 'URL'), URL)
@@ -143,7 +168,7 @@ export default function Splash() {
       const apiAxiosProps = {
         AxUrl: URL,
         AxData: body,
-        AxInfo: info
+        AxInfo: info,
       }
       const rtnObj = await apiAxios(apiAxiosProps)
       return rtnObj
@@ -160,10 +185,22 @@ export default function Splash() {
         rtnCatchFunction: debugModule,
         rtnCatch: true,
         rtnCatchMsg: 'Catch calling apiAxios',
-        rtnRows: []
+        rtnRows: [],
       }
       return rtnObj
     }
+  }
+  //--------------------------------------------------------------------
+  //-  Check The Server/Database
+  //--------------------------------------------------------------------
+  function createOptionsOwner() {
+    apiCreateOptions({
+      cop_AxTable: 'owner',
+      cop_id: 'oowner',
+      cop_title: 'otitle',
+      cop_store: 'Data_Options_Owner',
+      cop_received: 'Data_Options_Owner_Received',
+    })
   }
   //...................................................................................
   //.  Render the form
@@ -176,7 +213,7 @@ export default function Splash() {
           padding: 1,
           maxWidth: 350,
           backgroundColor: 'whitesmoke',
-          elevation: 12
+          elevation: 12,
         }}
       >
         <Grid
@@ -200,9 +237,41 @@ export default function Splash() {
           {/*.................................................................................................*/}
           <Grid item xs={12}>
             <Typography variant='subtitle2' sx={{ color: 'red' }}>
-              Email: richardstuart007@hotmail.com
+              ANY ISSUES please email me
             </Typography>
           </Grid>
+          {/*.................................................................................................*/}
+          <Grid item xs={12}>
+            <Typography variant='subtitle2' sx={{ color: 'red' }}>
+              richardstuart007@hotmail.com
+            </Typography>
+          </Grid>
+
+          {/*.................................................................................................*/}
+          <Grid item xs={12}>
+            <Typography variant='subtitle2' sx={{ color: 'green' }}>
+              There are known issues with Registering
+            </Typography>
+          </Grid>
+          {/*.................................................................................................*/}
+          <Grid item xs={12}>
+            <Typography variant='subtitle2' sx={{ color: 'green' }}>
+              Generic student users have been created
+            </Typography>
+          </Grid>
+          {/*.................................................................................................*/}
+          <Grid item xs={12}>
+            <Typography variant='subtitle2' sx={{ color: 'black' }}>
+              student01, student02 ... student11
+            </Typography>
+          </Grid>
+          {/*.................................................................................................*/}
+          <Grid item xs={12}>
+            <Typography variant='subtitle2' sx={{ color: 'black' }}>
+              password = s
+            </Typography>
+          </Grid>
+
           {/*.................................................................................................*/}
           {ScreenSmall ? (
             <Grid item xs={12}>
@@ -218,19 +287,13 @@ export default function Splash() {
           {/*.................................................................................................*/}
           {showConnect ? (
             <Grid item xs={12}>
-              <MyButton
-                type='submit'
-                text='Retry Connection'
-                value='Submit'
-                onClick={() => sayHello(true)}
-              />
+              <MyButton text='Retry Connection' value='Submit' onClick={() => sayHello()} />
             </Grid>
           ) : null}
           {/*.................................................................................................*/}
           {showContinue ? (
             <Grid item xs={12}>
               <MyButton
-                type='submit'
                 text='Register/Signin'
                 value='Submit'
                 onClick={() => {

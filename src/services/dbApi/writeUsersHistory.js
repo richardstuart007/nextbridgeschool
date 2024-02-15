@@ -3,9 +3,11 @@
 //
 import { format, parseISO } from 'date-fns'
 //
-//  Utilities
+//  services
 //
-import rowCrud from '@/utilities/rowCrud'
+import apiRowCrud from '@/services/dbApi/apiRowCrud'
+import sessionStorageGet from '@/services/sessionStorage/sessionStorageGet'
+import sessionStorageSet from '@/services/sessionStorage/sessionStorageSet'
 //
 //  Debug Settings
 //
@@ -15,15 +17,18 @@ let debugLog
 const debugModule = 'writeUsersHistory'
 //===================================================================================
 export default function writeUsersHistory() {
-  if (debugLog) console.log(consoleLogTime(debugModule, 'Start'))
   //
   //  Debug Settings
   //
   debugLog = debugSettings()
+  if (debugLog) console.log(consoleLogTime(debugModule, 'Start'))
   //
   //  Answers
   //
-  const r_ans = JSON.parse(sessionStorage.getItem('Page_Quiz_A'))
+  const r_ans = sessionStorageGet({
+    caller: debugModule,
+    itemName: 'Page_Quiz_A',
+  })
   const r_questions = r_ans.length
   //
   //  If no questions answered, do not write history
@@ -32,15 +37,24 @@ export default function writeUsersHistory() {
   //
   //  Get User
   //
-  const User_User = JSON.parse(sessionStorage.getItem('User_User'))
+  const User_User = sessionStorageGet({
+    caller: debugModule,
+    itemName: 'User_User',
+  })
   //
   //  Get History data
   //
-  const Page_History_Data = JSON.parse(sessionStorage.getItem('Page_History_Data'))
+  const Page_History_Data = sessionStorageGet({
+    caller: debugModule,
+    itemName: 'Page_History_Data',
+  })
   //
   //  Get group title
   //
-  const Page_Quiz_ogtitle = JSON.parse(sessionStorage.getItem('Page_Quiz_ogtitle'))
+  const Page_Quiz_ogtitle = sessionStorageGet({
+    caller: debugModule,
+    itemName: 'Page_Quiz_ogtitle',
+  })
   //
   //  Key
   //
@@ -50,8 +64,14 @@ export default function writeUsersHistory() {
   //
   //  Selection Data
   //
-  const r_owner = JSON.parse(sessionStorage.getItem('Page_Quiz_Owner'))
-  const r_group = JSON.parse(sessionStorage.getItem('Page_Quiz_OwnerGroup'))
+  const r_owner = sessionStorageGet({
+    caller: debugModule,
+    itemName: 'Page_Quiz_Owner',
+  })
+  const r_group = sessionStorageGet({
+    caller: debugModule,
+    itemName: 'Page_Quiz_OwnerGroup',
+  })
   //
   //  Question IDs of Answered questions
   //
@@ -61,7 +81,11 @@ export default function writeUsersHistory() {
   let r_totalpoints = 0
   let r_maxpoints = 0
   let r_correctpercent = 0
-  const Page_Quiz_Q_Flt = JSON.parse(sessionStorage.getItem('Page_Quiz_Q_Flt'))
+
+  const Page_Quiz_Q_Flt = sessionStorageGet({
+    caller: debugModule,
+    itemName: 'Page_Quiz_Q_Flt',
+  })
   Page_Quiz_Q_Flt.forEach(row => {
     count++
     if (count <= r_questions) {
@@ -101,7 +125,7 @@ export default function writeUsersHistory() {
     r_points: r_points,
     r_maxpoints: r_maxpoints,
     r_totalpoints: r_totalpoints,
-    r_correctpercent: r_correctpercent
+    r_correctpercent: r_correctpercent,
   }
   if (debugLog) console.log(consoleLogTime(debugModule, 'AxRow'), { ...AxRow })
   //
@@ -116,7 +140,11 @@ export default function writeUsersHistory() {
     newQH.u_name = User_User.u_name
     if (debugLog) console.log(consoleLogTime(debugModule, 'newQH'), newQH)
     Page_History_Data.unshift(newQH)
-    sessionStorage.setItem('Page_History_Data', JSON.stringify(Page_History_Data))
+    sessionStorageSet({
+      caller: debugModule,
+      itemName: 'Page_History_Data',
+      itemValue: Page_History_Data,
+    })
   }
   //
   //  Build Props
@@ -127,12 +155,12 @@ export default function writeUsersHistory() {
     AxAction: 'INSERT',
     AxTable: 'usershistory',
     AxRow: AxRow,
-    timeout: 1500
+    timeout: 1500,
   }
   //
   //  Process promise
   //
-  const myPromiseInsert = rowCrud(props)
+  const myPromiseInsert = apiRowCrud(props)
   //
   //  Resolve Status
   //
@@ -154,7 +182,11 @@ export default function writeUsersHistory() {
     //
     if (Page_History_Data) {
       Page_History_Data[0].r_hid = newRow.r_hid
-      sessionStorage.setItem('Page_History_Data', JSON.stringify(Page_History_Data))
+      sessionStorageSet({
+        caller: debugModule,
+        itemName: 'Page_History_Data',
+        itemValue: Page_History_Data,
+      })
     }
     return
   })

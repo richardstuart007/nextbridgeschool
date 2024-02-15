@@ -1,12 +1,17 @@
 //
 //  Libraries
 //
+import React from 'react'
 import { Typography } from '@mui/material'
 import { teal } from 'material-ui-colors'
 //
+//  services
+//
+import sessionStorageGet from '@/services/sessionStorage/sessionStorageGet'
+//
 //  Components
 //
-import MyButton from '@/components/controls/MyButton'
+import MyButton from '@/components/Controls/MyButton'
 //===================================================================================
 export default function QuizQuestion(params) {
   //...................................................................................
@@ -34,8 +39,10 @@ export default function QuizQuestion(params) {
     //  Hyperlink get Answer from Library
     //
     if (QorA === 'A') {
-      const Page_Lib_Data_JSON = sessionStorage.getItem('Page_Lib_Data')
-      const Page_Lib_Data = JSON.parse(Page_Lib_Data_JSON)
+      const Page_Lib_Data = sessionStorageGet({
+        caller: debugModule,
+        itemName: 'Page_Lib_Data',
+      })
       const libRow = Page_Lib_Data.find(e => (e.lrowner === qowner) & (e.lrgroup === qgroup))
       buttonLink = libRow.lrlink
       buttonText = 'Click to view the Answer'
@@ -68,7 +75,6 @@ export default function QuizQuestion(params) {
       {hyperLink && (
         <MyButton
           onClick={openTab(buttonLink)}
-          type='submit'
           style={{ color: 'white' }}
           size='small'
           text={buttonText}

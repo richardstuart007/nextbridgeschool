@@ -2,12 +2,14 @@
 //  Libraries
 //
 import axios from 'axios'
+import sessionStorageGet from '@/services/sessionStorage/sessionStorageGet'
+import sessionStorageSet from '@/services/sessionStorage/sessionStorageSet'
 //
 //  Debug Settings
 //
 import debugSettings from '@/debug/debugSettings'
 import consoleLogTime from '@/debug/consoleLogTime'
-let debugLog
+let debugLog = false
 const debugModule = 'apiAxios'
 //
 //  Global
@@ -23,14 +25,12 @@ export default async function apiAxios(props) {
   //  Debug Settings
   //
   debugLog = debugSettings()
+  if (debugLog) console.log(consoleLogTime(debugModule, 'Start'))
   //
   //  Application Environment Variables
   //
-  const App_Env = JSON.parse(sessionStorage.getItem('App_Env'))
+  const App_Env = sessionStorageGet({ caller: debugModule, itemName: 'App_Env' })
   if (debugLog) console.log(consoleLogTime(debugModule, 'App_Env '), App_Env)
-
-  if (debugLog) console.log(consoleLogTime(debugModule, 'Start'))
-
   //
   //  Constants
   //
@@ -88,11 +88,8 @@ export default async function apiAxios(props) {
       //
       //  Sess
       //
-      const AppSessionJSON = sessionStorage.getItem('App_Session')
-      if (AppSessionJSON) {
-        const AppSession = JSON.parse(AppSessionJSON)
-        g_AxSess = AppSession.v_vid
-      }
+      const App_Session = sessionStorageGet({ caller: debugModule, itemName: 'App_Session' })
+      if (App_Session?.v_vid) g_AxSess = App_Session.v_vid
       //
       //  Inceptor - req start time
       //
@@ -134,7 +131,7 @@ export default async function apiAxios(props) {
         method: AxMethod,
         url: AxUrl,
         data: AxDataAlt,
-        timeout: fpAxTimeoutAlt
+        timeout: fpAxTimeoutAlt,
       })
       //
       //  Sucessful response
@@ -172,7 +169,7 @@ export default async function apiAxios(props) {
         rtnMessage: error.message,
         rtnCatchFunction: debugModule,
         rtnCatch: true,
-        rtnCatchMsg: ''
+        rtnCatchMsg: '',
       }
       //
       //  Error logging - Error
@@ -221,8 +218,8 @@ export default async function apiAxios(props) {
     //  Get the store
     //
     let arrReq = []
-    const tempJSON = sessionStorage.getItem('App_apiAxios_Req')
-    if (tempJSON) arrReq = JSON.parse(tempJSON)
+    const temp = sessionStorageGet({ caller: debugModule, itemName: 'App_apiAxios_Req' })
+    if (temp) arrReq = temp
     //
     //  Populate the store object
     //
@@ -236,7 +233,7 @@ export default async function apiAxios(props) {
       AxInfo: AxInfo,
       AxData: AxData,
       AxUrl: AxUrl,
-      AxMethod: AxMethod
+      AxMethod: AxMethod,
     }
     if (debugLog) console.log(consoleLogTime(debugModule, 'objReq'), { ...objReq })
     //
@@ -246,7 +243,7 @@ export default async function apiAxios(props) {
     //
     //  update the store
     //
-    sessionStorage.setItem('App_apiAxios_Req', JSON.stringify(arrReq))
+    sessionStorageSet({ caller: debugModule, itemName: 'App_apiAxios_Req', itemValue: arrReq })
   }
   //--------------------------------------------------------------------------------------------
   // Store the Return values
@@ -257,8 +254,8 @@ export default async function apiAxios(props) {
     //  Get the store
     //
     let arrRes = []
-    const tempJSON = sessionStorage.getItem('App_apiAxios_Res')
-    if (tempJSON) arrRes = JSON.parse(tempJSON)
+    const temp = sessionStorageGet({ caller: debugModule, itemName: 'App_apiAxios_Res' })
+    if (temp) arrRes = temp
     //
     //  Count the returned rows
     //
@@ -277,7 +274,7 @@ export default async function apiAxios(props) {
       AxTry: resObj.rtnBodyParms.AxTry,
       AxTimeout: resObj.rtnBodyParms.AxTimeout,
       AxClient: resObj.rtnBodyParms.AxClient,
-      AxObj: resObj
+      AxObj: resObj,
     }
     if (debugLog) console.log(consoleLogTime(debugModule, 'objRes'), { ...objRes })
     //
@@ -287,7 +284,7 @@ export default async function apiAxios(props) {
     //
     //  update the store
     //
-    sessionStorage.setItem('App_apiAxios_Res', JSON.stringify(arrRes))
+    sessionStorageSet({ caller: debugModule, itemName: 'App_apiAxios_Res', itemValue: arrRes })
   }
   //--------------------------------------------------------------------------------------------
   // Update the transaction ID
@@ -296,12 +293,12 @@ export default async function apiAxios(props) {
     //
     //  Get the store
     //
-    const tempJSON = sessionStorage.getItem('App_apiAxios_Id')
-    tempJSON ? (g_AxId = JSON.parse(tempJSON)) : (g_AxId = 0)
+    const App_apiAxios_Id = sessionStorageGet({ caller: debugModule, itemName: 'App_apiAxios_Id' })
+    App_apiAxios_Id ? (g_AxId = App_apiAxios_Id) : (g_AxId = 0)
     g_AxId++
     //
     //  update the store
     //
-    sessionStorage.setItem('App_apiAxios_Id', JSON.stringify(g_AxId))
+    sessionStorageSet({ caller: debugModule, itemName: 'App_apiAxios_Id', itemValue: g_AxId })
   }
 }
