@@ -3,7 +3,6 @@
 //  Libraries
 //
 import React, { useState, useEffect } from 'react'
-import PeopleOutlineTwoToneIcon from '@mui/icons-material/PeopleOutlineTwoTone'
 import {
   Paper,
   TableBody,
@@ -16,8 +15,6 @@ import {
 } from '@mui/material'
 import SearchIcon from '@mui/icons-material/Search'
 import FilterListIcon from '@mui/icons-material/FilterList'
-import PreviewIcon from '@mui/icons-material/Preview'
-import QuizIcon from '@mui/icons-material/Quiz'
 //
 //  Controls
 //
@@ -41,8 +38,8 @@ import { useRouter } from 'next/navigation'
 //
 //  Debug Settings
 //
-import debugSettings from '@/debug/debugSettings'
-import consoleLogTime from '@/debug/consoleLogTime'
+import debugSettings from '@/services/debug/debugSettings'
+import consoleLogTime from '@/services/debug/consoleLogTime'
 let debugLog = false
 const debugModule = 'Library'
 //...........................................................................
@@ -406,7 +403,6 @@ export default function Library() {
         <PageHeader
           title='Library of Teaching Material'
           subTitle='View Reference Material or Take a Quiz'
-          icon={<PeopleOutlineTwoToneIcon fontSize='large' />}
         />
       )}
       {/* .......................................................................................... */}
@@ -468,7 +464,6 @@ export default function Library() {
                   {ScreenSmall ? null : <TableCell>{row.lrtype}</TableCell>}
                   <TableCell>
                     <MyActionButton
-                      startIcon={<PreviewIcon fontSize='small' />}
                       text={buttonTextView}
                       color='warning'
                       onClick={() => openHyperlink(row.lrlink)}
@@ -478,7 +473,6 @@ export default function Library() {
                   <TableCell>
                     {row.ogcntquestions > 0 ? (
                       <MyActionButton
-                        startIcon={<QuizIcon fontSize='small' />}
                         text={buttonTextQuiz}
                         color='warning'
                         onClick={() => LibraryRow(row)}

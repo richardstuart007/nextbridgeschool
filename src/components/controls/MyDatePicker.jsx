@@ -8,8 +8,8 @@ import { TextField } from '@mui/material'
 //
 //  Debug Settings
 //
-import debugSettings from '@/debug/debugSettings'
-import consoleLogTime from '@/debug/consoleLogTime'
+import debugSettings from '@/services/debug/debugSettings'
+import consoleLogTime from '@/services/debug/consoleLogTime'
 let debugLog
 const debugModule = 'MyDatePicker'
 //=====================================================================================
