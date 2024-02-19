@@ -34,7 +34,7 @@ export default function Home() {
   //
   const ScreenMedium = useMediaQuery(theme.breakpoints.up('sm'))
 
-  console.log('ScreenMedium', ScreenMedium)
+  // console.log('ScreenMedium', ScreenMedium)
   //
   //  Client
   //

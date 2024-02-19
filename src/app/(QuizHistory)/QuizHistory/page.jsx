@@ -130,7 +130,7 @@ export default function QuizHistory() {
   //  Every Time
   //
   useEffect(() => {
-    clientLoad()
+    clientEveryTime()
   })
   //...........................................................................
   // First Time
@@ -188,7 +188,7 @@ export default function QuizHistory() {
   //...........................................................................
   // Client Code
   //...........................................................................
-  function clientLoad() {
+  function clientEveryTime() {
     try {
     } catch (e) {
       if (debugLog) console.log(consoleLogTime(debugModule, 'Catch'))

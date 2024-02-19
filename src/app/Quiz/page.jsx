@@ -72,7 +72,7 @@ export default function Quiz() {
   //  Every Time
   //
   useEffect(() => {
-    clientLoad()
+    clientEveryTime()
   })
   //...........................................................................
   // First Time
@@ -110,7 +110,7 @@ export default function Quiz() {
   //...........................................................................
   // Client Code
   //...........................................................................
-  function clientLoad() {
+  function clientEveryTime() {
     try {
       if (debugLog) console.log(consoleLogTime(debugModule, 'quizRow'), quizRow)
     } catch (e) {

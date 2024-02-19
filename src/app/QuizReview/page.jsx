@@ -74,7 +74,7 @@ export default function QuizReview() {
   //  Every Time
   //
   useEffect(() => {
-    clientLoad()
+    clientEveryTime()
   })
   //...........................................................................
   // First Time
@@ -114,7 +114,7 @@ export default function QuizReview() {
   //...........................................................................
   // Client Code
   //...........................................................................
-  function clientLoad() {
+  function clientEveryTime() {
     try {
       //
       //  Hide/Show Previous/Next Buttons

@@ -1,7 +1,8 @@
-.container{
+.container {
   width: 42px;
   height: 24px;
-  border: 1.5px solid #53c28b70;
+  background-color: #944f8e70;
+  border: 1.5px solid #dd0c3970;
   border-radius: 30px;
   display: flex;
   align-items: center;
@@ -11,11 +12,11 @@
   cursor: pointer;
 }
 
-.icon{
+.icon {
   font-size: 12px;
 }
 
-.ball{
+.ball {
   width: 15px;
   height: 15px;
   background-color: #53c28b;

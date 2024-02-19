@@ -8,13 +8,11 @@ export default function sessionStorageGet(props) {
   //
   const { caller, itemName } = props
   try {
-    if (debugLog) console.log(`Caller(${caller}) itemName(${itemName})`)
     //
     //  Get the item
     //
-    if (debugLog) console.log(`itemName`, itemName)
     const json = sessionStorage.getItem(itemName)
-    if (debugLog) console.log(`Caller(${caller}) itemName(${itemName})`, json)
+    // if (debugLog) console.log(`Caller(${caller}) itemName(${itemName})`, json)
     //
     //  Does not exist - return null
     //

@@ -47,7 +47,7 @@ export default function Splash() {
   //  Every Time
   //
   useEffect(() => {
-    clientLoad()
+    clientEveryTime()
   })
   //...........................................................................
   // First Time
@@ -76,7 +76,7 @@ export default function Splash() {
   //...........................................................................
   // Client Code
   //...........................................................................
-  function clientLoad() {
+  function clientEveryTime() {
     try {
     } catch (e) {
       if (debugLog) console.log(consoleLogTime(debugModule, 'Catch'))

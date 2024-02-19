@@ -2,7 +2,7 @@
 //
 //  Libraries
 //
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Paper, Grid, Typography } from '@mui/material'
 //
 //  services
@@ -42,11 +42,6 @@ const initialFValues = {
 export default function RegisterPwd() {
   const router = useRouter()
   //
-  //  Debug Settings
-  //
-  debugLog = debugSettings()
-  if (debugLog) console.log(consoleLogTime(debugModule, 'Start'))
-  //
   // State
   //
   const [form_message, setForm_message] = useState('')
@@ -58,6 +53,38 @@ export default function RegisterPwd() {
     true,
     validate
   )
+  //
+  //  First Time
+  //
+  useEffect(() => {
+    clientFirstTime()
+  }, [])
+  //
+  //  Every Time
+  //
+  useEffect(() => {
+    clientEveryTime()
+  })
+  //...........................................................................
+  // First Time
+  //...........................................................................
+  function clientFirstTime() {
+    //
+    //  Debug Settings
+    //
+    debugLog = debugSettings()
+    if (debugLog) console.log(consoleLogTime(debugModule, 'Start'))
+  }
+  //...........................................................................
+  // Client Code
+  //...........................................................................
+  function clientEveryTime() {
+    try {
+    } catch (e) {
+      if (debugLog) console.log(consoleLogTime(debugModule, 'Catch'))
+      console.log(e)
+    }
+  }
   //.............................................................................
   //.  Input field validation
   //.............................................................................

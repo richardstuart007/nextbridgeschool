@@ -2,7 +2,7 @@
 //
 //  Libraries
 //
-import React, { useEffect, useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Paper, Grid, Typography } from '@mui/material'
 //
 //  services
@@ -47,22 +47,34 @@ const initialFValues = {
 //  Valid form
 //
 let validForm = false
+let u_uid
+let u_user
+let password
+let App_Env
 //...................................................................................
 //.  Main Line
 //...................................................................................
 export default function RegisterUser() {
   const router = useRouter()
   //
-  //  Debug Settings
-  //
-  debugLog = debugSettings()
-  if (debugLog) console.log(consoleLogTime(debugModule, 'Start'))
-  //
   // State
   //
   const [form_message, setForm_message] = useState('')
   const [showButtonUpdate, setShowButtonUpdate] = useState(false)
   const [showButtonSignin, setShowButtonSignin] = useState(false)
+  const [Data_Options_Owner, setData_Options_Owner] = useState([{ id: 'id', title: 'title' }])
+  //
+  //  First Time
+  //
+  useEffect(() => {
+    clientFirstTime()
+  }, [])
+  //
+  //  Every Time
+  //
+  useEffect(() => {
+    clientEveryTime()
+  })
   //
   //  Interface to Form
   //
@@ -71,34 +83,54 @@ export default function RegisterUser() {
     true,
     validate
   )
-  //
-  //  Userpwd info
-  //
-  const User_Userspwd = sessionStorageGet({ caller: debugModule, itemName: 'User_Userspwd' })
-  const u_uid = User_Userspwd.upuid
-  const u_user = User_Userspwd.upuser
-  //
-  //  Password
-  //
-  const password = sessionStorageGet({ caller: debugModule, itemName: 'User_Password' })
-  //
-  //  Default in Owner
-  //
-  const App_Env = sessionStorageGet({ caller: debugModule, itemName: 'App_Env' })
-  useEffect(() => {
+  //...........................................................................
+  // First Time
+  //...........................................................................
+  function clientFirstTime() {
+    //
+    //  Debug Settings
+    //
+    debugLog = debugSettings()
+    if (debugLog) console.log(consoleLogTime(debugModule, 'Start'))
+    //
+    //  Userpwd info
+    //
+    const User_Userspwd = sessionStorageGet({ caller: debugModule, itemName: 'User_Userspwd' })
+    u_uid = User_Userspwd.upuid
+    u_user = User_Userspwd.upuser
+    //
+    //  Password
+    //
+    password = sessionStorageGet({ caller: debugModule, itemName: 'User_Password' })
+    //
+    //  Default in Owner
+    //
+    App_Env = sessionStorageGet({ caller: debugModule, itemName: 'App_Env' })
     const dftowner = App_Env.DFT_USER_OWNER
     const updValues = { ...values }
     updValues.ogowner = dftowner
     setValues(updValues)
-    // eslint-disable-next-line
-  }, [])
-  //
-  //  Define the Store
-  //
-  const Data_Options_Owner = sessionStorageGet({
-    caller: debugModule,
-    itemName: 'Data_Options_Owner',
-  })
+    //
+    //  Define the Store
+    //
+    const w_Data_Options_Owner = sessionStorageGet({
+      caller: debugModule,
+      itemName: 'Data_Options_Owner',
+    })
+    if (debugLog) console.log(consoleLogTime(debugModule, 'Data_Options_Owner'), Data_Options_Owner)
+    setData_Options_Owner(w_Data_Options_Owner)
+  }
+  //...........................................................................
+  // Client Code
+  //...........................................................................
+  function clientEveryTime() {
+    if (debugLog) console.log(consoleLogTime(debugModule, 'Every Time'))
+    try {
+    } catch (e) {
+      if (debugLog) console.log(consoleLogTime(debugModule, 'Catch'))
+      console.log(e)
+    }
+  }
   //.............................................................................
   //.  Input field validation
   //.............................................................................
@@ -321,7 +353,6 @@ export default function RegisterUser() {
                 Register User Information
               </Typography>
             </Grid>
-
             {/*.................................................................................................*/}
             <Grid item xs={12}>
               <MyInput
