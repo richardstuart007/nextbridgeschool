@@ -84,7 +84,7 @@ export default function QuizReview() {
     //  Debug Settings
     //
     debugLog = debugSettings()
-    if (debugLog) console.log(consoleLogTime(debugModule, 'Start'))
+    if (debugLog) console.log(consoleLogTime(debugModule, 'clientFirstTime'))
 
     //
     //  Load the data array from the store
@@ -115,6 +115,7 @@ export default function QuizReview() {
   // Client Code
   //...........................................................................
   function clientEveryTime() {
+    if (debugLog) console.log(consoleLogTime(debugModule, 'clientEveryTime'))
     try {
       //
       //  Hide/Show Previous/Next Buttons

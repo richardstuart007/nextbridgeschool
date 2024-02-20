@@ -3,7 +3,6 @@
 //  Libraries
 //
 import React, { useState, useEffect } from 'react'
-import PeopleOutlineTwoToneIcon from '@mui/icons-material/PeopleOutlineTwoTone'
 import {
   Paper,
   TableBody,
@@ -15,10 +14,6 @@ import {
   Typography,
 } from '@mui/material'
 import SearchIcon from '@mui/icons-material/Search'
-import FilterListIcon from '@mui/icons-material/FilterList'
-import ScoreboardIcon from '@mui/icons-material/Scoreboard'
-import QuizIcon from '@mui/icons-material/Quiz'
-import PeopleIcon from '@mui/icons-material/People'
 import { format, parseISO } from 'date-fns'
 //
 //  Controls
@@ -140,7 +135,7 @@ export default function QuizHistory() {
     //  Debug Settings
     //
     debugLog = debugSettings()
-    if (debugLog) console.log(consoleLogTime(debugModule, 'Start'))
+    if (debugLog) console.log(consoleLogTime(debugModule, 'clientFirstTime'))
     //
     //  Small Screen overrides
     //
@@ -484,13 +479,7 @@ export default function QuizHistory() {
   return (
     <>
       {/* .......................................................................................... */}
-      {ScreenSmall ? null : (
-        <PageHeader
-          title='Quiz History'
-          subTitle={subtitle}
-          icon={<PeopleOutlineTwoToneIcon fontSize='large' />}
-        />
-      )}
+      {ScreenSmall ? null : <PageHeader title='Quiz History' subTitle={subtitle} />}
       {/* .......................................................................................... */}
       <Paper>
         <Toolbar>
@@ -521,29 +510,14 @@ export default function QuizHistory() {
             </Box>
           )}
           {/* .......................................................................................... */}
-          <MyButton
-            text='Filter'
-            variant='outlined'
-            startIcon={<FilterListIcon />}
-            onClick={() => handleSearch()}
-          />
+          <MyButton text='Filter' variant='outlined' onClick={() => handleSearch()} />
           {/* .......................................................................................... */}
           {User_Admin & !ScreenSmall ? (
-            <MyButton
-              text={allUsersText}
-              variant='outlined'
-              startIcon={<PeopleIcon />}
-              onClick={handleAllUsers}
-            />
+            <MyButton text={allUsersText} variant='outlined' onClick={handleAllUsers} />
           ) : null}
           {/* .......................................................................................... */}
           {User_Admin & !ScreenSmall ? (
-            <MyButton
-              text='Refresh'
-              variant='outlined'
-              startIcon={<PeopleIcon />}
-              onClick={() => getRowAllData()}
-            />
+            <MyButton text='Refresh' variant='outlined' onClick={() => getRowAllData()} />
           ) : null}
           {/*.................................................................................................*/}
           <Box>
@@ -570,7 +544,6 @@ export default function QuizHistory() {
                 {ScreenSmall ? null : <TableCell>{row.r_correctpercent}</TableCell>}
                 <TableCell>
                   <MyActionButton
-                    startIcon={<ScoreboardIcon fontSize='small' />}
                     text={buttonTextView}
                     color='warning'
                     onClick={() => QuizHistoryRow(row)}
@@ -578,7 +551,6 @@ export default function QuizHistory() {
                 </TableCell>
                 <TableCell>
                   <MyActionButton
-                    startIcon={<QuizIcon fontSize='small' />}
                     text={buttonTextQuiz}
                     color='warning'
                     onClick={() => QuizBuild(row)}

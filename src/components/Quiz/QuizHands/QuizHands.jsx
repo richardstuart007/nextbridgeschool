@@ -13,6 +13,10 @@ import sessionStorageGet from '@/services/sessionStorage/sessionStorageGet'
 //
 import QuizHandsTableHeader from './QuizHandsTableHeader'
 import QuizHandsTableLine from './QuizHandsTableLine'
+//
+//  Debug Settings
+//
+const debugModule = 'QuizHands'
 //...................................................................................
 //.  Main Line
 //...................................................................................

@@ -2,7 +2,7 @@
 //
 //  Libraries
 //
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Paper, Grid, Typography } from '@mui/material'
 //
 //  services
@@ -35,44 +35,69 @@ const initialFValues = {
   user: '',
   password: '',
 }
+//
+let App_Env
 //...................................................................................
 //.  Main Line
 //...................................................................................
 export default function Signin() {
-  debugLog = debugSettings()
-  //
-  //  Application Environment Variables
-  //
-  const App_Env = sessionStorageGet({
-    caller: debugModule,
-    itemName: 'App_Env',
-  })
+  const router = useRouter()
   //
   // State
   //
   const [form_message, setForm_message] = useState('')
   const [showButtons, setShowButtons] = useState(true)
-  const router = useRouter()
   //
   //  Interface to Form
   //
   const { values, errors, setErrors, handleInputChange } = useMyForm(initialFValues, true, validate)
   //
-  //  Try
+  //  First Time
   //
-  try {
-    if (debugLog) console.log(consoleLogTime(debugModule, 'Start'))
+  useEffect(() => {
+    clientFirstTime()
+  }, [])
+  //
+  //  Every Time
+  //
+  useEffect(() => {
+    clientEveryTime()
+  })
+  //...........................................................................
+  // First Time
+  //...........................................................................
+  function clientFirstTime() {
     //
-    //  Restore previous signin info
+    //  Debug Settings
     //
-    const User_User = sessionStorageGet({
+    debugLog = debugSettings()
+    if (debugLog) console.log(consoleLogTime(debugModule, 'clientFirstTime'))
+    //
+    //  Application Environment Variables
+    //
+    App_Env = sessionStorageGet({
       caller: debugModule,
-      itemName: 'User_User',
+      itemName: 'App_Env',
     })
-    if (User_User) initialFValues.user = User_User.u_user
-  } catch (e) {
-    if (debugLog) console.log(consoleLogTime(debugModule, 'Catch'))
-    console.log(e)
+  }
+  //...........................................................................
+  // Client Code
+  //...........................................................................
+  function clientEveryTime() {
+    if (debugLog) console.log(consoleLogTime(debugModule, 'clientEveryTime'))
+    try {
+      //
+      //  Restore previous signin info
+      //
+      const User_User = sessionStorageGet({
+        caller: debugModule,
+        itemName: 'User_User',
+      })
+      if (User_User) initialFValues.user = User_User.u_user
+    } catch (e) {
+      if (debugLog) console.log(consoleLogTime(debugModule, 'Catch'))
+      console.log(e)
+    }
   }
   //.............................................................................
   //.  Input field validation

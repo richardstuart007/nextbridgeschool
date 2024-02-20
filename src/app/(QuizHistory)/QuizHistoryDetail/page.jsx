@@ -24,14 +24,13 @@ import debugSettings from '@/services/debug/debugSettings'
 import consoleLogTime from '@/services/debug/consoleLogTime'
 let debugLog
 const debugModule = 'QuizHistoryDetail'
+
+let User_User = null
+let g_AnsIdx = 0
 //...................................................................................
 //.  Main Line
 //...................................................................................
 export default function QuizHistoryDetail() {
-  //
-  //  Debug Settings
-  //
-  debugLog = debugSettings()
   const router = useRouter()
   //
   //  Counts
@@ -48,56 +47,79 @@ export default function QuizHistoryDetail() {
   const [arrAns, setArrAns] = useState([])
   const [arrAnsNum, setArrAnsNum] = useState([])
   const [ansIdx, setAnsIdx] = useState(0)
-  if (debugLog) console.log(consoleLogTime(debugModule, 'Start'))
   //
-  //  Signed in User
+  //  Buttons
   //
-  const User_User = sessionStorageGet({ caller: debugModule, itemName: 'User_User' })
+  const [hideNextButton, sethideNextButton] = useState(true)
+  const [hidePreviousButton, sethidePreviousButton] = useState(true)
   //
-  //  Load the data array from the store
+  //  First Time
   //
   useEffect(() => {
-    firstLoad()
-    // eslint-disable-next-line
+    clientFirstTime()
   }, [])
   //
-  //  No data to review
+  //  Every Time
   //
-  if (!quizRow) {
-    if (countAns === 0) {
-      return (
-        <>
-          <Typography variant='subtitle1' sx={{ marginTop: '8px' }}>
-            Waiting for data
-          </Typography>
-        </>
-      )
-    } else {
-      return (
-        <>
-          <Typography variant='subtitle1' sx={{ marginTop: '8px' }}>
-            Result ({mark}%) {countPass} out of {countAns}. WELL DONE !!
-          </Typography>
-        </>
-      )
-    }
-  }
-  //
-  //  Hide/Show Previous/Next Buttons
-  //
-  let hidePreviousButton
-  ansIdx + 1 === 1 ? (hidePreviousButton = true) : (hidePreviousButton = false)
-  let hideNextButton
-  ansIdx + 1 === countReview ? (hideNextButton = true) : (hideNextButton = false)
-  //...................................................................................
-  //.  First time data received
-  //...................................................................................
-  function firstLoad() {
+  useEffect(() => {
+    clientEveryTime()
+  })
+  //...........................................................................
+  // First Time
+  //...........................................................................
+  function clientFirstTime() {
+    //
+    //  Debug Settings
+    //
+    debugLog = debugSettings()
+    if (debugLog) console.log(consoleLogTime(debugModule, 'clientFirstTime'))
+    //
+    //  Signed in User
+    //
+    User_User = sessionStorageGet({ caller: debugModule, itemName: 'User_User' })
     //
     //  Get Row Values
     //
     const row = sessionStorageGet({ caller: debugModule, itemName: 'Page_Qd_Row' })
     updateSelection(row)
+    //
+    //  No data to review
+    //
+    if (!quizRow) {
+      if (countAns === 0) {
+        return (
+          <>
+            <Typography variant='subtitle1' sx={{ marginTop: '8px' }}>
+              Waiting for data
+            </Typography>
+          </>
+        )
+      } else {
+        return (
+          <>
+            <Typography variant='subtitle1' sx={{ marginTop: '8px' }}>
+              Result ({mark}%) {countPass} out of {countAns}. WELL DONE !!
+            </Typography>
+          </>
+        )
+      }
+    }
+  }
+  //...........................................................................
+  // Client Code
+  //...........................................................................
+  function clientEveryTime() {
+    if (debugLog) console.log(consoleLogTime(debugModule, 'clientEveryTime'))
+    try {
+      //
+      //  Hide/Show Previous/Next Buttons
+      //
+      ansIdx + 1 === 1 ? sethidePreviousButton(true) : sethidePreviousButton(false)
+      ansIdx + 1 === countReview ? sethideNextButton(true) : sethideNextButton(false)
+    } catch (e) {
+      if (debugLog) console.log(consoleLogTime(debugModule, 'Catch'))
+      console.log(e)
+    }
   }
   //...................................................................................
   //.  Update Selection
@@ -164,9 +186,9 @@ export default function QuizHistoryDetail() {
     //
     // Start at Answer Row 0
     //
-    const AnsIdx = 0
-    setAnsIdx(AnsIdx)
-    const QuizIdx = AnsNum[AnsIdx]
+    g_AnsIdx = 0
+    setAnsIdx(g_AnsIdx)
+    const QuizIdx = AnsNum[g_AnsIdx]
     setQuizRow(ArrQuestions[QuizIdx])
   }
   //...................................................................................
@@ -176,10 +198,10 @@ export default function QuizHistoryDetail() {
     //
     //  More rows
     //
-    const AnsIdx = ansIdx + 1
-    if (AnsIdx < countReview) {
-      const QuizIdx = arrAnsNum[AnsIdx]
-      setAnsIdx(AnsIdx)
+    g_AnsIdx = ansIdx + 1
+    if (g_AnsIdx < countReview) {
+      const QuizIdx = arrAnsNum[g_AnsIdx]
+      setAnsIdx(g_AnsIdx)
       setQuizRow(arrQuest[QuizIdx])
     }
   }
@@ -191,28 +213,27 @@ export default function QuizHistoryDetail() {
     //  More rows
     //
     if (ansIdx > 0) {
-      const AnsIdx = ansIdx - 1
-      const QuizIdx = arrAnsNum[AnsIdx]
-      setAnsIdx(AnsIdx)
+      g_AnsIdx = ansIdx - 1
+      const QuizIdx = arrAnsNum[g_AnsIdx]
+      setAnsIdx(g_AnsIdx)
       setQuizRow(arrQuest[QuizIdx])
     }
   }
   //...................................................................................
   //.  Render the form
   //...................................................................................
+  if (quizRow === null) return null
   return (
     <>
-      <Box sx={{ mt: 2, maxWidth: 600 }}>
-        <Typography variant='subtitle1' sx={{ marginTop: '8px' }}>
-          Result ({mark}%) {countPass} out of {countAns}
-        </Typography>
-      </Box>
       <QuizQuestion
         quizRow={quizRow}
         quizQuestion={arrAnsNum[ansIdx] + 1}
         quizTotal={countAns}
         QorA='A'
       />
+      <Typography variant='subtitle2'>
+        Result ({mark}%) {countPass} out of {countAns}
+      </Typography>
       <QuizBidding qqid={quizRow.qqid} />
       <QuizHands qqid={quizRow.qqid} />
       <QuizReviewAnswers quizRow={quizRow} AnswerNum={arrAns[ansIdx]} />

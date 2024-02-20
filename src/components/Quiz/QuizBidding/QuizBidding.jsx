@@ -13,6 +13,10 @@ import sessionStorageGet from '@/services/sessionStorage/sessionStorageGet'
 //
 import QuizBiddingTableHeader from './QuizBiddingTableHeader'
 import QuizBiddingTableLine from './QuizBiddingTableLine'
+//
+//  Debug Settings
+//
+const debugModule = 'QuizBidding'
 //===================================================================================
 export default function QuizBidding({ qqid }) {
   //...................................................................................

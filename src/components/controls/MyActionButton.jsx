@@ -3,7 +3,6 @@
 //
 import React from 'react'
 import MyButton from './MyButton'
-
 //=====================================================================================
 export default function MyActionButton(props) {
   const { children, onClick, ...other } = props
@@ -12,7 +11,7 @@ export default function MyActionButton(props) {
     <MyButton
       sx={{
         ':hover': {
-          bgcolor: 'yellow',
+          backgroundColor: 'yellowgreen',
         },
       }}
       onClick={onClick}

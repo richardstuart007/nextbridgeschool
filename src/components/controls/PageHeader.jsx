@@ -15,8 +15,16 @@ export default function PageHeader(props) {
       <div>
         <Card>{icon}</Card>
         <div>
-          <Typography variant='h6'>{title}</Typography>
-          <Typography variant='subtitle2'>{subTitle}</Typography>
+          <Typography
+            variant='h6'
+            display='inline-block'
+            style={{ marginLeft: '1rem', marginRight: '2rem' }}
+          >
+            {title}
+          </Typography>
+          <Typography variant='subtitle2' display='inline-block'>
+            {subTitle}
+          </Typography>
         </div>
       </div>
     </Paper>

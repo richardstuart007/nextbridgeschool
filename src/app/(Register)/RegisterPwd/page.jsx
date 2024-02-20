@@ -73,7 +73,7 @@ export default function RegisterPwd() {
     //  Debug Settings
     //
     debugLog = debugSettings()
-    if (debugLog) console.log(consoleLogTime(debugModule, 'Start'))
+    if (debugLog) console.log(consoleLogTime(debugModule, 'clientFirstTime'))
   }
   //...........................................................................
   // Client Code

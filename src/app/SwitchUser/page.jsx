@@ -58,8 +58,6 @@ const searchTypeOptions = [
 //.  Main Line
 //...................................................................................
 export default function SwitchUser() {
-  debugLog = debugSettings()
-  if (debugLog) console.log(consoleLogTime(debugModule, 'Start'))
   const router = useRouter()
   //.............................................................................
   //
@@ -74,13 +72,11 @@ export default function SwitchUser() {
   const [searchType, setSearchType] = useState('u_name')
   const [searchValue, setSearchValue] = useState('')
   //
-  //  Initial Data Load
+  //  First Time
   //
   useEffect(() => {
-    getRowAllData()
-    // eslint-disable-next-line
+    clientFirstTime()
   }, [])
-  //.............................................................................
   //
   //  Populate the Table
   //
@@ -89,6 +85,20 @@ export default function SwitchUser() {
     headCells,
     filterFn
   )
+  //...........................................................................
+  // First Time
+  //...........................................................................
+  function clientFirstTime() {
+    //
+    //  Debug Settings
+    //
+    debugLog = debugSettings()
+    if (debugLog) console.log(consoleLogTime(debugModule, 'clientFirstTime'))
+    //
+    //  Initial Data Load
+    //
+    getRowAllData()
+  }
   //.............................................................................
   //.  GET ALL
   //.............................................................................

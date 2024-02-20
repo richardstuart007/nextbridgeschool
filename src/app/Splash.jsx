@@ -57,7 +57,7 @@ export default function Splash() {
     //  Debug Settings
     //
     debugLog = debugSettings()
-    if (debugLog) console.log(consoleLogTime(debugModule, 'Start'))
+    if (debugLog) console.log(consoleLogTime(debugModule, 'clientFirstTime'))
     //
     //  Screen Width
     //
@@ -77,6 +77,7 @@ export default function Splash() {
   // Client Code
   //...........................................................................
   function clientEveryTime() {
+    if (debugLog) console.log(consoleLogTime(debugModule, 'clientEveryTime'))
     try {
     } catch (e) {
       if (debugLog) console.log(consoleLogTime(debugModule, 'Catch'))

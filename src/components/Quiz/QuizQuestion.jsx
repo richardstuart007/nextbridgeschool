@@ -12,6 +12,10 @@ import sessionStorageGet from '@/services/sessionStorage/sessionStorageGet'
 //  Components
 //
 import MyButton from '@/components/Controls/MyButton'
+//
+//  Debug Settings
+//
+const debugModule = 'QuizQuestion'
 //===================================================================================
 export default function QuizQuestion(params) {
   //...................................................................................

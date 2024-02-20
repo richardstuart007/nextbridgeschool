@@ -80,7 +80,7 @@ export default function Home() {
     //  Debug Settings
     //
     debugLog = debugSettings()
-    if (debugLog) console.log(consoleLogTime(debugModule, 'Start'))
+    if (debugLog) console.log(consoleLogTime(debugModule, 'clientFirstTime'))
     //
     //  Client
     //

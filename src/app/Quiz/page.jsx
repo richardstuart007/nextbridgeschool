@@ -82,7 +82,7 @@ export default function Quiz() {
     //  Debug Settings
     //
     debugLog = debugSettings()
-    if (debugLog) console.log(consoleLogTime(debugModule, 'Start'))
+    if (debugLog) console.log(consoleLogTime(debugModule, 'clientFirstTime'))
     //
     //  Signed in User
     //
@@ -111,6 +111,7 @@ export default function Quiz() {
   // Client Code
   //...........................................................................
   function clientEveryTime() {
+    if (debugLog) console.log(consoleLogTime(debugModule, 'clientEveryTime'))
     try {
       if (debugLog) console.log(consoleLogTime(debugModule, 'quizRow'), quizRow)
     } catch (e) {

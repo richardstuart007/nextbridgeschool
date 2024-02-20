@@ -68,7 +68,7 @@ export default function UsersSettings() {
     //  Debug Settings
     //
     debugLog = debugSettings()
-    if (debugLog) console.log(consoleLogTime(debugModule, 'Start'))
+    if (debugLog) console.log(consoleLogTime(debugModule, 'clientFirstTime'))
     //
     //  Get User
     //
@@ -87,6 +87,7 @@ export default function UsersSettings() {
   // Client Code
   //...........................................................................
   function clientEveryTime() {
+    if (debugLog) console.log(consoleLogTime(debugModule, 'clientEveryTime'))
     try {
     } catch (e) {
       if (debugLog) console.log(consoleLogTime(debugModule, 'Catch'))

@@ -91,7 +91,7 @@ export default function RegisterUser() {
     //  Debug Settings
     //
     debugLog = debugSettings()
-    if (debugLog) console.log(consoleLogTime(debugModule, 'Start'))
+    if (debugLog) console.log(consoleLogTime(debugModule, 'clientFirstTime'))
     //
     //  Userpwd info
     //
@@ -124,7 +124,7 @@ export default function RegisterUser() {
   // Client Code
   //...........................................................................
   function clientEveryTime() {
-    if (debugLog) console.log(consoleLogTime(debugModule, 'Every Time'))
+    if (debugLog) console.log(consoleLogTime(debugModule, 'clientEveryTime'))
     try {
     } catch (e) {
       if (debugLog) console.log(consoleLogTime(debugModule, 'Catch'))
