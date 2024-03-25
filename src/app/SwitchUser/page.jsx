@@ -3,8 +3,17 @@
 //  Libraries
 //
 import React, { useState, useEffect } from 'react'
-import PeopleOutlineTwoToneIcon from '@mui/icons-material/PeopleOutlineTwoTone'
-import { Paper, TableBody, TableRow, TableCell, Toolbar, InputAdornment, Box } from '@mui/material'
+import styles from './SwitchUser.module.css'
+import {
+  Paper,
+  TableBody,
+  TableRow,
+  TableCell,
+  Toolbar,
+  InputAdornment,
+  Box,
+  Typography,
+} from '@mui/material'
 import SearchIcon from '@mui/icons-material/Search'
 import RefreshIcon from '@mui/icons-material/Refresh'
 import FilterListIcon from '@mui/icons-material/FilterList'
@@ -12,7 +21,6 @@ import SwitchAccountIcon from '@mui/icons-material/SwitchAccount'
 //
 //  Controls
 //
-import MyActionButton from '@/components/Controls/MyActionButton'
 import MyButton from '@/components/Controls/MyButton'
 import MyInput from '@/components/Controls/MyInput'
 import MySelect from '@/components/Controls/MySelect'
@@ -23,6 +31,7 @@ import useMyTable from '@/components/Controls/useMyTable'
 //
 import apiRowCrud from '@/services/dbApi/apiRowCrud'
 import sessionStorageSet from '@/services/sessionStorage/sessionStorageSet'
+import sessionStorageGet from '@/services/sessionStorage/sessionStorageGet'
 //
 //  Routing
 //
@@ -71,6 +80,13 @@ export default function SwitchUser() {
   })
   const [searchType, setSearchType] = useState('u_name')
   const [searchValue, setSearchValue] = useState('')
+  const [form_message, setForm_message] = useState('')
+  //
+  //  BackgroundColor
+  //
+  const [BACKGROUNDCOLOR_TABLEPAPER, SetBACKGROUNDCOLOR_TABLEPAPER] = useState('purple')
+  const [BACKGROUNDCOLOR_MYINPUT, SetBACKGROUNDCOLOR_MYINPUT] = useState('purple')
+  const [BACKGROUNDCOLOR_TABLEBODY, SetBACKGROUNDCOLOR_TABLEBODY] = useState('purple')
   //
   //  First Time
   //
@@ -92,8 +108,19 @@ export default function SwitchUser() {
     //
     //  Debug Settings
     //
-    debugLog = debugSettings()
+    debugLog = debugSettings(true)
     if (debugLog) console.log(consoleLogTime(debugModule, 'clientFirstTime'))
+    //
+    //  Application Environment Variables
+    //
+    const App_Env = sessionStorageGet({ caller: debugModule, itemName: 'App_Env' })
+    if (debugLog) console.log(consoleLogTime(debugModule, 'App_Env '), App_Env)
+    //
+    //  BackgroundColor
+    //
+    SetBACKGROUNDCOLOR_TABLEPAPER(App_Env.BACKGROUNDCOLOR_TABLEPAPER)
+    SetBACKGROUNDCOLOR_MYINPUT(App_Env.BACKGROUNDCOLOR_MYINPUT)
+    SetBACKGROUNDCOLOR_TABLEBODY(App_Env.BACKGROUNDCOLOR_TABLEBODY)
     //
     //  Initial Data Load
     //
@@ -103,6 +130,10 @@ export default function SwitchUser() {
   //.  GET ALL
   //.............................................................................
   function getRowAllData() {
+    //
+    //  User Message
+    //
+    setForm_message('Retrieving data from the database....')
     //
     //  Selection
     //
@@ -133,6 +164,7 @@ export default function SwitchUser() {
       //
       //  Update Table
       //
+      setForm_message('')
       setRecords(data)
       //
       //  Filter
@@ -218,17 +250,23 @@ export default function SwitchUser() {
   //...................................................................................
   return (
     <>
-      <PageHeader
-        title='Users'
-        subTitle='Switch Users'
-        icon={<PeopleOutlineTwoToneIcon fontSize='large' />}
-      />
-      <Paper>
+      <PageHeader title='Users' subTitle='Switch Users' />
+      <Paper
+        className={styles.pageContent}
+        sx={{
+          backgroundColor: BACKGROUNDCOLOR_TABLEPAPER,
+        }}
+      >
         <Toolbar>
           <MyInput
             label='Search'
             name='Search'
             value={searchValue}
+            className={styles.searchInput}
+            sx={{
+              backgroundColor: BACKGROUNDCOLOR_MYINPUT,
+              minWidth: '300px',
+            }}
             InputProps={{
               startAdornment: (
                 <InputAdornment position='start'>
@@ -239,17 +277,22 @@ export default function SwitchUser() {
             onChange={e => setSearchValue(e.target.value)}
           />
           {/* .......................................................................................... */}
-          <Box>
+          <Box className={styles.searchInputTypeBox}>
             <MySelect
               name='SearchType'
               label='Search By'
               value={searchType}
+              sx={{
+                backgroundColor: BACKGROUNDCOLOR_MYINPUT,
+                minWidth: '200px',
+              }}
               onChange={e => setSearchType(e.target.value)}
               options={searchTypeOptions}
             />
           </Box>
           {/* .......................................................................................... */}
           <MyButton
+            className={styles.buttonfilter}
             text='Filter'
             variant='outlined'
             startIcon={<FilterListIcon />}
@@ -257,16 +300,25 @@ export default function SwitchUser() {
           />
           {/* .......................................................................................... */}
           <MyButton
+            className={styles.buttonfilter}
             text='Refresh'
             variant='outlined'
             startIcon={<RefreshIcon />}
             onClick={getRowAllData}
           />
+          {/*.................................................................................................*/}
+          <Box className={styles.messages}>
+            <Typography style={{ color: 'red' }}>{form_message}</Typography>
+          </Box>
           {/* .......................................................................................... */}
         </Toolbar>
         <TblContainer>
           <TblHead />
-          <TableBody>
+          <TableBody
+            sx={{
+              backgroundColor: BACKGROUNDCOLOR_TABLEBODY,
+            }}
+          >
             {recordsAfterPagingAndSorting().map(row => (
               <TableRow key={row.u_uid}>
                 <TableCell>{row.u_uid}</TableCell>
@@ -277,12 +329,12 @@ export default function SwitchUser() {
                 <TableCell>{row.u_fedcountry}</TableCell>
                 <TableCell>{row.u_dftmaxquestions}</TableCell>
                 <TableCell>
-                  <MyActionButton
+                  <MyButton
                     startIcon={<SwitchAccountIcon fontSize='small' />}
                     text='Switch'
                     color='warning'
                     onClick={() => submitSwitchUser(row)}
-                  ></MyActionButton>
+                  ></MyButton>
                 </TableCell>
               </TableRow>
             ))}

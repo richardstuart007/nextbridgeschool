@@ -1,0 +1,37 @@
+.pageContent {
+  padding: 4px;
+  margin: 4px;
+}
+
+.searchInput {
+  margin-right: 1rem;
+}
+
+.searchInputTypeBox {
+  margin-right: 1rem;
+}
+
+.buttonfilter {
+  margin-right: 1rem;
+  background-color: rgba(211, 125, 185, 0.685);
+}
+
+.buttonview {
+  display: flex;
+  align-items: center;
+  background-color: rgba(125, 211, 178, 0.685);
+}
+
+.buttonquiz {
+  display: flex;
+  align-items: center;
+  background-color: rgba(224, 20, 98, 0.507);
+}
+
+.messages {
+  margin: '0 0 0 16px';
+}
+
+.TblHead {
+  background-color: rgba(224, 20, 98, 0.507);
+}

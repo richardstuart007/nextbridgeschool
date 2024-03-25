@@ -3,6 +3,7 @@
 //  Libraries
 //
 import React, { useState, useEffect } from 'react'
+import styles from './Library.module.css'
 import {
   Paper,
   TableBody,
@@ -14,7 +15,6 @@ import {
   Typography,
 } from '@mui/material'
 import SearchIcon from '@mui/icons-material/Search'
-import FilterListIcon from '@mui/icons-material/FilterList'
 //
 //  Controls
 //
@@ -23,7 +23,6 @@ import MyInput from '@/components/Controls/MyInput'
 import MySelect from '@/components/Controls/MySelect'
 import PageHeader from '@/components/Controls/PageHeader'
 import useMyTable from '@/components/Controls/useMyTable'
-import MyActionButton from '@/components/Controls/MyActionButton'
 //
 //  Services
 //
@@ -98,6 +97,12 @@ export default function Library() {
   const [startPage0, setStartPage0] = useState(false)
   const [form_message, setForm_message] = useState('')
   const [ScreenSmall, setScreenSmall] = useState(false)
+  //
+  //  BackgroundColor
+  //
+  const [BACKGROUNDCOLOR_TABLEPAPER, SetBACKGROUNDCOLOR_TABLEPAPER] = useState('purple')
+  const [BACKGROUNDCOLOR_MYINPUT, SetBACKGROUNDCOLOR_MYINPUT] = useState('purple')
+  const [BACKGROUNDCOLOR_TABLEBODY, SetBACKGROUNDCOLOR_TABLEBODY] = useState('purple')
   const router = useRouter()
   //
   //  Default to large
@@ -106,6 +111,7 @@ export default function Library() {
   let searchTypeOptions = searchTypeOptionsLarge
   let buttonTextView = 'View'
   let buttonTextQuiz = 'Quiz'
+  let minWidth = '300px'
   //...........................................................................
   // Module Main Line
   //...........................................................................
@@ -125,18 +131,31 @@ export default function Library() {
     debugLog = debugSettings()
     if (debugLog) console.log(consoleLogTime(debugModule, 'clientFirstTime'))
     //
+    //  Application Environment Variables
+    //
+    const App_Env = sessionStorageGet({ caller: debugModule, itemName: 'App_Env' })
+    if (debugLog) console.log(consoleLogTime(debugModule, 'App_Env '), App_Env)
+    //
+    //  BackgroundColor
+    //
+    SetBACKGROUNDCOLOR_TABLEPAPER(App_Env.BACKGROUNDCOLOR_TABLEPAPER)
+    SetBACKGROUNDCOLOR_MYINPUT(App_Env.BACKGROUNDCOLOR_MYINPUT)
+    SetBACKGROUNDCOLOR_TABLEBODY(App_Env.BACKGROUNDCOLOR_TABLEBODY)
+    //
     //  Small Screen overrides
     //
     const w_ScreenSmall = sessionStorageGet({ caller: debugModule, itemName: 'App_ScreenSmall' })
     setScreenSmall(w_ScreenSmall)
+    if (debugLog) console.log(consoleLogTime(debugModule, 'w_ScreenSmall'), w_ScreenSmall)
     //
     //  Override if small
     //
-    if (ScreenSmall) {
+    if (w_ScreenSmall) {
       headCells = headCellsSmall
       searchTypeOptions = searchTypeOptionsSmall
       buttonTextView = null
       buttonTextQuiz = null
+      minWidth = '220px'
     }
     //
     //  Initial Data Load
@@ -179,11 +198,11 @@ export default function Library() {
     //
     //  Update Table
     //
-    const Page_Lib_Data = sessionStorageGet({
+    const User_Data_Library = sessionStorageGet({
       caller: debugModule,
-      itemName: 'Page_Lib_Data',
+      itemName: 'User_Data_Library',
     })
-    setRecords(Page_Lib_Data)
+    setRecords(User_Data_Library)
     //
     //  Form Saved Values - retrieve
     //
@@ -244,24 +263,24 @@ export default function Library() {
       //
       //  Data
       //
-      const Page_Lib_Data = rtnObj.rtnRows
+      const User_Data_Library = rtnObj.rtnRows
       //
       //  Session Storage
       //
       sessionStorageSet({
         caller: debugModule,
-        itemName: 'Page_Lib_Data',
-        itemValue: Page_Lib_Data,
+        itemName: 'User_Data_Library',
+        itemValue: User_Data_Library,
       })
       //
       //  Update Table
       //
       setForm_message('')
-      setRecords(Page_Lib_Data)
+      setRecords(User_Data_Library)
       //
       //  Filter
       //
-      if (debugLog) console.log(consoleLogTime(debugModule, `Page_Lib_Data`), Page_Lib_Data)
+      if (debugLog) console.log(consoleLogTime(debugModule, `User_Data_Library`), User_Data_Library)
       handleSearch()
       return
     })
@@ -406,13 +425,23 @@ export default function Library() {
         />
       )}
       {/* .......................................................................................... */}
-      <Paper>
+      <Paper
+        className={styles.pageContent}
+        sx={{
+          backgroundColor: BACKGROUNDCOLOR_TABLEPAPER,
+        }}
+      >
         <Toolbar>
           {/* .......................................................................................... */}
           <MyInput
             label='Search'
             name='Search'
             value={searchValue}
+            className={styles.searchInput}
+            sx={{
+              backgroundColor: BACKGROUNDCOLOR_MYINPUT,
+              minWidth: minWidth,
+            }}
             InputProps={{
               startAdornment: (
                 <InputAdornment position='start'>
@@ -424,8 +453,12 @@ export default function Library() {
           />
           {/* .......................................................................................... */}
           {ScreenSmall ? null : (
-            <Box>
+            <Box className={styles.searchInputTypeBox}>
               <MySelect
+                sx={{
+                  backgroundColor: BACKGROUNDCOLOR_MYINPUT,
+                  minWidth: '200px',
+                }}
                 name='SearchType'
                 label='Search By'
                 value={searchType}
@@ -436,13 +469,12 @@ export default function Library() {
           )}
           {/* .......................................................................................... */}
           <MyButton
+            className={styles.buttonfilter}
             text='Filter'
-            variant='outlined'
-            startIcon={<FilterListIcon />}
             onClick={() => handleSearch()}
-          />
+          ></MyButton>
           {/*.................................................................................................*/}
-          <Box>
+          <Box className={styles.messages}>
             <Typography style={{ color: 'red' }}>{form_message}</Typography>
           </Box>
           {/* .......................................................................................... */}
@@ -452,7 +484,11 @@ export default function Library() {
         <TblContainer>
           <TblHead />
           {recordsFiltered === undefined || recordsFiltered === null ? null : (
-            <TableBody>
+            <TableBody
+              sx={{
+                backgroundColor: BACKGROUNDCOLOR_TABLEBODY,
+              }}
+            >
               {recordsFiltered.map(row => (
                 <TableRow key={row.lrlid}>
                   {ScreenSmall ? null : <TableCell>{row.lrlid}</TableCell>}
@@ -463,20 +499,22 @@ export default function Library() {
                   {ScreenSmall ? null : <TableCell>{row.lrwho}</TableCell>}
                   {ScreenSmall ? null : <TableCell>{row.lrtype}</TableCell>}
                   <TableCell>
-                    <MyActionButton
+                    <MyButton
+                      className={styles.buttonview}
                       text={buttonTextView}
                       color='warning'
                       onClick={() => openHyperlink(row.lrlink)}
-                    ></MyActionButton>
+                    ></MyButton>
                   </TableCell>
                   {ScreenSmall ? null : <TableCell>{row.ogcntquestions}</TableCell>}
                   <TableCell>
                     {row.ogcntquestions > 0 ? (
-                      <MyActionButton
+                      <MyButton
+                        className={styles.buttonquiz}
                         text={buttonTextQuiz}
                         color='warning'
                         onClick={() => LibraryRow(row)}
-                      ></MyActionButton>
+                      ></MyButton>
                     ) : null}
                   </TableCell>
                 </TableRow>

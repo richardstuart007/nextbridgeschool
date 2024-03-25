@@ -1,0 +1,12 @@
+.pageContent {
+  padding: 4px;
+  margin: 4px;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+}
+
+.container {
+  width: 450px;
+  text-align: center;
+}

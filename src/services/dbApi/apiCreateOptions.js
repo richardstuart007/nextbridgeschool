@@ -29,11 +29,13 @@ export default function apiCreateOptions(props) {
   //
   //  Received flag
   //
-  sessionStorageSet({
-    caller: debugModule,
-    itemName: cop_received,
-    itemValue: false,
-  })
+  if (cop_received) {
+    sessionStorageSet({
+      caller: debugModule,
+      itemName: cop_received,
+      itemValue: false,
+    })
+  }
   //
   //  Process promise
   //
@@ -110,11 +112,13 @@ export default function apiCreateOptions(props) {
     //
     //  Received flag
     //
-    sessionStorageSet({
-      caller: debugModule,
-      itemName: cop_received,
-      itemValue: true,
-    })
+    if (cop_received) {
+      sessionStorageSet({
+        caller: debugModule,
+        itemName: cop_received,
+        itemValue: true,
+      })
+    }
   }
   //...................................................................................
 }

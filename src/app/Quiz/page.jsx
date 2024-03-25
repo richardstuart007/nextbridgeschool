@@ -58,7 +58,7 @@ export default function Quiz() {
   const [value, setValue] = useState(0)
   const [id, setId] = useState(0)
   const [showSubmit, setShowSubmit] = useState(false)
-  const [quizRow, setQuizRow] = useState(true)
+  const [quizRow, setQuizRow] = useState({})
   const [showLinearProgress, setshowLinearProgress] = useState(true)
   const [showLinearScore, setshowLinearScore] = useState(true)
   const [isData, setisData] = useState(false)
@@ -97,7 +97,7 @@ export default function Quiz() {
     //
     const Page_Quiz_Reset = sessionStorageGet({
       caller: debugModule,
-      itemName: 'User_Page_Quiz_ResetUser',
+      itemName: 'Page_Quiz_Reset',
     })
     if (Page_Quiz_Reset) handleQuizReset()
     //
@@ -123,6 +123,7 @@ export default function Quiz() {
   //.  Reset the Quiz
   //...................................................................................
   function handleQuizReset() {
+    if (debugLog) console.log(consoleLogTime(debugModule, 'handleQuizReset'))
     //
     //  Reset flag
     //
@@ -261,7 +262,7 @@ export default function Quiz() {
           color='warning'
           variant='contained'
           onClick={() => {
-            writeUsersHistory()
+            if (g_Idx > 0) writeUsersHistory()
             router.back()
           }}
         />

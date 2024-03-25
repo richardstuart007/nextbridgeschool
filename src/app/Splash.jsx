@@ -3,7 +3,8 @@
 //  Libraries
 //
 import React, { useState, useEffect } from 'react'
-import { Paper, Grid, Typography } from '@mui/material'
+import { Paper, Typography } from '@mui/material'
+import styles from './Splash.module.css'
 //
 //  services
 //
@@ -26,16 +27,30 @@ import debugSettings from '@/services/debug/debugSettings'
 import consoleLogTime from '@/services/debug/consoleLogTime'
 let debugLog = false
 const debugModule = 'Splash'
+//
+//  Global Variables
+//
 let App_Env
+let App_URL
+//
+//  Constants
+//
+import { BACKGROUNDCOLOR_FORMPAPER } from '@/services/appInit/AppConstants'
 //===================================================================================
 export default function Splash() {
   //
   // State
   //
-  const [form_message, setForm_message] = useState('')
+  const [server_message, setserver_message] = useState('')
+  const [connection_message, setconnection_message] = useState('')
+  const [database_message, setdatabase_message] = useState('')
   const [showContinue, setshowContinue] = useState(false)
   const [showConnect, setshowConnect] = useState(false)
   const [ScreenSmall, setScreenSmall] = useState(false)
+  //
+  //  BackgroundColor
+  //
+  const [BackgroudColor_FORMPAPER, SetBackgroudColor_FORMPAPER] = useState('purple')
   const router = useRouter()
   //
   //  First Time
@@ -43,12 +58,6 @@ export default function Splash() {
   useEffect(() => {
     clientFirstTime()
   }, [])
-  //
-  //  Every Time
-  //
-  useEffect(() => {
-    clientEveryTime()
-  })
   //...........................................................................
   // First Time
   //...........................................................................
@@ -58,6 +67,12 @@ export default function Splash() {
     //
     debugLog = debugSettings()
     if (debugLog) console.log(consoleLogTime(debugModule, 'clientFirstTime'))
+    //
+    //  BackgroundColor
+    //
+    SetBackgroudColor_FORMPAPER(BACKGROUNDCOLOR_FORMPAPER)
+    if (process.env.NEXT_PUBLIC_BACKGROUNDCOLOR_FORMPAPER)
+      SetBackgroudColor_FORMPAPER(process.env.NEXT_PUBLIC_BACKGROUNDCOLOR_FORMPAPER)
     //
     //  Screen Width
     //
@@ -71,18 +86,10 @@ export default function Splash() {
     //
     App_Env = sessionStorageGet({ caller: debugModule, itemName: 'App_Env' })
     if (debugLog) console.log(consoleLogTime(debugModule, 'App_Env'), App_Env)
+    //
+    //  Initial connection
+    //
     sayHello()
-  }
-  //...........................................................................
-  // Client Code
-  //...........................................................................
-  function clientEveryTime() {
-    if (debugLog) console.log(consoleLogTime(debugModule, 'clientEveryTime'))
-    try {
-    } catch (e) {
-      if (debugLog) console.log(consoleLogTime(debugModule, 'Catch'))
-      console.log(e)
-    }
   }
   //...................................................................................
   //.  Check Server is responding
@@ -93,10 +100,20 @@ export default function Splash() {
     //  Check if errors
     //
     const App_Server = sessionStorageGet({ caller: debugModule, itemName: 'App_Server' })
-    if (App_Server === 'Error') {
-      setForm_message('Invalid Setup parameters')
+    if (!App_Server) {
+      setserver_message('Invalid App_Server Setup parameters')
       return
     }
+    setserver_message(`Server: ${App_Server}`)
+    //
+    //  Check if errors
+    //
+    const App_Database = sessionStorageGet({ caller: debugModule, itemName: 'App_Database' })
+    if (!App_Database) {
+      setdatabase_message('Invalid App_Database Setup parameters')
+      return
+    }
+    setdatabase_message(`Database: ${App_Database}`)
     //
     //  Hide buttons
     //
@@ -112,8 +129,8 @@ export default function Splash() {
       //  Error - no rsponse from server
       //
       if (!rtnObj) {
-        let message = 'No response from the Server'
-        setForm_message(message)
+        const message = 'No response from the Server'
+        setserver_message(message)
         setshowConnect(true)
         return
       }
@@ -124,15 +141,43 @@ export default function Splash() {
         let message
         rtnObj.rtnCatch ? (message = rtnObj.rtnCatchMsg) : (message = rtnObj.rtnMessage)
         if (debugLog) console.log(consoleLogTime(debugModule, 'Error Message'), message)
-        setForm_message(message)
+        setserver_message(message)
         setshowConnect(true)
         return
       }
       //-----------------
       //  OK
       //-----------------
+      //
+      //  Reset User Info
+      //
+      sessionStorage.removeItem('User_Password')
+      sessionStorage.removeItem('User_Userspwd')
+      //
+      //  Write Session info
+      //
+      let App_Session
+      App_Session = sessionStorageGet({ caller: debugModule, itemName: 'App_Session' })
+      if (!App_Session) {
+        writeSession()
+        App_Session = sessionStorageGet({
+          caller: debugModule,
+          itemName: 'App_Session',
+        })
+      }
+      //
+      //  Connection message
+      //
+      if (App_Session) {
+        setconnection_message(`Connected (${App_Session.v_vid})`)
+      }
+      //
+      //  Create Options
+      //
       createOptionsOwner()
-      setForm_message('')
+      //
+      //  Connected
+      //
       setshowContinue(true)
     })
   }
@@ -143,9 +188,12 @@ export default function Splash() {
     //
     //  Get the URL
     //
-    const App_URL = sessionStorageGet({ caller: debugModule, itemName: 'App_URL' })
+    App_URL = sessionStorageGet({ caller: debugModule, itemName: 'App_URL' })
     if (debugLog) console.log(consoleLogTime(debugModule, 'App_URL'), App_URL)
-    let body
+    //
+    //  Try server connection
+    //
+    setconnection_message(`Connecting to Server`)
     //
     // Fetch the data
     //
@@ -153,7 +201,7 @@ export default function Splash() {
       //
       //  Setup actions
       //
-      body = {
+      const body = {
         AxClient: debugModule,
         AxTable: 'dbstats',
       }
@@ -199,8 +247,7 @@ export default function Splash() {
       cop_AxTable: 'owner',
       cop_id: 'oowner',
       cop_title: 'otitle',
-      cop_store: 'Data_Options_Owner',
-      cop_received: 'Data_Options_Owner_Received',
+      cop_store: 'App_Data_Options_Owner',
     })
   }
   //...................................................................................
@@ -208,105 +255,69 @@ export default function Splash() {
   //...................................................................................
   return (
     <>
-      <Paper
-        sx={{
-          margin: 3,
-          padding: 1,
-          maxWidth: 350,
-          backgroundColor: 'whitesmoke',
-          elevation: 12,
-        }}
-      >
-        <Grid
-          container
-          spacing={1}
-          justify='center'
-          alignItems='center'
-          direction='column'
-          style={{ minheight: '100vh' }}
-        >
-          {/*.................................................................................................*/}
-          <Grid item xs={12} sx={{ mt: 2 }}>
-            <Typography variant='h6' style={{ color: 'blue' }}>
+      <div className={styles.pageContent}>
+        <div className={styles.container}>
+          <Paper
+            sx={{
+              backgroundColor: BackgroudColor_FORMPAPER,
+              elevation: 12,
+              padding: 2,
+            }}
+          >
+            {/*.................................................................................................*/}
+
+            <Typography variant='h6' style={{ color: 'blue' }} margin={1}>
               Splash Information
             </Typography>
-          </Grid>
-          {/*.................................................................................................*/}
-          <Grid item xs={12}>
-            <Typography variant='subtitle2'>Developed by Richard Stuart</Typography>
-          </Grid>
-          {/*.................................................................................................*/}
-          <Grid item xs={12}>
-            <Typography variant='subtitle2' sx={{ color: 'red' }}>
-              ANY ISSUES please email me
-            </Typography>
-          </Grid>
-          {/*.................................................................................................*/}
-          <Grid item xs={12}>
-            <Typography variant='subtitle2' sx={{ color: 'red' }}>
-              richardstuart007@hotmail.com
-            </Typography>
-          </Grid>
+            {/*.................................................................................................*/}
 
-          {/*.................................................................................................*/}
-          <Grid item xs={12}>
-            <Typography variant='subtitle2' sx={{ color: 'green' }}>
-              There are known issues with Registering
+            <Typography variant='subtitle2' margin={1}>
+              Developed by Richard Stuart
             </Typography>
-          </Grid>
-          {/*.................................................................................................*/}
-          <Grid item xs={12}>
-            <Typography variant='subtitle2' sx={{ color: 'green' }}>
-              Generic student users have been created
-            </Typography>
-          </Grid>
-          {/*.................................................................................................*/}
-          <Grid item xs={12}>
-            <Typography variant='subtitle2' sx={{ color: 'black' }}>
-              student01, student02 ... student11
-            </Typography>
-          </Grid>
-          {/*.................................................................................................*/}
-          <Grid item xs={12}>
-            <Typography variant='subtitle2' sx={{ color: 'black' }}>
-              password = s
-            </Typography>
-          </Grid>
-
-          {/*.................................................................................................*/}
-          {ScreenSmall ? (
-            <Grid item xs={12}>
-              <Typography variant='subtitle2' sx={{ color: 'blue', backgroundColor: 'yellow' }}>
+            {/*.................................................................................................*/}
+            {ScreenSmall ? (
+              <Typography
+                variant='subtitle2'
+                margin={1}
+                sx={{ color: 'blue', backgroundColor: 'yellow' }}
+              >
                 Restricted Functionality on a SMALL screen
               </Typography>
-            </Grid>
-          ) : null}
-          {/*.................................................................................................*/}
-          <Grid item xs={12}>
-            <Typography style={{ color: 'red' }}>{form_message}</Typography>
-          </Grid>
-          {/*.................................................................................................*/}
-          {showConnect ? (
-            <Grid item xs={12}>
-              <MyButton text='Retry Connection' value='Submit' onClick={() => sayHello()} />
-            </Grid>
-          ) : null}
-          {/*.................................................................................................*/}
-          {showContinue ? (
-            <Grid item xs={12}>
+            ) : null}
+            {/*.................................................................................................*/}
+            <Typography style={{ color: 'red' }} margin={1}>
+              {connection_message}
+            </Typography>
+            <Typography style={{ color: 'green' }} margin={1}>
+              {server_message}
+            </Typography>
+            <Typography style={{ color: 'green' }} margin={1}>
+              {database_message}
+            </Typography>
+            {/*.................................................................................................*/}
+            {showConnect ? (
               <MyButton
-                text='Register/Signin'
+                text='Retry Connection'
+                margin={1}
                 value='Submit'
+                onClick={() => sayHello()}
+              />
+            ) : null}
+            {/*.................................................................................................*/}
+            {showContinue ? (
+              <MyButton
+                text='Continue'
+                value='Submit'
+                margin={1}
                 onClick={() => {
-                  writeSession()
                   router.push('/Signin')
                 }}
               />
-            </Grid>
-          ) : null}
-          {/*.................................................................................................*/}
-        </Grid>
-      </Paper>
+            ) : null}
+            {/*.................................................................................................*/}
+          </Paper>
+        </div>
+      </div>
     </>
   )
 }

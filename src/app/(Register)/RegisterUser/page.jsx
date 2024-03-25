@@ -3,7 +3,8 @@
 //  Libraries
 //
 import React, { useState, useEffect } from 'react'
-import { Paper, Grid, Typography } from '@mui/material'
+import { Paper, Typography } from '@mui/material'
+import styles from './RegisterUser.module.css'
 //
 //  services
 //
@@ -29,6 +30,7 @@ import { useRouter } from 'next/navigation'
 //
 import debugSettings from '@/services/debug/debugSettings'
 import consoleLogTime from '@/services/debug/consoleLogTime'
+import { Box } from '@mui/system'
 let debugLog
 const debugModule = 'RegisterUser'
 //.............................................................................
@@ -47,9 +49,6 @@ const initialFValues = {
 //  Valid form
 //
 let validForm = false
-let u_uid
-let u_user
-let password
 let App_Env
 //...................................................................................
 //.  Main Line
@@ -61,8 +60,17 @@ export default function RegisterUser() {
   //
   const [form_message, setForm_message] = useState('')
   const [showButtonUpdate, setShowButtonUpdate] = useState(false)
-  const [showButtonSignin, setShowButtonSignin] = useState(false)
-  const [Data_Options_Owner, setData_Options_Owner] = useState([{ id: 'id', title: 'title' }])
+  const [App_Data_Options_Owner, setApp_Data_Options_Owner] = useState([
+    { id: 'id', title: 'title' },
+  ])
+  const [u_user, setu_user] = useState('')
+  const [password, setpassword] = useState('')
+  const [u_uid, setu_uid] = useState(0)
+  //
+  //  BackgroundColor
+  //
+  const [BACKGROUNDCOLOR_FORMPAPER, SetBACKGROUNDCOLOR_FORMPAPER] = useState('purple')
+  const [BACKGROUNDCOLOR_MYINPUT, SetBACKGROUNDCOLOR_MYINPUT] = useState('purple')
   //
   //  First Time
   //
@@ -93,32 +101,41 @@ export default function RegisterUser() {
     debugLog = debugSettings()
     if (debugLog) console.log(consoleLogTime(debugModule, 'clientFirstTime'))
     //
+    //  Application Environment Variables
+    //
+    App_Env = sessionStorageGet({ caller: debugModule, itemName: 'App_Env' })
+    if (debugLog) console.log(consoleLogTime(debugModule, 'App_Env '), App_Env)
+    //
+    //  BackgroundColor
+    //
+    SetBACKGROUNDCOLOR_FORMPAPER(App_Env.BACKGROUNDCOLOR_FORMPAPER)
+    SetBACKGROUNDCOLOR_MYINPUT(App_Env.BACKGROUNDCOLOR_MYINPUT)
+    //
     //  Userpwd info
     //
     const User_Userspwd = sessionStorageGet({ caller: debugModule, itemName: 'User_Userspwd' })
-    u_uid = User_Userspwd.upuid
-    u_user = User_Userspwd.upuser
+    setu_uid(User_Userspwd.upuid)
+    setu_user(User_Userspwd.upuser)
     //
     //  Password
     //
-    password = sessionStorageGet({ caller: debugModule, itemName: 'User_Password' })
+    setpassword(sessionStorageGet({ caller: debugModule, itemName: 'User_Password' }))
     //
     //  Default in Owner
     //
-    App_Env = sessionStorageGet({ caller: debugModule, itemName: 'App_Env' })
-    const dftowner = App_Env.DFT_USER_OWNER
     const updValues = { ...values }
-    updValues.ogowner = dftowner
+    updValues.ogowner = App_Env.DFT_USER_OWNER
     setValues(updValues)
     //
     //  Define the Store
     //
-    const w_Data_Options_Owner = sessionStorageGet({
+    const w_App_Data_Options_Owner = sessionStorageGet({
       caller: debugModule,
-      itemName: 'Data_Options_Owner',
+      itemName: 'App_Data_Options_Owner',
     })
-    if (debugLog) console.log(consoleLogTime(debugModule, 'Data_Options_Owner'), Data_Options_Owner)
-    setData_Options_Owner(w_Data_Options_Owner)
+    if (debugLog)
+      console.log(consoleLogTime(debugModule, 'App_Data_Options_Owner'), App_Data_Options_Owner)
+    setApp_Data_Options_Owner(w_App_Data_Options_Owner)
   }
   //...........................................................................
   // Client Code
@@ -205,13 +222,9 @@ export default function RegisterUser() {
     //
     process_writeUsersOwner()
     //
-    //  User message
+    //  Go to Signin
     //
-    setForm_message('Registration Completed')
-    //
-    //  Hide signin button
-    //
-    setShowButtonSignin(true)
+    router.push('/Signin')
   }
   //...................................................................................
   //.  Write User
@@ -330,149 +343,108 @@ export default function RegisterUser() {
   //...................................................................................
   return (
     <>
-      <MyForm>
-        <Paper
-          sx={{
-            margin: 1,
-            padding: 1,
-            maxWidth: 400,
-            backgroundColor: 'whitesmoke',
-          }}
-        >
-          <Grid
-            container
-            spacing={1}
-            justify='center'
-            alignItems='center'
-            direction='column'
-            style={{ minheight: '100vh' }}
-          >
-            {/*.................................................................................................*/}
-            <Grid item xs={12} sx={{ mt: 2 }}>
-              <Typography variant='h6' style={{ color: 'blue' }}>
-                Register User Information
+      <div className={styles.pageContent}>
+        <div className={styles.container}>
+          <MyForm>
+            <Paper
+              sx={{
+                margin: 1,
+                padding: 1,
+                maxWidth: 400,
+                backgroundColor: BACKGROUNDCOLOR_FORMPAPER,
+              }}
+            >
+              {/*.................................................................................................*/}
+              <Typography variant='h6' style={{ color: 'blue', margin: 1 }}>
+                User Information
               </Typography>
-            </Grid>
-            {/*.................................................................................................*/}
-            <Grid item xs={12}>
-              <MyInput
-                name='u_user'
-                label='User'
-                value={u_user}
-                sx={{ minWidth: '300px' }}
-                disabled
-              />
-            </Grid>
-            {/*.................................................................................................*/}
-            <Grid item xs={12}>
-              <MyInput
-                name='password'
-                label='password'
-                value={password}
-                sx={{ minWidth: '300px' }}
-                disabled
-              />
-            </Grid>
-            {/*.................................................................................................*/}
-            <Grid item xs={12}>
-              <MyInput
-                name='u_uid'
-                label='User ID'
-                value={u_uid}
-                sx={{ minWidth: '300px' }}
-                disabled
-              />
-            </Grid>
-            {/*.................................................................................................*/}
-            <Grid item xs={12}>
+              {/*.................................................................................................*/}
+              <span style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <Typography variant='h6' style={{ color: 'green', margin: 1 }}>
+                  User
+                </Typography>
+                <Typography variant='h6' style={{ color: 'red', margin: 1, paddingLeft: 4 }}>
+                  {u_user}
+                </Typography>
+              </span>
+              {/*.................................................................................................*/}
+              <span style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <Typography variant='h6' style={{ color: 'green', margin: 1 }}>
+                  Password
+                </Typography>
+                <Typography variant='h6' style={{ color: 'red', margin: 1, paddingLeft: 4 }}>
+                  {password}
+                </Typography>
+              </span>
+              {/*.................................................................................................*/}
+              <span style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <Typography variant='h6' style={{ color: 'green', margin: 1 }}>
+                  Id
+                </Typography>
+                <Typography variant='h6' style={{ color: 'red', margin: 1, paddingLeft: 4 }}>
+                  {u_uid}
+                </Typography>
+              </span>
+              {/*.................................................................................................*/}
               <MyInput
                 name='u_name'
                 label='name'
                 value={values.u_name}
                 onChange={handleInputChange}
                 error={errors.u_name}
-                sx={{ minWidth: '300px' }}
-                disabled={showButtonSignin}
+                sx={{ backgroundColor: BACKGROUNDCOLOR_MYINPUT, minWidth: '300px', margin: 1.5 }}
               />
-            </Grid>
-            {/*.................................................................................................*/}
-            <Grid item xs={12}>
+              {/*.................................................................................................*/}
               <MyInput
                 name='u_email'
                 label='email'
                 value={values.u_email}
                 onChange={handleInputChange}
                 error={errors.u_email}
-                sx={{ minWidth: '300px' }}
-                disabled={showButtonSignin}
+                sx={{ backgroundColor: BACKGROUNDCOLOR_MYINPUT, minWidth: '300px', margin: 1.5 }}
               />
-            </Grid>
-            {/*.................................................................................................*/}
-            <Grid item xs={12}>
+              {/*.................................................................................................*/}
               <MySelect
-                key={Data_Options_Owner.id}
+                key={App_Data_Options_Owner.id}
                 name='ogowner'
                 label='Owner'
                 value={values.ogowner}
                 onChange={handleInputChange}
                 error={errors.ogowner}
-                sx={{ minWidth: '300px' }}
-                options={Data_Options_Owner}
-                disabled={showButtonSignin}
+                sx={{ backgroundColor: BACKGROUNDCOLOR_MYINPUT, minWidth: '300px', margin: 1.5 }}
+                options={App_Data_Options_Owner}
               />
-            </Grid>
-            {/*.................................................................................................*/}
-            <Grid item xs={12}>
+              {/*.................................................................................................*/}
               <SelectCountry
                 label='Bridge Federation Country'
                 onChange={handleSelectCountry}
                 countryCode={values.u_fedcountry}
-                disabled={showButtonSignin}
               />
-            </Grid>
-            {/*.................................................................................................*/}
-            <Grid item xs={12}>
+              {/*.................................................................................................*/}
               <MyInput
                 name='u_fedid'
                 label='Bridge Federation Id'
                 value={values.u_fedid}
                 onChange={handleInputChange}
                 error={errors.u_fedid}
-                sx={{ minWidth: '300px' }}
-                disabled={showButtonSignin}
+                sx={{ backgroundColor: BACKGROUNDCOLOR_MYINPUT, minWidth: '300px', margin: 1.5 }}
               />
-            </Grid>
-            {/*.................................................................................................*/}
-            <Grid item xs={12}>
-              <Typography style={{ color: 'red' }}>{form_message}</Typography>
-            </Grid>
-            {/*.................................................................................................*/}
-            {showButtonUpdate ? (
-              <Grid item xs={12}>
+              {/*.................................................................................................*/}
+              <Typography style={{ color: 'red', margin: 1.5 }}>{form_message}</Typography>
+              {/*.................................................................................................*/}
+              {showButtonUpdate ? (
                 <MyButton
                   text='Update'
                   onClick={() => {
                     FormSubmit()
                   }}
                 />
-              </Grid>
-            ) : null}
-          </Grid>
-        </Paper>
-        {/*.................................................................................................*/}
-        {showButtonSignin ? (
-          <Grid item xs={12}>
-            <MyButton
-              color='warning'
-              onClick={() => {
-                router.push('/Signin')
-              }}
-              text='Signin'
-            />
-          </Grid>
-        ) : null}
-        {/*.................................................................................................*/}
-      </MyForm>
+              ) : null}
+            </Paper>
+            {/*.................................................................................................*/}
+          </MyForm>
+        </div>
+      </div>
     </>
   )
 }

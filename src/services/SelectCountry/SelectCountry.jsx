@@ -1,8 +1,10 @@
-import React, { useState } from 'react'
-import Box from '@mui/material/Box'
-import TextField from '@mui/material/TextField'
-import Autocomplete from '@mui/material/Autocomplete'
+import React, { useState, useEffect } from 'react'
+import { Box, TextField, Autocomplete } from '@mui/material'
 import Image from 'next/image'
+//
+//  services
+//
+import sessionStorageGet from '@/services/sessionStorage/sessionStorageGet'
 //
 //  Debug Settings
 //
@@ -14,11 +16,6 @@ const debugModule = 'SelectCountry'
 //.  Main Line
 //...................................................................................
 export default function SelectCountry(props) {
-  //
-  //  Debug Settings
-  //
-  debugLog = debugSettings()
-  if (debugLog) console.log(consoleLogTime(debugModule, 'Start'))
   //
   //  Deconstruct
   //
@@ -36,53 +33,84 @@ export default function SelectCountry(props) {
   //
   const [selected, setSelected] = useState(countryObj)
   const [inputValue, setInputValue] = useState(countryObj.label)
+  //
+  //  BackgroundColor
+  //
+  const [BACKGROUNDCOLOR_MYINPUT, SetBACKGROUNDCOLOR_MYINPUT] = useState('purple')
+  //
+  //  First Time
+  //
+  useEffect(() => {
+    clientFirstTime()
+  }, [])
+  //...........................................................................
+  // First Time
+  //...........................................................................
+  function clientFirstTime() {
+    //
+    //  Debug Settings
+    //
+    debugLog = debugSettings()
+    if (debugLog) console.log(consoleLogTime(debugModule, 'clientFirstTime'))
+    //
+    //  Application Environment Variables
+    //
+    const App_Env = sessionStorageGet({ caller: debugModule, itemName: 'App_Env' })
+    if (debugLog) console.log(consoleLogTime(debugModule, 'App_Env '), App_Env)
+    //
+    //  BackgroundColor
+    //
+    SetBACKGROUNDCOLOR_MYINPUT(App_Env.BACKGROUNDCOLOR_MYINPUT)
+  }
   //...................................................................................
   //  Render
   //...................................................................................
   return (
-    <Autocomplete
-      disabled={disabled}
-      value={selected}
-      onChange={(event, newSelected) => {
-        setSelected(newSelected)
-        if (newSelected) {
-          onChange(newSelected.code)
-        }
-      }}
-      inputValue={inputValue}
-      onInputChange={(event, newInputValue) => {
-        setInputValue(newInputValue)
-      }}
-      id='country-select'
-      sx={{ width: 300 }}
-      options={COUNTRIES}
-      autoHighlight
-      getOptionLabel={option => option.label}
-      isOptionEqualToValue={(option, value) => option.label === value.label}
-      noOptionsText={'No match'}
-      renderOption={(props, option) => (
-        <Box component='li' sx={{ '& > img': { mr: 2, flexShrink: 0 } }} {...props}>
-          <Image
-            src={`https://flagcdn.com/w20/${option.code.toLowerCase()}.png`}
-            width={20}
-            height={20}
-            alt='flag'
-            loading='lazy'
-            srcSet={`https://flagcdn.com/w40/${option.code.toLowerCase()}.png 2x`}
+    <div style={{ display: 'flex', justifyContent: 'center' }}>
+      <Autocomplete
+        disabled={disabled}
+        value={selected}
+        onChange={(event, newSelected) => {
+          setSelected(newSelected)
+          if (newSelected) {
+            onChange(newSelected.code)
+          }
+        }}
+        inputValue={inputValue}
+        onInputChange={(event, newInputValue) => {
+          setInputValue(newInputValue)
+        }}
+        id='country-select'
+        sx={{ backgroundColor: BACKGROUNDCOLOR_MYINPUT, width: 300 }}
+        options={COUNTRIES}
+        autoHighlight
+        getOptionLabel={option => option.label}
+        isOptionEqualToValue={(option, value) => option.label === value.label}
+        noOptionsText={'No match'}
+        renderOption={(props, option) => (
+          <Box component='li' sx={{ '& > img': { mr: 2 } }} {...props}>
+            <Image
+              src={`https://flagcdn.com/w20/${option.code.toLowerCase()}.png`}
+              width={20}
+              height={20}
+              alt='flag'
+              loading='lazy'
+              srcSet={`https://flagcdn.com/w40/${option.code.toLowerCase()}.png 2x`}
+            />
+            {option.label} ({option.code}) +{option.phone}
+          </Box>
+        )}
+        renderInput={params => (
+          <TextField
+            {...params}
+            label={label}
+            inputProps={{
+              ...params.inputProps,
+              autoComplete: 'new-password',
+            }}
           />
-          {option.label} ({option.code}) +{option.phone}
-        </Box>
-      )}
-      renderInput={params => (
-        <TextField
-          {...params}
-          label={label}
-          inputProps={{
-            ...params.inputProps,
-            autoComplete: 'new-password', // disable autocomplete and autofill
-          }}
-        />
-      )}
-    />
+        )}
+      />
+    </div>
   )
 }

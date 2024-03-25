@@ -3,13 +3,12 @@
 //
 import React from 'react'
 import { TextField } from '@mui/material'
-
 //=====================================================================================
 export default function MyInput(props) {
   //
   //  Deconstruct
   //
-  const { name, label, value, className, error = null, onChange, ...other } = props
+  const { name, label, value, error = null, onChange, ...other } = props
 
   return (
     <TextField

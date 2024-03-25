@@ -44,9 +44,9 @@ export default function writeUsersHistory() {
   //
   //  Get History data
   //
-  const Page_History_Data = sessionStorageGet({
+  const User_Data_History = sessionStorageGet({
     caller: debugModule,
-    itemName: 'Page_History_Data',
+    itemName: 'User_Data_History',
   })
   //
   //  Get group title
@@ -131,19 +131,19 @@ export default function writeUsersHistory() {
   //
   //  Add record to storage (if history already exists)
   //
-  if (Page_History_Data) {
-    const template = Page_History_Data[0]
+  if (User_Data_History) {
+    const template = User_Data_History[0]
     const newQH = { ...template, ...AxRow }
     newQH.r_hid = 0
     newQH.ogtitle = Page_Quiz_ogtitle
     newQH.yymmdd = yymmdd
     newQH.u_name = User_User.u_name
     if (debugLog) console.log(consoleLogTime(debugModule, 'newQH'), newQH)
-    Page_History_Data.unshift(newQH)
+    User_Data_History.unshift(newQH)
     sessionStorageSet({
       caller: debugModule,
-      itemName: 'Page_History_Data',
-      itemValue: Page_History_Data,
+      itemName: 'User_Data_History',
+      itemValue: User_Data_History,
     })
   }
   //
@@ -180,12 +180,12 @@ export default function writeUsersHistory() {
     //
     //  Update storage with r_hid
     //
-    if (Page_History_Data) {
-      Page_History_Data[0].r_hid = newRow.r_hid
+    if (User_Data_History) {
+      User_Data_History[0].r_hid = newRow.r_hid
       sessionStorageSet({
         caller: debugModule,
-        itemName: 'Page_History_Data',
-        itemValue: Page_History_Data,
+        itemName: 'User_Data_History',
+        itemValue: User_Data_History,
       })
     }
     return

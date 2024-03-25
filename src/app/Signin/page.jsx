@@ -3,7 +3,8 @@
 //  Libraries
 //
 import React, { useState, useEffect } from 'react'
-import { Paper, Grid, Typography } from '@mui/material'
+import { Paper, Typography } from '@mui/material'
+import styles from './Signin.module.css'
 //
 //  services
 //
@@ -52,6 +53,11 @@ export default function Signin() {
   //
   const { values, errors, setErrors, handleInputChange } = useMyForm(initialFValues, true, validate)
   //
+  //  BackgroundColor
+  //
+  const [BACKGROUNDCOLOR_FORMPAPER, SetBACKGROUNDCOLOR_FORMPAPER] = useState('purple')
+  const [BACKGROUNDCOLOR_MYINPUT, SetBACKGROUNDCOLOR_MYINPUT] = useState('purple')
+  //
   //  First Time
   //
   useEffect(() => {
@@ -79,6 +85,11 @@ export default function Signin() {
       caller: debugModule,
       itemName: 'App_Env',
     })
+    //
+    //  BackgroundColor
+    //
+    SetBACKGROUNDCOLOR_FORMPAPER(App_Env.BACKGROUNDCOLOR_FORMPAPER)
+    SetBACKGROUNDCOLOR_MYINPUT(App_Env.BACKGROUNDCOLOR_MYINPUT)
   }
   //...........................................................................
   // Client Code
@@ -94,6 +105,11 @@ export default function Signin() {
         itemName: 'User_User',
       })
       if (User_User) initialFValues.user = User_User.u_user
+      //
+      //  Userpwd info
+      //
+      const User_Userspwd = sessionStorageGet({ caller: debugModule, itemName: 'User_Userspwd' })
+      if (User_Userspwd) initialFValues.user = User_Userspwd.upuser
     } catch (e) {
       if (debugLog) console.log(consoleLogTime(debugModule, 'Catch'))
       console.log(e)
@@ -317,76 +333,73 @@ export default function Signin() {
   //...................................................................................
   return (
     <>
-      <MyForm>
-        <Paper
-          sx={{
-            margin: 1,
-            padding: 1,
-            maxWidth: 400,
-            backgroundColor: 'whitesmoke',
-          }}
-        >
-          <Grid container spacing={1} justify='center' alignItems='center' direction='column'>
-            {/*.................................................................................................*/}
-            <Grid item xs={12} sx={{ mt: 2 }}>
-              <Typography variant='h6' style={{ color: 'blue' }}>
+      <div className={styles.pageContent}>
+        <div className={styles.container}>
+          <MyForm>
+            <Paper
+              sx={{
+                padding: 2,
+                margin: 2,
+                maxWidth: 400,
+                backgroundColor: BACKGROUNDCOLOR_FORMPAPER,
+              }}
+            >
+              {/*.................................................................................................*/}
+
+              <Typography variant='h6' style={{ color: 'blue', margin: 1 }}>
                 SignIn
               </Typography>
-            </Grid>
-            {/*.................................................................................................*/}
-            <Grid item xs={12}>
+
+              {/*.................................................................................................*/}
+
               <MyInput
                 name='user'
                 label='Registered user'
                 value={values.user}
                 onChange={handleInputChange}
                 error={errors.user}
-                sx={{ minWidth: '300px' }}
+                sx={{ backgroundColor: BACKGROUNDCOLOR_MYINPUT, minWidth: '300px', margin: 2 }}
               />
-            </Grid>
-            {/*.................................................................................................*/}
-            <Grid item xs={12}>
+
+              {/*.................................................................................................*/}
+
               <MyInput
                 name='password'
                 label='password'
                 value={values.password}
                 onChange={handleInputChange}
                 error={errors.password}
-                sx={{ minWidth: '300px' }}
+                sx={{ backgroundColor: BACKGROUNDCOLOR_MYINPUT, minWidth: '300px', margin: 2 }}
               />
-            </Grid>
-            {/*.................................................................................................*/}
-            <Grid item xs={12}>
-              <Typography style={{ color: 'red' }}>{form_message}</Typography>
-            </Grid>
 
-            {/*.................................................................................................*/}
-            {showButtons ? (
-              <Grid item xs={12}>
+              {/*.................................................................................................*/}
+
+              <Typography style={{ color: 'red', margin: 2 }}>{form_message}</Typography>
+
+              {/*.................................................................................................*/}
+              {showButtons ? (
                 <MyButton
                   text='SignIn'
                   onClick={() => {
                     FormSubmit()
                   }}
                 />
-              </Grid>
+              ) : null}
+            </Paper>
+            {/*.................................................................................................*/}
+            {showButtons ? (
+              <MyButton
+                color='warning'
+                onClick={() => {
+                  router.push('/RegisterPwd')
+                }}
+                text='Register'
+              />
             ) : null}
-          </Grid>
-        </Paper>
-        {/*.................................................................................................*/}
-        {showButtons ? (
-          <Grid item xs={12}>
-            <MyButton
-              color='warning'
-              onClick={() => {
-                router.push('/RegisterPwd')
-              }}
-              text='Register'
-            />
-          </Grid>
-        ) : null}
-        {/*.................................................................................................*/}
-      </MyForm>
+            {/*.................................................................................................*/}
+          </MyForm>
+        </div>
+      </div>
     </>
   )
 }

@@ -1,7 +1,7 @@
 //
 //  Libraries
 //
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import {
   Table,
   TableHead,
@@ -10,17 +10,39 @@ import {
   TablePagination,
   TableSortLabel,
 } from '@mui/material'
+//
+//  Services
+//
+import sessionStorageGet from '@/services/sessionStorage/sessionStorageGet'
+//
+//  Debug Settings
+//
+import debugSettings from '@/services/debug/debugSettings'
+import consoleLogTime from '@/services/debug/consoleLogTime'
+let debugLog = false
+const debugModule = 'useMyTable'
+
 let recordsLength = 0
 //=====================================================================================
 export default function useMyTable(records, headCells, filterFn, startPage0, setStartPage0) {
   //
   //  State
   //
-  const pages = [100, 10, 200]
+  const pages = [8, 100, 200]
   const [page, setPage] = useState(0)
   const [rowsPerPage, setRowsPerPage] = useState(pages[page])
   const [order, setOrder] = useState()
   const [orderBy, setOrderBy] = useState()
+  //
+  //  BackgroundColor
+  //
+  const [BACKGROUNDCOLOR_TABLEHEAD, SetBACKGROUNDCOLOR_TABLEHEAD] = useState('purple')
+  //
+  //  First Time
+  //
+  useEffect(() => {
+    clientFirstTime()
+  }, [])
 
   records ? (recordsLength = records.length) : 0
   //
@@ -29,6 +51,25 @@ export default function useMyTable(records, headCells, filterFn, startPage0, set
   if (startPage0) {
     setPage(0)
     setStartPage0(false)
+  }
+  //...........................................................................
+  // First Time
+  //...........................................................................
+  function clientFirstTime() {
+    //
+    //  Debug Settings
+    //
+    debugLog = debugSettings()
+    if (debugLog) console.log(consoleLogTime(debugModule, 'clientFirstTime'))
+    //
+    //  Application Environment Variables
+    //
+    const App_Env = sessionStorageGet({ caller: debugModule, itemName: 'App_Env' })
+    if (debugLog) console.log(consoleLogTime(debugModule, 'App_Env '), App_Env)
+    //
+    //  BackgroundColor
+    //
+    SetBACKGROUNDCOLOR_TABLEHEAD(App_Env.BACKGROUNDCOLOR_TABLEHEAD)
   }
   //.....................................................................................
   //. Table Container
@@ -50,7 +91,11 @@ export default function useMyTable(records, headCells, filterFn, startPage0, set
     //  Table Header Row
     //
     return (
-      <TableHead>
+      <TableHead
+        sx={{
+          backgroundColor: BACKGROUNDCOLOR_TABLEHEAD,
+        }}
+      >
         <TableRow>
           {headCells.map(headCell => (
             <TableCell key={headCell.id} sortDirection={orderBy === headCell.id ? order : false}>

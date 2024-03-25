@@ -2,7 +2,7 @@
 //
 //  Libraries
 //
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Paper, Grid } from '@mui/material'
 //
 //  Controls
@@ -10,6 +10,7 @@ import { Paper, Grid } from '@mui/material'
 import MyButton from '@/components/Controls/MyButton'
 import MyInput from '@/components/Controls/MyInput'
 import MyCheckbox from '@/components/Controls/MyCheckbox'
+import PageHeader from '@/components/Controls/PageHeader'
 import { useMyForm, MyForm } from '@/components/Controls/useMyForm'
 //
 //  Services
@@ -49,6 +50,15 @@ const initialFValues = {
 export default function UsersSettings() {
   const router = useRouter()
   //
+  //  State
+  //
+  const [ScreenSmall, setScreenSmall] = useState(false)
+  //
+  //  BackgroundColor
+  //
+  const [BACKGROUNDCOLOR_FORMPAPER, SetBACKGROUNDCOLOR_FORMPAPER] = useState('purple')
+  const [BACKGROUNDCOLOR_MYINPUT, SetBACKGROUNDCOLOR_MYINPUT] = useState('purple')
+  //
   //  First Time
   //
   useEffect(() => {
@@ -69,6 +79,22 @@ export default function UsersSettings() {
     //
     debugLog = debugSettings()
     if (debugLog) console.log(consoleLogTime(debugModule, 'clientFirstTime'))
+    //
+    //  Application Environment Variables
+    //
+    const App_Env = sessionStorageGet({ caller: debugModule, itemName: 'App_Env' })
+    if (debugLog) console.log(consoleLogTime(debugModule, 'App_Env '), App_Env)
+    //
+    //  BackgroundColor
+    //
+    SetBACKGROUNDCOLOR_FORMPAPER(App_Env.BACKGROUNDCOLOR_FORMPAPER)
+    SetBACKGROUNDCOLOR_MYINPUT(App_Env.BACKGROUNDCOLOR_MYINPUT)
+    //
+    //  Small Screen overrides
+    //
+    const w_ScreenSmall = sessionStorageGet({ caller: debugModule, itemName: 'App_ScreenSmall' })
+    setScreenSmall(w_ScreenSmall)
+    if (debugLog) console.log(consoleLogTime(debugModule, 'w_ScreenSmall'), w_ScreenSmall)
     //
     //  Get User
     //
@@ -226,19 +252,22 @@ export default function UsersSettings() {
   //...................................................................................
   return (
     <>
+      {/* .......................................................................................... */}
+      {ScreenSmall ? null : <PageHeader title='User Settings' subTitle='Change User Preferences' />}
+      {/* .......................................................................................... */}
       <MyForm>
         <Paper
           sx={{
             margin: 2,
             padding: 0,
             maxWidth: 400,
-            backgroundColor: 'whitesmoke',
+            backgroundColor: BACKGROUNDCOLOR_FORMPAPER,
             elevation: 12,
           }}
         >
           <Grid
             container
-            spacing={0}
+            spacing={2}
             justifyContent='flex-start'
             alignItems='flex-start'
             direction='column'
@@ -251,7 +280,7 @@ export default function UsersSettings() {
                 value={values.u_name}
                 onChange={handleInputChange}
                 error={errors.u_name}
-                sx={{ minWidth: '300px' }}
+                sx={{ backgroundColor: BACKGROUNDCOLOR_MYINPUT, minWidth: '300px' }}
               />
             </Grid>
             {/*------------------------------------------------------------------------------ */}
@@ -262,7 +291,7 @@ export default function UsersSettings() {
                 value={values.u_email}
                 onChange={handleInputChange}
                 error={errors.u_email}
-                sx={{ minWidth: '300px' }}
+                sx={{ backgroundColor: BACKGROUNDCOLOR_MYINPUT, minWidth: '300px' }}
               />
             </Grid>
             {/*------------------------------------------------------------------------------ */}
@@ -273,7 +302,7 @@ export default function UsersSettings() {
                 value={values.u_fedcountry}
                 onChange={handleInputChange}
                 error={errors.u_fedcountry}
-                sx={{ minWidth: '200px' }}
+                sx={{ backgroundColor: BACKGROUNDCOLOR_MYINPUT, minWidth: '200px' }}
               />
             </Grid>
             <Grid item xs={12}>
@@ -283,7 +312,7 @@ export default function UsersSettings() {
                 value={values.u_fedid}
                 onChange={handleInputChange}
                 error={errors.u_fedid}
-                sx={{ minWidth: '300px' }}
+                sx={{ backgroundColor: BACKGROUNDCOLOR_MYINPUT, minWidth: '300px' }}
               />
             </Grid>
 
@@ -295,13 +324,12 @@ export default function UsersSettings() {
                 value={values.u_dftmaxquestions}
                 onChange={handleInputChange}
                 error={errors.u_dftmaxquestions}
-                sx={{ minWidth: '200px' }}
+                sx={{ backgroundColor: BACKGROUNDCOLOR_MYINPUT, minWidth: '200px' }}
               />
             </Grid>
             {/*------------------------------------------------------------------------------ */}
             <Grid item xs={12}>
               <MyCheckbox
-                sx={{ pt: 0, mt: 0 }}
                 name='u_showprogress'
                 label='Show Linear Progress'
                 value={values.u_showprogress}
@@ -312,7 +340,6 @@ export default function UsersSettings() {
             {/*------------------------------------------------------------------------------ */}
             <Grid item xs={12}>
               <MyCheckbox
-                sx={{ pt: 0, mt: 0 }}
                 name='u_showscore'
                 label='Show Linear Score'
                 value={values.u_showscore}
@@ -324,7 +351,6 @@ export default function UsersSettings() {
             {/*------------------------------------------------------------------------------ */}
             <Grid item xs={12}>
               <MyCheckbox
-                sx={{ pt: 0, mt: 0 }}
                 name='u_sortquestions'
                 label='Sort Questions'
                 value={values.u_sortquestions}
@@ -335,7 +361,6 @@ export default function UsersSettings() {
             {/*------------------------------------------------------------------------------ */}
             <Grid item xs={12}>
               <MyCheckbox
-                sx={{ pt: 0, mt: 0 }}
                 name='u_skipcorrect'
                 label='Skip Correct Answers'
                 value={values.u_skipcorrect}
@@ -346,7 +371,6 @@ export default function UsersSettings() {
             {/*------------------------------------------------------------------------------ */}
             <Grid item xs={12}>
               <MyButton
-                sx={{ mt: 2 }}
                 text='Update'
                 color='primary'
                 variant='contained'

@@ -43,11 +43,11 @@ export default function QuizQuestion(params) {
     //  Hyperlink get Answer from Library
     //
     if (QorA === 'A') {
-      const Page_Lib_Data = sessionStorageGet({
+      const User_Data_Library = sessionStorageGet({
         caller: debugModule,
-        itemName: 'Page_Lib_Data',
+        itemName: 'User_Data_Library',
       })
-      const libRow = Page_Lib_Data.find(e => (e.lrowner === qowner) & (e.lrgroup === qgroup))
+      const libRow = User_Data_Library.find(e => (e.lrowner === qowner) & (e.lrgroup === qgroup))
       buttonLink = libRow.lrlink
       buttonText = 'Click to view the Answer'
     }

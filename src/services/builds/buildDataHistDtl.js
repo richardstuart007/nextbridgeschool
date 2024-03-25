@@ -54,15 +54,15 @@ export default function buildDataHistDtl(row) {
     //
     //  Question Data
     //
-    const User_Questions = sessionStorageGet({
+    const User_Data_Questions = sessionStorageGet({
       caller: debugModule,
-      itemName: 'User_Questions',
+      itemName: 'User_Data_Questions',
     })
     //
     //  Filter QIDs
     //
     const p_qqid = row.r_qid
-    const Page_Quiz_Q_Flt = User_Questions.filter(x => p_qqid.includes(x.qqid))
+    const Page_Quiz_Q_Flt = User_Data_Questions.filter(x => p_qqid.includes(x.qqid))
     //
     //  Question IDs
     //
@@ -73,11 +73,11 @@ export default function buildDataHistDtl(row) {
     //
     //  Load related Bids
     //
-    const User_Bid = sessionStorageGet({
+    const User_Data_Bid = sessionStorageGet({
       caller: debugModule,
-      itemName: 'User_Bid',
+      itemName: 'User_Data_Bid',
     })
-    Page_Quiz_Bid = User_Bid.filter(x => Page_Quiz_Q_Flt_qqid.includes(x.bqid))
+    Page_Quiz_Bid = User_Data_Bid.filter(x => Page_Quiz_Q_Flt_qqid.includes(x.bqid))
     sessionStorageSet({
       caller: debugModule,
       itemName: 'Page_Quiz_Bid',
@@ -86,11 +86,11 @@ export default function buildDataHistDtl(row) {
     //
     //  Load related Hands
     //
-    const User_Hands = sessionStorageGet({
+    const User_Data_Hands = sessionStorageGet({
       caller: debugModule,
-      itemName: 'User_Hands',
+      itemName: 'User_Data_Hands',
     })
-    Page_Quiz_Hands = User_Hands.filter(x => Page_Quiz_Q_Flt_qqid.includes(x.hqid))
+    Page_Quiz_Hands = User_Data_Hands.filter(x => Page_Quiz_Q_Flt_qqid.includes(x.hqid))
     sessionStorageSet({
       caller: debugModule,
       itemName: 'Page_Quiz_Hands',

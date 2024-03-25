@@ -3,6 +3,7 @@
 //  Libraries
 //
 import React, { useState, useEffect } from 'react'
+import styles from './QuizHistory.module.css'
 import {
   Paper,
   TableBody,
@@ -23,7 +24,6 @@ import MyInput from '@/components/Controls/MyInput'
 import MySelect from '@/components/Controls/MySelect'
 import PageHeader from '@/components/Controls/PageHeader'
 import useMyTable from '@/components/Controls/useMyTable'
-import MyActionButton from '@/components/Controls/MyActionButton'
 //
 //  Services
 //
@@ -102,6 +102,12 @@ export default function QuizHistory() {
   const [form_message, setForm_message] = useState('')
   const [ScreenSmall, setScreenSmall] = useState(false)
   const [User_Admin, setUser_Admin] = useState(false)
+  //
+  //  BackgroundColor
+  //
+  const [BACKGROUNDCOLOR_TABLEPAPER, SetBACKGROUNDCOLOR_TABLEPAPER] = useState('purple')
+  const [BACKGROUNDCOLOR_MYINPUT, SetBACKGROUNDCOLOR_MYINPUT] = useState('purple')
+  const [BACKGROUNDCOLOR_TABLEBODY, SetBACKGROUNDCOLOR_TABLEBODY] = useState('purple')
   const router = useRouter()
   let g_User_name = ''
   let g_User_uid = 0
@@ -112,6 +118,7 @@ export default function QuizHistory() {
   let searchTypeOptions = searchTypeOptionsLarge
   let buttonTextView = 'View'
   let buttonTextQuiz = 'Quiz'
+  let minWidth = '300px'
   //...........................................................................
   // Module Main Line
   //...........................................................................
@@ -137,6 +144,17 @@ export default function QuizHistory() {
     debugLog = debugSettings()
     if (debugLog) console.log(consoleLogTime(debugModule, 'clientFirstTime'))
     //
+    //  Application Environment Variables
+    //
+    const App_Env = sessionStorageGet({ caller: debugModule, itemName: 'App_Env' })
+    if (debugLog) console.log(consoleLogTime(debugModule, 'App_Env '), App_Env)
+    //
+    //  BackgroundColor
+    //
+    SetBACKGROUNDCOLOR_TABLEPAPER(App_Env.BACKGROUNDCOLOR_TABLEPAPER)
+    SetBACKGROUNDCOLOR_MYINPUT(App_Env.BACKGROUNDCOLOR_MYINPUT)
+    SetBACKGROUNDCOLOR_TABLEBODY(App_Env.BACKGROUNDCOLOR_TABLEBODY)
+    //
     //  Small Screen overrides
     //
     const w_ScreenSmall = sessionStorageGet({ caller: debugModule, itemName: 'App_ScreenSmall' })
@@ -149,6 +167,7 @@ export default function QuizHistory() {
       searchTypeOptions = searchTypeOptionsSmall
       buttonTextView = null
       buttonTextQuiz = null
+      minWidth = '220px'
     }
     //
     //  Get User
@@ -171,7 +190,7 @@ export default function QuizHistory() {
         itemName: 'Page_History_Rebuild',
         itemValue: false,
       })
-      sessionStorage.removeItem('Page_History_Data')
+      sessionStorage.removeItem('User_Data_History')
       setRecords([])
       loadData()
     }
@@ -214,21 +233,21 @@ export default function QuizHistory() {
     //
     //  Session Storage ?
     //
-    const Page_History_Data = sessionStorageGet({
+    const User_Data_History = sessionStorageGet({
       caller: debugModule,
-      itemName: 'Page_History_Data',
+      itemName: 'User_Data_History',
     })
-    if (debugLog) console.log(consoleLogTime(debugModule, 'Page_History_Data'), Page_History_Data)
-    if (Page_History_Data) {
+    if (debugLog) console.log(consoleLogTime(debugModule, 'User_Data_History'), User_Data_History)
+    if (User_Data_History) {
       setForm_message('Loading Data ....')
-      setRecords(Page_History_Data)
+      setRecords(User_Data_History)
       handleSearch(searchType, searchValue)
       setForm_message('')
     }
     //
     //  Get Data
     //
-    if (!Page_History_Data) getRowAllData()
+    if (!User_Data_History) getRowAllData()
   }
   //.............................................................................
   //.  GET ALL
@@ -273,11 +292,11 @@ export default function QuizHistory() {
       //
       //  Data
       //
-      const Page_History_Data = rtnObj.rtnRows
+      const User_Data_History = rtnObj.rtnRows
       //
       //  Data History add time stamp
       //
-      const Page_History_Data_Update = Page_History_Data.map(record => ({
+      const User_Data_History_Update = User_Data_History.map(record => ({
         ...record,
         yymmdd: format(parseISO(record.r_datetime), 'yy-MM-dd'),
       }))
@@ -286,8 +305,8 @@ export default function QuizHistory() {
       //
       sessionStorageSet({
         caller: debugModule,
-        itemName: 'Page_History_Data',
-        itemValue: Page_History_Data_Update,
+        itemName: 'User_Data_History',
+        itemValue: User_Data_History_Update,
       })
       //
       //  Update Table
@@ -295,11 +314,11 @@ export default function QuizHistory() {
       setForm_message('')
       if (debugLog)
         console.log(
-          consoleLogTime(debugModule, 'Page_History_Data_Update'),
-          Page_History_Data_Update
+          consoleLogTime(debugModule, 'User_Data_History_Update'),
+          User_Data_History_Update
         )
 
-      setRecords(Page_History_Data_Update)
+      setRecords(User_Data_History_Update)
       //
       //  Filter
       //
@@ -481,13 +500,23 @@ export default function QuizHistory() {
       {/* .......................................................................................... */}
       {ScreenSmall ? null : <PageHeader title='Quiz History' subTitle={subtitle} />}
       {/* .......................................................................................... */}
-      <Paper>
+      <Paper
+        className={styles.pageContent}
+        sx={{
+          backgroundColor: BACKGROUNDCOLOR_TABLEPAPER,
+        }}
+      >
         <Toolbar>
           {/* .......................................................................................... */}
           <MyInput
             label='Search'
             name='Search'
             value={searchValue}
+            className={styles.searchInput}
+            sx={{
+              backgroundColor: BACKGROUNDCOLOR_MYINPUT,
+              minWidth: { minWidth },
+            }}
             InputProps={{
               startAdornment: (
                 <InputAdornment position='start'>
@@ -499,8 +528,12 @@ export default function QuizHistory() {
           />
           {/* .......................................................................................... */}
           {ScreenSmall ? null : (
-            <Box>
+            <Box className={styles.searchInputTypeBox}>
               <MySelect
+                sx={{
+                  backgroundColor: BACKGROUNDCOLOR_MYINPUT,
+                  minWidth: '200px',
+                }}
                 name='SearchType'
                 label='Search By'
                 value={searchType}
@@ -510,14 +543,26 @@ export default function QuizHistory() {
             </Box>
           )}
           {/* .......................................................................................... */}
-          <MyButton text='Filter' variant='outlined' onClick={() => handleSearch()} />
+          <MyButton
+            className={styles.buttonfilter}
+            text='Filter'
+            onClick={() => handleSearch()}
+          ></MyButton>
           {/* .......................................................................................... */}
           {User_Admin & !ScreenSmall ? (
-            <MyButton text={allUsersText} variant='outlined' onClick={handleAllUsers} />
+            <MyButton
+              text={allUsersText}
+              className={styles.buttonfilter}
+              onClick={handleAllUsers}
+            />
           ) : null}
           {/* .......................................................................................... */}
           {User_Admin & !ScreenSmall ? (
-            <MyButton text='Refresh' variant='outlined' onClick={() => getRowAllData()} />
+            <MyButton
+              text='Refresh'
+              className={styles.buttonfilter}
+              onClick={() => getRowAllData()}
+            />
           ) : null}
           {/*.................................................................................................*/}
           <Box>
@@ -529,7 +574,11 @@ export default function QuizHistory() {
         {/* .......................................................................................... */}
         <TblContainer>
           <TblHead />
-          <TableBody>
+          <TableBody
+            sx={{
+              backgroundColor: BACKGROUNDCOLOR_TABLEBODY,
+            }}
+          >
             {recordsAfterPagingAndSorting().map(row => (
               <TableRow key={row.r_hid}>
                 {ScreenSmall ? null : <TableCell>{row.r_hid}</TableCell>}
@@ -543,18 +592,20 @@ export default function QuizHistory() {
                 {ScreenSmall ? null : <TableCell>{row.r_maxpoints}</TableCell>}
                 {ScreenSmall ? null : <TableCell>{row.r_correctpercent}</TableCell>}
                 <TableCell>
-                  <MyActionButton
+                  <MyButton
+                    className={styles.buttonview}
                     text={buttonTextView}
                     color='warning'
                     onClick={() => QuizHistoryRow(row)}
-                  ></MyActionButton>
+                  ></MyButton>
                 </TableCell>
                 <TableCell>
-                  <MyActionButton
+                  <MyButton
+                    className={styles.buttonquiz}
                     text={buttonTextQuiz}
                     color='warning'
                     onClick={() => QuizBuild(row)}
-                  ></MyActionButton>
+                  ></MyButton>
                 </TableCell>
               </TableRow>
             ))}

@@ -1,16 +1,14 @@
 'use client'
 import React, { useState, useEffect } from 'react'
 import styles from './Navbar.module.css'
-import { AppBar, Toolbar } from '@mui/material'
-import { Typography } from '@mui/material'
+import { AppBar, Toolbar, Typography, Box } from '@mui/material'
 import Image from 'next/image'
 import { signOut, useSession } from 'next-auth/react'
-import { usePathname } from 'next/navigation'
-import { useRouter } from 'next/navigation'
+import { usePathname, useRouter } from 'next/navigation'
 //
 //  Common Components
 //
-import MyActionButton from '@/components/Controls/MyActionButton'
+import MyButton from '@/components/Controls/MyButton'
 import sessionStorageGet from '@/services/sessionStorage/sessionStorageGet'
 import sessionStorageSet from '@/services/sessionStorage/sessionStorageSet'
 import DarkModeToggle from '@/components/Navbar/DarkModeToggle/DarkModeToggle'
@@ -21,6 +19,10 @@ import debugSettings from '@/services/debug/debugSettings'
 import consoleLogTime from '@/services/debug/consoleLogTime'
 let debugLog
 const debugModule = 'Navbar'
+//
+//  Constants
+//
+import { BACKGROUNDCOLOR_NAVBAR } from '@/services/appInit/AppConstants'
 //...........................................................................
 // Module Main Line
 //...........................................................................
@@ -47,6 +49,10 @@ export default function Navbar() {
   const [showButton_UsersSettings, setshowButton_UsersSettings] = useState(false)
   const [showButton_SwitchUser, setshowButton_SwitchUser] = useState(false)
   //
+  //  BackgroundColor
+  //
+  const [BackgroundColor_Navbar, SetBackgroundColor_Navbar] = useState('purple')
+  //
   //  First Time
   //
   useEffect(() => {
@@ -67,6 +73,12 @@ export default function Navbar() {
     //
     debugLog = debugSettings()
     if (debugLog) console.log(consoleLogTime(debugModule, 'clientFirstTime'))
+    //
+    //  BackgroundColor
+    //
+    if (BACKGROUNDCOLOR_NAVBAR) SetBackgroundColor_Navbar(BACKGROUNDCOLOR_NAVBAR)
+    if (process.env.NEXT_PUBLIC_BACKGROUNDCOLOR_NAVBAR)
+      SetBackgroundColor_Navbar(process.env.NEXT_PUBLIC_BACKGROUNDCOLOR_NAVBAR)
     //
     //  Small screen
     //
@@ -185,7 +197,13 @@ export default function Navbar() {
   //...........................................................................
   return (
     <div className={styles.container}>
-      <AppBar className={styles.appBar} position='fixed' elevation={0}>
+      <AppBar
+        position='fixed'
+        elevation={0}
+        sx={{
+          backgroundColor: BackgroundColor_Navbar,
+        }}
+      >
         <Toolbar className={styles.Toolbar}>
           <div className={styles.Navbar}>
             <div className={styles.left}>
@@ -200,68 +218,79 @@ export default function Navbar() {
                 />
                 {/* .......................................................................................... */}
                 {User_SignedIn ? (
-                  <Typography
-                    className={styles.headerText}
-                    sx={{
-                      display: { xs: 'none', sm: 'inline' },
-                      color: 'red',
-                    }}
-                  >
-                    {User_Name}
-                  </Typography>
+                  <Box display='flex' alignItems='center' justifyContent='center'>
+                    <Typography
+                      className={styles.headerText}
+                      align='center'
+                      sx={{
+                        display: { xs: 'none', sm: 'inline' },
+                        color: 'red',
+                      }}
+                    >
+                      {User_Name}
+                    </Typography>
+                  </Box>
                 ) : null}
                 {/* .......................................................................................... */}
                 {User_Admin ? (
-                  <Typography
-                    className={styles.headerText}
-                    sx={{
-                      display: {
-                        xs: 'none',
-                        sm: 'inline',
-                        color: 'yellow',
-                      },
-                    }}
-                  >
-                    ADMIN
-                  </Typography>
+                  <Box display='flex' alignItems='center' justifyContent='center'>
+                    <Typography
+                      className={styles.headerText}
+                      sx={{
+                        display: {
+                          xs: 'none',
+                          sm: 'inline',
+                          color: 'yellow',
+                        },
+                      }}
+                    >
+                      ADMIN
+                    </Typography>
+                  </Box>
                 ) : null}
                 {/* .......................................................................................... */}
                 {User_Dev ? (
-                  <Typography
-                    className={styles.headerText}
-                    sx={{
-                      display: {
-                        xs: 'none',
-                        sm: 'inline',
-                        color: 'yellow',
-                      },
-                    }}
-                  >
-                    DEV
-                  </Typography>
+                  <Box display='flex' alignItems='center' justifyContent='center'>
+                    <Typography
+                      className={styles.headerText}
+                      sx={{
+                        display: {
+                          xs: 'none',
+                          sm: 'inline',
+                          color: 'yellow',
+                        },
+                      }}
+                    >
+                      DEV
+                    </Typography>
+                  </Box>
                 ) : null}
                 {/* .......................................................................................... */}
                 {User_UserSwitch ? (
-                  <Typography
-                    className={styles.headerText}
-                    sx={{
-                      display: {
-                        xs: 'none',
-                        sm: 'inline',
-                        color: 'white',
-                        backgroundColor: 'purple',
-                      },
-                    }}
-                  >
-                    SWITCHED
-                  </Typography>
+                  <Box display='flex' alignItems='center' justifyContent='center'>
+                    <Typography
+                      className={styles.headerText}
+                      sx={{
+                        display: {
+                          xs: 'none',
+                          sm: 'inline',
+                          color: 'white',
+                          backgroundColor: 'purple',
+                        },
+                      }}
+                    >
+                      SWITCHED
+                    </Typography>
+                  </Box>
                 ) : null}
                 {/* .......................................................................................... */}
                 {User_Dev ? (
-                  <Typography
-                    className={styles.headerText}
-                    sx={{ display: { xs: 'none', sm: 'inline', color: 'yellow' } }}
-                  >{`Server(${App_Server})  Database(${App_Database})`}</Typography>
+                  <Box display='flex' alignItems='center' justifyContent='center'>
+                    <Typography
+                      className={styles.headerText}
+                      sx={{ display: { xs: 'none', sm: 'inline', color: 'yellow' } }}
+                    >{`Server(${App_Server})  Database(${App_Database})`}</Typography>
+                  </Box>
                 ) : null}
                 {/* .......................................................................................... */}
               </div>
@@ -269,59 +298,57 @@ export default function Navbar() {
 
             <div className={styles.right}>
               <div className={styles.rightcontainer}>
-                <DarkModeToggle />
+                <Box display='flex' alignItems='center' justifyContent='center'>
+                  <DarkModeToggle />
+                </Box>
                 {/* .......................................................................................... */}
 
                 {showButton_Library && (
-                  <MyActionButton
+                  <MyButton
                     className={styles.links}
                     onClick={() => router.push('/Library')}
                     text='Library'
-                  ></MyActionButton>
+                  ></MyButton>
                 )}
                 {/* .......................................................................................... */}
 
                 {showButton_QuizHistory && (
-                  <MyActionButton
+                  <MyButton
                     className={styles.links}
                     onClick={() => router.push('/QuizHistory')}
                     text='History'
-                  ></MyActionButton>
+                  ></MyButton>
                 )}
                 {/* .......................................................................................... */}
                 {showButton_UsersSettings && (
-                  <MyActionButton
+                  <MyButton
                     className={styles.links}
                     onClick={() => router.push('/UsersSettings')}
                     text='Settings'
-                  ></MyActionButton>
+                  ></MyButton>
                 )}
 
                 {/* .......................................................................................... */}
                 {showButton_SwitchUser && (
-                  <MyActionButton
+                  <MyButton
                     className={styles.links}
                     onClick={() => router.push('/SwitchUser')}
                     text='Switch User'
-                  ></MyActionButton>
+                  ></MyButton>
                 )}
                 {/* .......................................................................................... */}
                 {User_SignedIn && (
-                  <MyActionButton
+                  <MyButton
                     className={styles.links}
                     onClick={() => {
                       handleLogout()
                     }}
                     text='Logout'
-                  ></MyActionButton>
+                  ></MyButton>
                 )}
                 {/* .......................................................................................... */}
                 {session.status === 'authenticated' && (
-                  <MyActionButton
-                    className={styles.logout}
-                    onClick={signOut}
-                    text='Logout'
-                  ></MyActionButton>
+                  <MyButton className={styles.logout} onClick={signOut} text='Logout'></MyButton>
                 )}
               </div>
             </div>

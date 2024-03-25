@@ -15,11 +15,11 @@ const debugModule = 'buildDataUser'
 //
 //  Global Variables
 //
-let User_Questions = []
-let User_Questions_Id = []
-let User_Questions_IdString = ''
-let User_Bid = []
-let User_Hands = []
+let User_Data_Questions = []
+let User_Data_Questions_Id = []
+let User_Data_Questions_IdString = ''
+let User_Data_Bid = []
+let User_Data_Hands = []
 //...................................................................................
 //.  Main Line
 //...................................................................................
@@ -40,26 +40,26 @@ export default function buildDataUser() {
 
     sessionStorageSet({
       caller: debugModule,
-      itemName: 'User_Questions',
-      itemValue: User_Questions,
+      itemName: 'User_Data_Questions',
+      itemValue: User_Data_Questions,
     })
 
     sessionStorageSet({
       caller: debugModule,
-      itemName: 'User_Questions_Id',
-      itemValue: User_Questions_Id,
+      itemName: 'User_Data_Questions_Id',
+      itemValue: User_Data_Questions_Id,
     })
 
     sessionStorageSet({
       caller: debugModule,
-      itemName: 'User_Bid',
-      itemValue: User_Bid,
+      itemName: 'User_Data_Bid',
+      itemValue: User_Data_Bid,
     })
 
     sessionStorageSet({
       caller: debugModule,
-      itemName: 'User_Hands',
-      itemValue: User_Hands,
+      itemName: 'User_Data_Hands',
+      itemValue: User_Data_Hands,
     })
     //
     //  Load data
@@ -112,20 +112,21 @@ export default function buildDataUser() {
       //
       //  Data
       //
-      User_Questions = rtnObj.rtnRows
+      User_Data_Questions = rtnObj.rtnRows
       //
       //  Session Storage
       //
-      if (debugLog) console.log(consoleLogTime(debugModule, 'User_Questions ', User_Questions))
+      if (debugLog)
+        console.log(consoleLogTime(debugModule, 'User_Data_Questions ', User_Data_Questions))
       sessionStorageSet({
         caller: debugModule,
-        itemName: 'User_Questions',
-        itemValue: User_Questions,
+        itemName: 'User_Data_Questions',
+        itemValue: User_Data_Questions,
       })
       //
       //  No Questions
       //
-      if (!User_Questions[0]) {
+      if (!User_Data_Questions[0]) {
         return
       }
       //
@@ -143,34 +144,37 @@ export default function buildDataUser() {
     return
   }
   //...................................................................................
-  //.  Output User_Questions
+  //.  Output User_Data_Questions
   //...................................................................................
   function getQid() {
     //
     //  Question IDs
     //
-    User_Questions_Id = []
-    for (let i = 0; i < User_Questions.length; i++) {
-      User_Questions_Id.push(User_Questions[i].qqid)
+    User_Data_Questions_Id = []
+    for (let i = 0; i < User_Data_Questions.length; i++) {
+      User_Data_Questions_Id.push(User_Data_Questions[i].qqid)
     }
     //
     //  Order by question id
     //
-    User_Questions_Id.sort()
-    if (debugLog) console.log(consoleLogTime(debugModule, 'User_Questions_Id ', User_Questions_Id))
+    User_Data_Questions_Id.sort()
+    if (debugLog)
+      console.log(consoleLogTime(debugModule, 'User_Data_Questions_Id ', User_Data_Questions_Id))
     //
     //  String version of ID
     //
-    User_Questions_IdString = User_Questions_Id.toString()
+    User_Data_Questions_IdString = User_Data_Questions_Id.toString()
     if (debugLog)
-      console.log(consoleLogTime(debugModule, 'User_Questions_IdString ', User_Questions_IdString))
+      console.log(
+        consoleLogTime(debugModule, 'User_Data_Questions_IdString ', User_Data_Questions_IdString)
+      )
     //
     //  Session Storage
     //
     sessionStorageSet({
       caller: debugModule,
-      itemName: 'User_Questions_Id',
-      itemValue: User_Questions_Id,
+      itemName: 'User_Data_Questions_Id',
+      itemValue: User_Data_Questions_Id,
     })
   }
   //...................................................................................
@@ -181,7 +185,7 @@ export default function buildDataUser() {
     //
     //  Selection
     //
-    let AxString = `* from bidding where bqid in (${User_Questions_IdString})`
+    let AxString = `* from bidding where bqid in (${User_Data_Questions_IdString})`
     if (debugLog) console.log(consoleLogTime(debugModule, 'AxString', AxString))
     //
     //  Process promise
@@ -212,17 +216,17 @@ export default function buildDataUser() {
       //
       //  Data
       //
-      User_Bid = rtnObj.rtnRows
-      if (debugLog) console.log(consoleLogTime(debugModule, 'User_Bid '), [...User_Bid])
-      User_Bid.sort()
+      User_Data_Bid = rtnObj.rtnRows
+      if (debugLog) console.log(consoleLogTime(debugModule, 'User_Data_Bid '), [...User_Data_Bid])
+      User_Data_Bid.sort()
       //
       //  Session Storage
       //
-      if (debugLog) console.log(consoleLogTime(debugModule, 'User_Bid '), [...User_Bid])
+      if (debugLog) console.log(consoleLogTime(debugModule, 'User_Data_Bid '), [...User_Data_Bid])
       sessionStorageSet({
         caller: debugModule,
-        itemName: 'User_Bid',
-        itemValue: User_Bid,
+        itemName: 'User_Data_Bid',
+        itemValue: User_Data_Bid,
       })
       return
     })
@@ -236,7 +240,7 @@ export default function buildDataUser() {
     //
     //  Selection
     //
-    let AxString = `* from hands where hqid in (${User_Questions_IdString})`
+    let AxString = `* from hands where hqid in (${User_Data_Questions_IdString})`
     if (debugLog) console.log(consoleLogTime(debugModule, 'AxString', AxString))
     //
     //  Process promise
@@ -268,17 +272,19 @@ export default function buildDataUser() {
       //
       //  Data
       //
-      User_Hands = rtnObj.rtnRows
-      if (debugLog) console.log(consoleLogTime(debugModule, 'User_Hands '), [...User_Hands])
-      User_Hands.sort()
+      User_Data_Hands = rtnObj.rtnRows
+      if (debugLog)
+        console.log(consoleLogTime(debugModule, 'User_Data_Hands '), [...User_Data_Hands])
+      User_Data_Hands.sort()
       //
       //  Session Storage
       //
-      if (debugLog) console.log(consoleLogTime(debugModule, 'User_Hands '), [...User_Hands])
+      if (debugLog)
+        console.log(consoleLogTime(debugModule, 'User_Data_Hands '), [...User_Data_Hands])
       sessionStorageSet({
         caller: debugModule,
-        itemName: 'User_Hands',
-        itemValue: User_Hands,
+        itemName: 'User_Data_Hands',
+        itemValue: User_Data_Hands,
       })
       return
     })

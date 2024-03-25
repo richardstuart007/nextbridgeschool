@@ -119,29 +119,29 @@ export default function buildDataQuiz(props) {
     //
     //  Question Data
     //
-    const User_Questions = sessionStorageGet({
+    const User_Data_Questions = sessionStorageGet({
       caller: debugModule,
-      itemName: 'User_Questions',
+      itemName: 'User_Data_Questions',
     })
     //
     //  Filter Owner/group
     //
-    const User_Questions_Flt = User_Questions.filter(
+    const User_Data_Questions_Flt = User_Data_Questions.filter(
       x => x.qowner === p_owner && x.qgroup === p_group
     )
     //
     //  Output Page_Quiz_Q_Flt
     //
-    QuestionsSortMax(User_Questions_Flt)
+    QuestionsSortMax(User_Data_Questions_Flt)
     //
     //  Load related Bids
     //
-    const User_Bid = sessionStorageGet({
+    const User_Data_Bid = sessionStorageGet({
       caller: debugModule,
-      itemName: 'User_Bid',
+      itemName: 'User_Data_Bid',
     })
 
-    Page_Quiz_Bid = User_Bid.filter(x => Page_Quiz_Q_Flt_qqid.includes(x.bqid))
+    Page_Quiz_Bid = User_Data_Bid.filter(x => Page_Quiz_Q_Flt_qqid.includes(x.bqid))
 
     sessionStorageSet({
       caller: debugModule,
@@ -151,11 +151,11 @@ export default function buildDataQuiz(props) {
     //
     //  Load related Hands
     //
-    const User_Hands = sessionStorageGet({
+    const User_Data_Hands = sessionStorageGet({
       caller: debugModule,
-      itemName: 'User_Hands',
+      itemName: 'User_Data_Hands',
     })
-    Page_Quiz_Hands = User_Hands.filter(x => Page_Quiz_Q_Flt_qqid.includes(x.hqid))
+    Page_Quiz_Hands = User_Data_Hands.filter(x => Page_Quiz_Q_Flt_qqid.includes(x.hqid))
     sessionStorageSet({
       caller: debugModule,
       itemName: 'Page_Quiz_Hands',
@@ -165,15 +165,15 @@ export default function buildDataQuiz(props) {
   //...................................................................................
   //.  Output Page_Quiz_Q_Flt
   //...................................................................................
-  function QuestionsSortMax(User_Questions_Flt) {
+  function QuestionsSortMax(User_Data_Questions_Flt) {
     if (debugLog) console.log(consoleLogTime(debugModule, 'QuestionsSortMax'))
     //
     //  Random sort questions
     //
     const SortQuestions = User_User.u_sortquestions
     SortQuestions
-      ? (Page_Quiz_Q_Flt = User_Questions_Flt.sort(() => Math.random() - 0.5))
-      : (Page_Quiz_Q_Flt = User_Questions_Flt)
+      ? (Page_Quiz_Q_Flt = User_Data_Questions_Flt.sort(() => Math.random() - 0.5))
+      : (Page_Quiz_Q_Flt = User_Data_Questions_Flt)
     //
     //  Apply max number
     //
