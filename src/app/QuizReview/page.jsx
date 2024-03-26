@@ -7,14 +7,14 @@ import { Typography, Box } from '@mui/material'
 //
 //  Controls
 //
-import MyButton from '/src//components/Controls/MyButton'
+import MyButton from '/src/components/Controls/MyButton'
 //
 //  Sub Components
 //
-import QuizReviewAnswers from '/src//components/Quiz/QuizReviewAnswers/QuizReviewAnswers'
-import QuizHands from '/src//components/Quiz/QuizHands/QuizHands'
-import QuizBidding from '/src//components/Quiz/QuizBidding/QuizBidding'
-import QuizQuestion from '/src//components/Quiz/QuizQuestion'
+import QuizReviewAnswers from '/src/components/Quiz/QuizReviewAnswers/QuizReviewAnswers'
+import QuizHands from '/src/components/Quiz/QuizHands/QuizHands'
+import QuizBidding from '/src/components/Quiz/QuizBidding/QuizBidding'
+import QuizQuestion from '/src/components/Quiz/QuizQuestion'
 //
 //  Routing
 //
@@ -22,13 +22,13 @@ import { useRouter } from 'next/navigation'
 //
 //  services
 //
-import sessionStorageGet from '/src//services/sessionStorage/sessionStorageGet'
-import sessionStorageSet from '/src//services/sessionStorage/sessionStorageSet'
+import sessionStorageGet from '/src/services/sessionStorage/sessionStorageGet'
+import sessionStorageSet from '/src/services/sessionStorage/sessionStorageSet'
 //
 //  Debug Settings
 //
-import debugSettings from '/src//services/debug/debugSettings'
-import consoleLogTime from '/src//services/debug/consoleLogTime'
+import debugSettings from '/src/services/debug/debugSettings'
+import consoleLogTime from '/src/services/debug/consoleLogTime'
 let debugLog = false
 const debugModule = 'QuizReview'
 //

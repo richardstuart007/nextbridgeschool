@@ -7,11 +7,11 @@ import { teal } from 'material-ui-colors'
 //
 //  services
 //
-import sessionStorageGet from '/src//services/sessionStorage/sessionStorageGet'
+import sessionStorageGet from '/src/services/sessionStorage/sessionStorageGet'
 //
 //  Components
 //
-import MyButton from '/src//components/Controls/MyButton'
+import MyButton from '/src/components/Controls/MyButton'
 //
 //  Debug Settings
 //

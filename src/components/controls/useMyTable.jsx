@@ -13,12 +13,12 @@ import {
 //
 //  Services
 //
-import sessionStorageGet from '/src//services/sessionStorage/sessionStorageGet'
+import sessionStorageGet from '/src/services/sessionStorage/sessionStorageGet'
 //
 //  Debug Settings
 //
-import debugSettings from '/src//services/debug/debugSettings'
-import consoleLogTime from '/src//services/debug/consoleLogTime'
+import debugSettings from '/src/services/debug/debugSettings'
+import consoleLogTime from '/src/services/debug/consoleLogTime'
 let debugLog = false
 const debugModule = 'useMyTable'
 
@@ -26,7 +26,7 @@ let recordsLength = 0
 //
 //  Constants
 //
-import { BACKGROUNDCOLOR_TABLEHEAD } from '/src//services/appInit/AppConstants'
+import { BACKGROUNDCOLOR_TABLEHEAD } from '/src/services/appInit/AppConstants'
 //=====================================================================================
 export default function useMyTable(records, headCells, filterFn, startPage0, setStartPage0) {
   //

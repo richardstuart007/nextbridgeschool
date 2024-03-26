@@ -2,12 +2,12 @@
 //  services
 //
 import apiAxios from './apiAxios'
-import sessionStorageGet from '/src//services/sessionStorage/sessionStorageGet'
+import sessionStorageGet from '/src/services/sessionStorage/sessionStorageGet'
 //
 //  Debug Settings
 //
-import debugSettings from '/src//services/debug/debugSettings'
-import consoleLogTime from '/src//services/debug/consoleLogTime'
+import debugSettings from '/src/services/debug/debugSettings'
+import consoleLogTime from '/src/services/debug/consoleLogTime'
 let debugLog
 const debugModule = 'apiRowCrud'
 //--------------------------------------------------------------------

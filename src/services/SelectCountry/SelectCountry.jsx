@@ -4,18 +4,18 @@ import Image from 'next/image'
 //
 //  services
 //
-import sessionStorageGet from '/src//services/sessionStorage/sessionStorageGet'
+import sessionStorageGet from '/src/services/sessionStorage/sessionStorageGet'
 //
 //  Debug Settings
 //
-import debugSettings from '/src//services/debug/debugSettings'
-import consoleLogTime from '/src//services/debug/consoleLogTime'
+import debugSettings from '/src/services/debug/debugSettings'
+import consoleLogTime from '/src/services/debug/consoleLogTime'
 let debugLog
 const debugModule = 'SelectCountry'
 //
 //  Constants
 //
-import { BACKGROUNDCOLOR_MYINPUT } from '/src//services/appInit/AppConstants'
+import { BACKGROUNDCOLOR_MYINPUT } from '/src/services/appInit/AppConstants'
 //...................................................................................
 //.  Main Line
 //...................................................................................
@@ -27,7 +27,7 @@ export default function SelectCountry(props) {
   //
   //  Countries
   //
-  const { COUNTRIES } = require('/src//services/SelectCountry/countries.js')
+  const { COUNTRIES } = require('/src/services/SelectCountry/countries.js')
   let countryObj = COUNTRIES.find(country => country.code === countryCode)
   if (!countryObj) {
     countryObj = { code: 'ZZ', label: 'World', phone: '999' }

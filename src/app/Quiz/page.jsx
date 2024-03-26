@@ -8,21 +8,21 @@ import { Card } from '@mui/material'
 //
 //  Controls
 //
-import MyButton from '/src//components/Controls/MyButton'
+import MyButton from '/src/components/Controls/MyButton'
 //
 //  Sub Components
 //
 import QuizChoice from './QuizChoice'
-import QuizHands from '/src//components/Quiz/QuizHands/QuizHands'
-import QuizBidding from '/src//components/Quiz/QuizBidding/QuizBidding'
-import QuizQuestion from '/src//components/Quiz/QuizQuestion'
-import QuizLinearProgress from '/src//components/Quiz/QuizLinearProgress'
+import QuizHands from '/src/components/Quiz/QuizHands/QuizHands'
+import QuizBidding from '/src/components/Quiz/QuizBidding/QuizBidding'
+import QuizQuestion from '/src/components/Quiz/QuizQuestion'
+import QuizLinearProgress from '/src/components/Quiz/QuizLinearProgress'
 //
 //  Services
 //
-import writeUsersHistory from '/src//services/dbApi/writeUsersHistory'
-import sessionStorageGet from '/src//services/sessionStorage/sessionStorageGet'
-import sessionStorageSet from '/src//services/sessionStorage/sessionStorageSet'
+import writeUsersHistory from '/src/services/dbApi/writeUsersHistory'
+import sessionStorageGet from '/src/services/sessionStorage/sessionStorageGet'
+import sessionStorageSet from '/src/services/sessionStorage/sessionStorageSet'
 //
 //  Routing
 //
@@ -30,8 +30,8 @@ import { useRouter } from 'next/navigation'
 //
 //  Debug Settings
 //
-import debugSettings from '/src//services/debug/debugSettings'
-import consoleLogTime from '/src//services/debug/consoleLogTime'
+import debugSettings from '/src/services/debug/debugSettings'
+import consoleLogTime from '/src/services/debug/consoleLogTime'
 let debugLog
 const debugModule = 'Quiz'
 //.............................................................................

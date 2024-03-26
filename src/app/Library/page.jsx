@@ -18,18 +18,18 @@ import SearchIcon from '@mui/icons-material/Search'
 //
 //  Controls
 //
-import MyButton from '/src//components/Controls/MyButton'
-import MyInput from '/src//components/Controls/MyInput'
-import MySelect from '/src//components/Controls/MySelect'
-import PageHeader from '/src//components/Controls/PageHeader'
-import useMyTable from '/src//components/Controls/useMyTable'
+import MyButton from '/src/components/Controls/MyButton'
+import MyInput from '/src/components/Controls/MyInput'
+import MySelect from '/src/components/Controls/MySelect'
+import PageHeader from '/src/components/Controls/PageHeader'
+import useMyTable from '/src/components/Controls/useMyTable'
 //
 //  Services
 //
-import apiRowCrud from '/src//services/dbApi/apiRowCrud'
-import buildDataQuiz from '/src//services/builds/buildDataQuiz'
-import sessionStorageGet from '/src//services/sessionStorage/sessionStorageGet'
-import sessionStorageSet from '/src//services/sessionStorage/sessionStorageSet'
+import apiRowCrud from '/src/services/dbApi/apiRowCrud'
+import buildDataQuiz from '/src/services/builds/buildDataQuiz'
+import sessionStorageGet from '/src/services/sessionStorage/sessionStorageGet'
+import sessionStorageSet from '/src/services/sessionStorage/sessionStorageSet'
 //
 //  Routing
 //
@@ -37,8 +37,8 @@ import { useRouter } from 'next/navigation'
 //
 //  Debug Settings
 //
-import debugSettings from '/src//services/debug/debugSettings'
-import consoleLogTime from '/src//services/debug/consoleLogTime'
+import debugSettings from '/src/services/debug/debugSettings'
+import consoleLogTime from '/src/services/debug/consoleLogTime'
 let debugLog = false
 const debugModule = 'Library'
 //...........................................................................
@@ -82,7 +82,7 @@ import {
   BACKGROUNDCOLOR_TABLEPAPER,
   BACKGROUNDCOLOR_MYINPUT,
   BACKGROUNDCOLOR_TABLEBODY,
-} from '/src//services/appInit/AppConstants'
+} from '/src/services/appInit/AppConstants'
 //...................................................................................
 //.  Main Line
 //...................................................................................

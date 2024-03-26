@@ -8,18 +8,18 @@ import styles from './RegisterUser.module.css'
 //
 //  services
 //
-import writeUsers from '/src//services/dbApi/writeUsers'
-import writeUsersowner from '/src//services/dbApi/writeUsersowner'
-import SelectCountry from '/src//services/SelectCountry/SelectCountry'
-import sessionStorageGet from '/src//services/sessionStorage/sessionStorageGet'
-import sessionStorageSet from '/src//services/sessionStorage/sessionStorageSet'
+import writeUsers from '/src/services/dbApi/writeUsers'
+import writeUsersowner from '/src/services/dbApi/writeUsersowner'
+import SelectCountry from '/src/services/SelectCountry/SelectCountry'
+import sessionStorageGet from '/src/services/sessionStorage/sessionStorageGet'
+import sessionStorageSet from '/src/services/sessionStorage/sessionStorageSet'
 //
 //  Controls
 //
-import MyButton from '/src//components/Controls/MyButton'
-import MyInput from '/src//components/Controls/MyInput'
-import MySelect from '/src//components/Controls/MySelect'
-import { useMyForm, MyForm } from '/src//components/Controls/useMyForm'
+import MyButton from '/src/components/Controls/MyButton'
+import MyInput from '/src/components/Controls/MyInput'
+import MySelect from '/src/components/Controls/MySelect'
+import { useMyForm, MyForm } from '/src/components/Controls/useMyForm'
 //
 //  Routing
 //
@@ -27,8 +27,8 @@ import { useRouter } from 'next/navigation'
 //
 //  Debug Settings
 //
-import debugSettings from '/src//services/debug/debugSettings'
-import consoleLogTime from '/src//services/debug/consoleLogTime'
+import debugSettings from '/src/services/debug/debugSettings'
+import consoleLogTime from '/src/services/debug/consoleLogTime'
 let debugLog
 const debugModule = 'RegisterUser'
 //.............................................................................
@@ -54,7 +54,7 @@ let App_Env
 import {
   BACKGROUNDCOLOR_FORMPAPER,
   BACKGROUNDCOLOR_MYINPUT,
-} from '/src//services/appInit/AppConstants'
+} from '/src/services/appInit/AppConstants'
 //...................................................................................
 //.  Main Line
 //...................................................................................
