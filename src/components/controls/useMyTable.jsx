@@ -23,6 +23,10 @@ let debugLog = false
 const debugModule = 'useMyTable'
 
 let recordsLength = 0
+//
+//  Constants
+//
+import { BACKGROUNDCOLOR_TABLEHEAD } from '@/services/appInit/AppConstants'
 //=====================================================================================
 export default function useMyTable(records, headCells, filterFn, startPage0, setStartPage0) {
   //
@@ -36,7 +40,8 @@ export default function useMyTable(records, headCells, filterFn, startPage0, set
   //
   //  BackgroundColor
   //
-  const [BACKGROUNDCOLOR_TABLEHEAD, SetBACKGROUNDCOLOR_TABLEHEAD] = useState('purple')
+  const [BackgroundColor_TABLEHEAD, SetBackgroundColor_TABLEHEAD] =
+    useState(BACKGROUNDCOLOR_TABLEHEAD)
   //
   //  First Time
   //
@@ -70,7 +75,7 @@ export default function useMyTable(records, headCells, filterFn, startPage0, set
     //
     //  BackgroundColor
     //
-    SetBACKGROUNDCOLOR_TABLEHEAD(App_Env.BACKGROUNDCOLOR_TABLEHEAD)
+    SetBackgroundColor_TABLEHEAD(App_Env.BACKGROUNDCOLOR_TABLEHEAD)
   }
   //.....................................................................................
   //. Table Container
@@ -94,7 +99,7 @@ export default function useMyTable(records, headCells, filterFn, startPage0, set
     return (
       <TableHead
         sx={{
-          backgroundColor: BACKGROUNDCOLOR_TABLEHEAD,
+          backgroundColor: BackgroundColor_TABLEHEAD,
         }}
       >
         <TableRow>

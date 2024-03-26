@@ -8,10 +8,25 @@ export default function MySelect(props) {
   //
   //  Deconstruct
   //
-  const { name, label, value, className, error = null, onChange, options, ...other } = props
+  const {
+    name,
+    label,
+    value,
+    className,
+    error = null,
+    onChange,
+    options,
+    backgroundColor = 'azure',
+    ...other
+  } = props
 
   return (
-    <FormControl variant='outlined' {...(error && { error: true })} {...other}>
+    <FormControl
+      variant='outlined'
+      sx={{ backgroundColor: backgroundColor, minWidth: '300px', margin: 1.5 }}
+      {...(error && { error: true })}
+      {...other}
+    >
       <InputLabel>{label}</InputLabel>
       <Select label={label} name={name} value={value} onChange={onChange} {...other}>
         {options.map(item => (

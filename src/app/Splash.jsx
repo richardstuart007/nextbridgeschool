@@ -32,6 +32,7 @@ const debugModule = 'Splash'
 //
 let App_Env
 let App_URL
+let App_Session
 //
 //  Constants
 //
@@ -50,7 +51,8 @@ export default function Splash() {
   //
   //  BackgroundColor
   //
-  const [BackgroudColor_FORMPAPER, SetBackgroudColor_FORMPAPER] = useState('purple')
+  const [BackgroudColor_FORMPAPER, SetBackgroudColor_FORMPAPER] =
+    useState(BACKGROUNDCOLOR_FORMPAPER)
   const router = useRouter()
   //
   //  First Time
@@ -71,7 +73,6 @@ export default function Splash() {
     //
     //  BackgroundColor
     //
-    SetBackgroudColor_FORMPAPER(BACKGROUNDCOLOR_FORMPAPER)
     if (
       process.env.NEXT_PUBLIC_BACKGROUNDCOLOR_FORMPAPER &&
       process.env.NEXT_PUBLIC_BACKGROUNDCOLOR_FORMPAPER !== CONST_DEFAULT
@@ -158,25 +159,10 @@ export default function Splash() {
       sessionStorage.removeItem('User_Password')
       sessionStorage.removeItem('User_Userspwd')
       //
-      //  Write Session info
+      //  Write Session info (if not already exists)
       //
-      let App_Session
-      App_Session = sessionStorageGet({ caller: debugModule, itemName: 'App_Session' })
-      if (!App_Session) {
-        writeSession()
-        App_Session = sessionStorageGet({
-          caller: debugModule,
-          itemName: 'App_Session',
-        })
-      }
-      //
-      //  Connection message
-      //
-      if (App_Session) {
-        setconnection_message(`Connected (${App_Session.v_vid})`)
-      } else {
-        setconnection_message(`Connected`)
-      }
+      getSession()
+      if (!App_Session) writeSession()
       //
       //  Create Options
       //
@@ -185,7 +171,58 @@ export default function Splash() {
       //  Connected
       //
       setshowContinue(true)
+      //
+      //  Connection message
+      //
+      connectionMessage()
     })
+  }
+  //--------------------------------------------------------------------
+  //-  Get the session ID
+  //--------------------------------------------------------------------
+  function getSession() {
+    //
+    //  Session
+    //
+    App_Session = sessionStorageGet({ caller: debugModule, itemName: 'App_Session' })
+    if (debugLog) console.log(consoleLogTime(debugModule, 'App_Session'), App_Session)
+    //
+    //  Connection message
+    //
+    if (App_Session) {
+      setconnection_message(`Connected (${App_Session.v_vid})`)
+    } else {
+      setconnection_message(`Connected`)
+    }
+  }
+  //--------------------------------------------------------------------
+  //-  Attempt to get session info
+  //--------------------------------------------------------------------
+  function connectionMessage() {
+    //
+    //  Session already exists
+    //
+    if (App_Session) return
+    //
+    //  First Attempt
+    //
+    let attempts = 0
+    attemptToGetSession()
+    //
+    //  Wait to try again, Increase the delay with each attempt
+    //
+    function attemptToGetSession() {
+      setTimeout(() => {
+        getSession()
+        attempts++
+        //
+        //  Schedule the next attempt
+        //
+        if (!App_Session && attempts < 5) {
+          attemptToGetSession()
+        }
+      }, 500 * attempts)
+    }
   }
   //--------------------------------------------------------------------
   //-  Check The Server/Database

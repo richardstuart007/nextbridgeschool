@@ -43,7 +43,10 @@ const initialFValues = {
   u_fedcountry: '',
   u_fedid: '',
 }
-
+//
+//  Constants
+//
+import { BACKGROUNDCOLOR_FORMPAPER, BACKGROUNDCOLOR_MYINPUT } from '@/services/appInit/AppConstants'
 //...................................................................................
 //.  Main Line
 //...................................................................................
@@ -56,8 +59,9 @@ export default function UsersSettings() {
   //
   //  BackgroundColor
   //
-  const [BACKGROUNDCOLOR_FORMPAPER, SetBACKGROUNDCOLOR_FORMPAPER] = useState('purple')
-  const [BACKGROUNDCOLOR_MYINPUT, SetBACKGROUNDCOLOR_MYINPUT] = useState('purple')
+  const [BackgroundColor_FORMPAPER, SetBackgroundColor_FORMPAPER] =
+    useState(BACKGROUNDCOLOR_FORMPAPER)
+  const [BackgroundColor_MYINPUT, SetBackgroundColor_MYINPUT] = useState(BACKGROUNDCOLOR_MYINPUT)
   //
   //  First Time
   //
@@ -88,8 +92,8 @@ export default function UsersSettings() {
     //
     //  BackgroundColor
     //
-    SetBACKGROUNDCOLOR_FORMPAPER(App_Env.BACKGROUNDCOLOR_FORMPAPER)
-    SetBACKGROUNDCOLOR_MYINPUT(App_Env.BACKGROUNDCOLOR_MYINPUT)
+    SetBackgroundColor_FORMPAPER(App_Env.BACKGROUNDCOLOR_FORMPAPER)
+    SetBackgroundColor_MYINPUT(App_Env.BACKGROUNDCOLOR_MYINPUT)
     //
     //  Small Screen overrides
     //
@@ -262,7 +266,7 @@ export default function UsersSettings() {
             margin: 2,
             padding: 0,
             maxWidth: 400,
-            backgroundColor: BACKGROUNDCOLOR_FORMPAPER,
+            backgroundColor: BackgroundColor_FORMPAPER,
             elevation: 12,
           }}
         >
@@ -281,7 +285,7 @@ export default function UsersSettings() {
                 value={values.u_name}
                 onChange={handleInputChange}
                 error={errors.u_name}
-                sx={{ backgroundColor: BACKGROUNDCOLOR_MYINPUT, minWidth: '300px' }}
+                sx={{ backgroundColor: BackgroundColor_MYINPUT, minWidth: '300px' }}
               />
             </Grid>
             {/*------------------------------------------------------------------------------ */}
@@ -292,7 +296,7 @@ export default function UsersSettings() {
                 value={values.u_email}
                 onChange={handleInputChange}
                 error={errors.u_email}
-                sx={{ backgroundColor: BACKGROUNDCOLOR_MYINPUT, minWidth: '300px' }}
+                sx={{ backgroundColor: BackgroundColor_MYINPUT, minWidth: '300px' }}
               />
             </Grid>
             {/*------------------------------------------------------------------------------ */}
@@ -303,7 +307,7 @@ export default function UsersSettings() {
                 value={values.u_fedcountry}
                 onChange={handleInputChange}
                 error={errors.u_fedcountry}
-                sx={{ backgroundColor: BACKGROUNDCOLOR_MYINPUT, minWidth: '200px' }}
+                sx={{ backgroundColor: BackgroundColor_MYINPUT, minWidth: '200px' }}
               />
             </Grid>
             <Grid item xs={12}>
@@ -313,7 +317,7 @@ export default function UsersSettings() {
                 value={values.u_fedid}
                 onChange={handleInputChange}
                 error={errors.u_fedid}
-                sx={{ backgroundColor: BACKGROUNDCOLOR_MYINPUT, minWidth: '300px' }}
+                sx={{ backgroundColor: BackgroundColor_MYINPUT, minWidth: '300px' }}
               />
             </Grid>
 
@@ -325,7 +329,7 @@ export default function UsersSettings() {
                 value={values.u_dftmaxquestions}
                 onChange={handleInputChange}
                 error={errors.u_dftmaxquestions}
-                sx={{ backgroundColor: BACKGROUNDCOLOR_MYINPUT, minWidth: '200px' }}
+                sx={{ backgroundColor: BackgroundColor_MYINPUT, minWidth: '200px' }}
               />
             </Grid>
             {/*------------------------------------------------------------------------------ */}

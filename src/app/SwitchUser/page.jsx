@@ -63,6 +63,14 @@ const searchTypeOptions = [
   { id: 'u_name', title: 'Name' },
   { id: 'u_fedid', title: 'Bridge ID' },
 ]
+//
+//  Constants
+//
+import {
+  BACKGROUNDCOLOR_TABLEPAPER,
+  BACKGROUNDCOLOR_MYINPUT,
+  BACKGROUNDCOLOR_TABLEBODY,
+} from '@/services/appInit/AppConstants'
 //...................................................................................
 //.  Main Line
 //...................................................................................
@@ -84,9 +92,12 @@ export default function SwitchUser() {
   //
   //  BackgroundColor
   //
-  const [BACKGROUNDCOLOR_TABLEPAPER, SetBACKGROUNDCOLOR_TABLEPAPER] = useState('purple')
-  const [BACKGROUNDCOLOR_MYINPUT, SetBACKGROUNDCOLOR_MYINPUT] = useState('purple')
-  const [BACKGROUNDCOLOR_TABLEBODY, SetBACKGROUNDCOLOR_TABLEBODY] = useState('purple')
+  const [BackgroundColor_TABLEPAPER, SetBackgroundColor_TABLEPAPER] = useState(
+    BACKGROUNDCOLOR_TABLEPAPER
+  )
+  const [BackgroundColor_MYINPUT, SetBackgroundColor_MYINPUT] = useState(BACKGROUNDCOLOR_MYINPUT)
+  const [BackgroundColor_TABLEBODY, SetBackgroundColor_TABLEBODY] =
+    useState(BACKGROUNDCOLOR_TABLEBODY)
   //
   //  First Time
   //
@@ -109,7 +120,7 @@ export default function SwitchUser() {
     //
     //  Debug Settings
     //
-    debugLog = debugSettings(true)
+    debugLog = debugSettings()
     if (debugLog) console.log(consoleLogTime(debugModule, 'clientFirstTime'))
     //
     //  Application Environment Variables
@@ -119,9 +130,9 @@ export default function SwitchUser() {
     //
     //  BackgroundColor
     //
-    SetBACKGROUNDCOLOR_TABLEPAPER(App_Env.BACKGROUNDCOLOR_TABLEPAPER)
-    SetBACKGROUNDCOLOR_MYINPUT(App_Env.BACKGROUNDCOLOR_MYINPUT)
-    SetBACKGROUNDCOLOR_TABLEBODY(App_Env.BACKGROUNDCOLOR_TABLEBODY)
+    SetBackgroundColor_TABLEPAPER(App_Env.BACKGROUNDCOLOR_TABLEPAPER)
+    SetBackgroundColor_MYINPUT(App_Env.BACKGROUNDCOLOR_MYINPUT)
+    SetBackgroundColor_TABLEBODY(App_Env.BACKGROUNDCOLOR_TABLEBODY)
     //
     //  Initial Data Load
     //
@@ -255,7 +266,7 @@ export default function SwitchUser() {
       <Paper
         className={styles.pageContent}
         sx={{
-          backgroundColor: BACKGROUNDCOLOR_TABLEPAPER,
+          backgroundColor: BackgroundColor_TABLEPAPER,
         }}
       >
         <Toolbar>
@@ -265,7 +276,7 @@ export default function SwitchUser() {
             value={searchValue}
             className={styles.searchInput}
             sx={{
-              backgroundColor: BACKGROUNDCOLOR_MYINPUT,
+              backgroundColor: BackgroundColor_MYINPUT,
               minWidth: '300px',
             }}
             InputProps={{
@@ -284,7 +295,7 @@ export default function SwitchUser() {
               label='Search By'
               value={searchType}
               sx={{
-                backgroundColor: BACKGROUNDCOLOR_MYINPUT,
+                backgroundColor: BackgroundColor_MYINPUT,
                 minWidth: '200px',
               }}
               onChange={e => setSearchType(e.target.value)}
@@ -317,7 +328,7 @@ export default function SwitchUser() {
           <TblHead />
           <TableBody
             sx={{
-              backgroundColor: BACKGROUNDCOLOR_TABLEBODY,
+              backgroundColor: BackgroundColor_TABLEBODY,
             }}
           >
             {recordsAfterPagingAndSorting().map(row => (

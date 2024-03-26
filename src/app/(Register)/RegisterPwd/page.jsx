@@ -28,9 +28,6 @@ import debugSettings from '@/services/debug/debugSettings'
 import consoleLogTime from '@/services/debug/consoleLogTime'
 let debugLog
 const debugModule = 'RegisterPwd'
-//.............................................................................
-//.  Data Input Fields
-//.............................................................................
 //
 //  Initial Values
 //
@@ -38,6 +35,10 @@ const initialFValues = {
   user: '',
   password: '',
 }
+//
+//  Constants
+//
+import { BACKGROUNDCOLOR_FORMPAPER, BACKGROUNDCOLOR_MYINPUT } from '@/services/appInit/AppConstants'
 //...................................................................................
 //.  Main Line
 //...................................................................................
@@ -50,8 +51,9 @@ export default function RegisterPwd() {
   //
   //  BackgroundColor
   //
-  const [BACKGROUNDCOLOR_FORMPAPER, SetBACKGROUNDCOLOR_FORMPAPER] = useState('purple')
-  const [BACKGROUNDCOLOR_MYINPUT, SetBACKGROUNDCOLOR_MYINPUT] = useState('purple')
+  const [BackgroundColor_FORMPAPER, SetBackgroundColor_FORMPAPER] =
+    useState(BACKGROUNDCOLOR_FORMPAPER)
+  const [BackgroundColor_MYINPUT, SetBackgroundColor_MYINPUT] = useState(BACKGROUNDCOLOR_MYINPUT)
   //
   //  Interface to Form
   //
@@ -90,8 +92,8 @@ export default function RegisterPwd() {
     //
     //  BackgroundColor
     //
-    SetBACKGROUNDCOLOR_FORMPAPER(App_Env.BACKGROUNDCOLOR_FORMPAPER)
-    SetBACKGROUNDCOLOR_MYINPUT(App_Env.BACKGROUNDCOLOR_MYINPUT)
+    SetBackgroundColor_FORMPAPER(App_Env.BACKGROUNDCOLOR_FORMPAPER)
+    SetBackgroundColor_MYINPUT(App_Env.BACKGROUNDCOLOR_MYINPUT)
   }
   //...........................................................................
   // Client Code
@@ -221,7 +223,7 @@ export default function RegisterPwd() {
                 margin: 1,
                 padding: 1,
                 maxWidth: 400,
-                backgroundColor: BACKGROUNDCOLOR_FORMPAPER,
+                backgroundColor: BackgroundColor_FORMPAPER,
               }}
             >
               {/*.................................................................................................*/}
@@ -238,7 +240,7 @@ export default function RegisterPwd() {
                 value={values.user}
                 onChange={handleInputChange}
                 error={errors.user}
-                sx={{ backgroundColor: BACKGROUNDCOLOR_MYINPUT, minWidth: '300px', margin: 2 }}
+                sx={{ backgroundColor: BackgroundColor_MYINPUT, minWidth: '300px', margin: 2 }}
               />
 
               {/*.................................................................................................*/}
@@ -249,7 +251,7 @@ export default function RegisterPwd() {
                 value={values.password}
                 onChange={handleInputChange}
                 error={errors.password}
-                sx={{ backgroundColor: BACKGROUNDCOLOR_MYINPUT, minWidth: '300px', margin: 2 }}
+                sx={{ backgroundColor: BackgroundColor_MYINPUT, minWidth: '300px', margin: 2 }}
               />
 
               {/*.................................................................................................*/}

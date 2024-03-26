@@ -12,6 +12,10 @@ import debugSettings from '@/services/debug/debugSettings'
 import consoleLogTime from '@/services/debug/consoleLogTime'
 let debugLog
 const debugModule = 'SelectCountry'
+//
+//  Constants
+//
+import { BACKGROUNDCOLOR_MYINPUT } from '@/services/appInit/AppConstants'
 //...................................................................................
 //.  Main Line
 //...................................................................................
@@ -36,7 +40,7 @@ export default function SelectCountry(props) {
   //
   //  BackgroundColor
   //
-  const [BACKGROUNDCOLOR_MYINPUT, SetBACKGROUNDCOLOR_MYINPUT] = useState('purple')
+  const [BackgroundColor_MYINPUT, SetBackgroundColor_MYINPUT] = useState(BACKGROUNDCOLOR_MYINPUT)
   //
   //  First Time
   //
@@ -61,7 +65,7 @@ export default function SelectCountry(props) {
     //
     //  BackgroundColor
     //
-    SetBACKGROUNDCOLOR_MYINPUT(App_Env.BACKGROUNDCOLOR_MYINPUT)
+    SetBackgroundColor_MYINPUT(App_Env.BACKGROUNDCOLOR_MYINPUT)
   }
   //...................................................................................
   //  Render
@@ -82,7 +86,7 @@ export default function SelectCountry(props) {
           setInputValue(newInputValue)
         }}
         id='country-select'
-        sx={{ backgroundColor: BACKGROUNDCOLOR_MYINPUT, width: 300 }}
+        sx={{ backgroundColor: BackgroundColor_MYINPUT, width: 300 }}
         options={COUNTRIES}
         autoHighlight
         getOptionLabel={option => option.label}

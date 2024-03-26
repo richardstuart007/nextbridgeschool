@@ -24,7 +24,7 @@ export default async function apiAxios(props) {
   //
   //  Debug Settings
   //
-  debugLog = debugSettings(true)
+  debugLog = debugSettings()
   if (debugLog) console.log(consoleLogTime(debugModule, 'Start'))
   //
   //  Application Environment Variables

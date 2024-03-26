@@ -78,6 +78,14 @@ const searchTypeOptionsSmall = [{ id: 'ogtitle', title: 'Group' }]
 
 let g_allUsers = false
 let g_allUsersText = 'ALL'
+//
+//  Constants
+//
+import {
+  BACKGROUNDCOLOR_TABLEPAPER,
+  BACKGROUNDCOLOR_MYINPUT,
+  BACKGROUNDCOLOR_TABLEBODY,
+} from '@/services/appInit/AppConstants'
 //============================================================================
 //= Exported Module
 //============================================================================
@@ -105,9 +113,12 @@ export default function QuizHistory() {
   //
   //  BackgroundColor
   //
-  const [BACKGROUNDCOLOR_TABLEPAPER, SetBACKGROUNDCOLOR_TABLEPAPER] = useState('purple')
-  const [BACKGROUNDCOLOR_MYINPUT, SetBACKGROUNDCOLOR_MYINPUT] = useState('purple')
-  const [BACKGROUNDCOLOR_TABLEBODY, SetBACKGROUNDCOLOR_TABLEBODY] = useState('purple')
+  const [BackgroundColor_TABLEPAPER, SetBackgroundColor_TABLEPAPER] = useState(
+    BACKGROUNDCOLOR_TABLEPAPER
+  )
+  const [BackgroundColor_MYINPUT, SetBackgroundColor_MYINPUT] = useState(BACKGROUNDCOLOR_MYINPUT)
+  const [BackgroundColor_TABLEBODY, SetBackgroundColor_TABLEBODY] =
+    useState(BACKGROUNDCOLOR_TABLEBODY)
   const router = useRouter()
   let g_User_name = ''
   let g_User_uid = 0
@@ -152,9 +163,9 @@ export default function QuizHistory() {
     //
     //  BackgroundColor
     //
-    SetBACKGROUNDCOLOR_TABLEPAPER(App_Env.BACKGROUNDCOLOR_TABLEPAPER)
-    SetBACKGROUNDCOLOR_MYINPUT(App_Env.BACKGROUNDCOLOR_MYINPUT)
-    SetBACKGROUNDCOLOR_TABLEBODY(App_Env.BACKGROUNDCOLOR_TABLEBODY)
+    SetBackgroundColor_TABLEPAPER(App_Env.BACKGROUNDCOLOR_TABLEPAPER)
+    SetBackgroundColor_MYINPUT(App_Env.BACKGROUNDCOLOR_MYINPUT)
+    SetBackgroundColor_TABLEBODY(App_Env.BACKGROUNDCOLOR_TABLEBODY)
     //
     //  Small Screen overrides
     //
@@ -504,7 +515,7 @@ export default function QuizHistory() {
       <Paper
         className={styles.pageContent}
         sx={{
-          backgroundColor: BACKGROUNDCOLOR_TABLEPAPER,
+          backgroundColor: BackgroundColor_TABLEPAPER,
         }}
       >
         <Toolbar>
@@ -515,7 +526,7 @@ export default function QuizHistory() {
             value={searchValue}
             className={styles.searchInput}
             sx={{
-              backgroundColor: BACKGROUNDCOLOR_MYINPUT,
+              backgroundColor: BackgroundColor_MYINPUT,
               minWidth: { minWidth },
             }}
             InputProps={{
@@ -532,7 +543,7 @@ export default function QuizHistory() {
             <Box className={styles.searchInputTypeBox}>
               <MySelect
                 sx={{
-                  backgroundColor: BACKGROUNDCOLOR_MYINPUT,
+                  backgroundColor: BackgroundColor_MYINPUT,
                   minWidth: '200px',
                 }}
                 name='SearchType'
@@ -577,7 +588,7 @@ export default function QuizHistory() {
           <TblHead />
           <TableBody
             sx={{
-              backgroundColor: BACKGROUNDCOLOR_TABLEBODY,
+              backgroundColor: BackgroundColor_TABLEBODY,
             }}
           >
             {recordsAfterPagingAndSorting().map(row => (

@@ -51,7 +51,7 @@ export default function Navbar() {
   //
   //  BackgroundColor
   //
-  const [BackgroundColor_Navbar, SetBackgroundColor_Navbar] = useState('purple')
+  const [BackgroundColor_Navbar, SetBackgroundColor_Navbar] = useState(BACKGROUNDCOLOR_NAVBAR)
   //
   //  First Time
   //
@@ -77,7 +77,6 @@ export default function Navbar() {
     //
     //  BackgroundColor
     //
-    SetBackgroundColor_Navbar(BACKGROUNDCOLOR_NAVBAR)
     if (
       process.env.NEXT_PUBLIC_BACKGROUNDCOLOR_NAVBAR &&
       process.env.NEXT_PUBLIC_BACKGROUNDCOLOR_NAVBAR !== CONST_DEFAULT

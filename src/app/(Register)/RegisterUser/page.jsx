@@ -20,7 +20,6 @@ import MyButton from '@/components/Controls/MyButton'
 import MyInput from '@/components/Controls/MyInput'
 import MySelect from '@/components/Controls/MySelect'
 import { useMyForm, MyForm } from '@/components/Controls/useMyForm'
-
 //
 //  Routing
 //
@@ -30,7 +29,6 @@ import { useRouter } from 'next/navigation'
 //
 import debugSettings from '@/services/debug/debugSettings'
 import consoleLogTime from '@/services/debug/consoleLogTime'
-import { Box } from '@mui/system'
 let debugLog
 const debugModule = 'RegisterUser'
 //.............................................................................
@@ -50,6 +48,10 @@ const initialFValues = {
 //
 let validForm = false
 let App_Env
+//
+//  Constants
+//
+import { BACKGROUNDCOLOR_FORMPAPER, BACKGROUNDCOLOR_MYINPUT } from '@/services/appInit/AppConstants'
 //...................................................................................
 //.  Main Line
 //...................................................................................
@@ -69,8 +71,9 @@ export default function RegisterUser() {
   //
   //  BackgroundColor
   //
-  const [BACKGROUNDCOLOR_FORMPAPER, SetBACKGROUNDCOLOR_FORMPAPER] = useState('purple')
-  const [BACKGROUNDCOLOR_MYINPUT, SetBACKGROUNDCOLOR_MYINPUT] = useState('purple')
+  const [BackgroundColor_FORMPAPER, SetBackgroundColor_FORMPAPER] =
+    useState(BACKGROUNDCOLOR_FORMPAPER)
+  const [BackgroundColor_MYINPUT, SetBackgroundColor_MYINPUT] = useState(BACKGROUNDCOLOR_MYINPUT)
   //
   //  First Time
   //
@@ -109,8 +112,8 @@ export default function RegisterUser() {
     //
     //  BackgroundColor
     //
-    SetBACKGROUNDCOLOR_FORMPAPER(App_Env.BACKGROUNDCOLOR_FORMPAPER)
-    SetBACKGROUNDCOLOR_MYINPUT(App_Env.BACKGROUNDCOLOR_MYINPUT)
+    SetBackgroundColor_FORMPAPER(App_Env.BACKGROUNDCOLOR_FORMPAPER)
+    SetBackgroundColor_MYINPUT(App_Env.BACKGROUNDCOLOR_MYINPUT)
     //
     //  Userpwd info
     //
@@ -352,7 +355,7 @@ export default function RegisterUser() {
                 margin: 1,
                 padding: 1,
                 maxWidth: 400,
-                backgroundColor: BACKGROUNDCOLOR_FORMPAPER,
+                backgroundColor: BackgroundColor_FORMPAPER,
               }}
             >
               {/*.................................................................................................*/}
@@ -393,7 +396,7 @@ export default function RegisterUser() {
                 value={values.u_name}
                 onChange={handleInputChange}
                 error={errors.u_name}
-                sx={{ backgroundColor: BACKGROUNDCOLOR_MYINPUT, minWidth: '300px', margin: 1.5 }}
+                sx={{ backgroundColor: BackgroundColor_MYINPUT, minWidth: '300px', margin: 1.5 }}
               />
               {/*.................................................................................................*/}
               <MyInput
@@ -402,7 +405,7 @@ export default function RegisterUser() {
                 value={values.u_email}
                 onChange={handleInputChange}
                 error={errors.u_email}
-                sx={{ backgroundColor: BACKGROUNDCOLOR_MYINPUT, minWidth: '300px', margin: 1.5 }}
+                sx={{ backgroundColor: BackgroundColor_MYINPUT, minWidth: '300px', margin: 1.5 }}
               />
               {/*.................................................................................................*/}
               <MySelect
@@ -412,7 +415,7 @@ export default function RegisterUser() {
                 value={values.ogowner}
                 onChange={handleInputChange}
                 error={errors.ogowner}
-                sx={{ backgroundColor: BACKGROUNDCOLOR_MYINPUT, minWidth: '300px', margin: 1.5 }}
+                backgroundColor={BackgroundColor_MYINPUT}
                 options={App_Data_Options_Owner}
               />
               {/*.................................................................................................*/}
@@ -428,7 +431,7 @@ export default function RegisterUser() {
                 value={values.u_fedid}
                 onChange={handleInputChange}
                 error={errors.u_fedid}
-                sx={{ backgroundColor: BACKGROUNDCOLOR_MYINPUT, minWidth: '300px', margin: 1.5 }}
+                sx={{ backgroundColor: BackgroundColor_MYINPUT, minWidth: '300px', margin: 1.5 }}
               />
               {/*.................................................................................................*/}
               <Typography style={{ color: 'red', margin: 1.5 }}>{form_message}</Typography>

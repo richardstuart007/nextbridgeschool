@@ -38,6 +38,10 @@ const initialFValues = {
 }
 //
 let App_Env
+//
+//  Constants
+//
+import { BACKGROUNDCOLOR_FORMPAPER, BACKGROUNDCOLOR_MYINPUT } from '@/services/appInit/AppConstants'
 //...................................................................................
 //.  Main Line
 //...................................................................................
@@ -49,21 +53,26 @@ export default function Signin() {
   const [form_message, setForm_message] = useState('')
   const [showButtons, setShowButtons] = useState(true)
   //
-  //  Interface to Form
-  //
-  const { values, errors, setErrors, handleInputChange } = useMyForm(initialFValues, true, validate)
-  //
-  //  BackgroundColor
-  //
-  const [BACKGROUNDCOLOR_FORMPAPER, SetBACKGROUNDCOLOR_FORMPAPER] = useState('purple')
-  const [BACKGROUNDCOLOR_MYINPUT, SetBACKGROUNDCOLOR_MYINPUT] = useState('purple')
-  //
   //  First Time
   //
   useEffect(() => {
     clientFirstTime()
     // eslint-disable-next-line
   }, [])
+  //
+  //  Interface to Form
+  //
+  const { values, setValues, errors, setErrors, handleInputChange } = useMyForm(
+    initialFValues,
+    true,
+    validate
+  )
+  //
+  //  BackgroundColor
+  //
+  const [BackgroundColor_FORMPAPER, SetBackgroundColor_FORMPAPER] =
+    useState(BACKGROUNDCOLOR_FORMPAPER)
+  const [BackgroundColor_MYINPUT, SetBackgroundColor_MYINPUT] = useState(BACKGROUNDCOLOR_MYINPUT)
   //
   //  Every Time
   //
@@ -77,7 +86,7 @@ export default function Signin() {
     //
     //  Debug Settings
     //
-    debugLog = debugSettings()
+    debugLog = debugSettings(true)
     if (debugLog) console.log(consoleLogTime(debugModule, 'clientFirstTime'))
     //
     //  Application Environment Variables
@@ -89,32 +98,37 @@ export default function Signin() {
     //
     //  BackgroundColor
     //
-    SetBACKGROUNDCOLOR_FORMPAPER(App_Env.BACKGROUNDCOLOR_FORMPAPER)
-    SetBACKGROUNDCOLOR_MYINPUT(App_Env.BACKGROUNDCOLOR_MYINPUT)
+    SetBackgroundColor_FORMPAPER(App_Env.BACKGROUNDCOLOR_FORMPAPER)
+    SetBackgroundColor_MYINPUT(App_Env.BACKGROUNDCOLOR_MYINPUT)
+    //
+    //  Userpwd info
+    //
+    const User_Userspwd = sessionStorageGet({ caller: debugModule, itemName: 'User_Userspwd' })
+    if (User_Userspwd) {
+      const updValues = { ...values }
+      updValues.user = User_Userspwd.upuser
+      setValues(updValues)
+    }
+    //
+    //  Restore previous signin info
+    //
+    else {
+      const User_User = sessionStorageGet({
+        caller: debugModule,
+        itemName: 'User_User',
+      })
+      if (User_User) {
+        const updValues = { ...values }
+        updValues.user = User_User.u_user
+        setValues(updValues)
+      }
+    }
   }
   //...........................................................................
   // Client Code
   //...........................................................................
   function clientEveryTime() {
     if (debugLog) console.log(consoleLogTime(debugModule, 'clientEveryTime'))
-    try {
-      //
-      //  Restore previous signin info
-      //
-      const User_User = sessionStorageGet({
-        caller: debugModule,
-        itemName: 'User_User',
-      })
-      if (User_User) initialFValues.user = User_User.u_user
-      //
-      //  Userpwd info
-      //
-      const User_Userspwd = sessionStorageGet({ caller: debugModule, itemName: 'User_Userspwd' })
-      if (User_Userspwd) initialFValues.user = User_Userspwd.upuser
-    } catch (e) {
-      if (debugLog) console.log(consoleLogTime(debugModule, 'Catch'))
-      console.log(e)
-    }
   }
   //.............................................................................
   //.  Input field validation
@@ -342,7 +356,7 @@ export default function Signin() {
                 padding: 2,
                 margin: 2,
                 maxWidth: 400,
-                backgroundColor: BACKGROUNDCOLOR_FORMPAPER,
+                backgroundColor: BackgroundColor_FORMPAPER,
               }}
             >
               {/*.................................................................................................*/}
@@ -359,7 +373,7 @@ export default function Signin() {
                 value={values.user}
                 onChange={handleInputChange}
                 error={errors.user}
-                sx={{ backgroundColor: BACKGROUNDCOLOR_MYINPUT, minWidth: '300px', margin: 2 }}
+                sx={{ backgroundColor: BackgroundColor_MYINPUT, minWidth: '300px', margin: 2 }}
               />
 
               {/*.................................................................................................*/}
@@ -370,7 +384,7 @@ export default function Signin() {
                 value={values.password}
                 onChange={handleInputChange}
                 error={errors.password}
-                sx={{ backgroundColor: BACKGROUNDCOLOR_MYINPUT, minWidth: '300px', margin: 2 }}
+                sx={{ backgroundColor: BackgroundColor_MYINPUT, minWidth: '300px', margin: 2 }}
               />
 
               {/*.................................................................................................*/}
