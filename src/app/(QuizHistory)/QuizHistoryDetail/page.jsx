@@ -57,6 +57,7 @@ export default function QuizHistoryDetail() {
   //
   useEffect(() => {
     clientFirstTime()
+    // eslint-disable-next-line
   }, [])
   //
   //  Every Time

@@ -42,6 +42,7 @@ export default function useMyTable(records, headCells, filterFn, startPage0, set
   //
   useEffect(() => {
     clientFirstTime()
+    // eslint-disable-next-line
   }, [])
 
   records ? (recordsLength = records.length) : 0

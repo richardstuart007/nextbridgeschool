@@ -23,6 +23,7 @@ export default function QuizChoice({ quizRow, value, setValue, setId, setShowSub
   //
   useEffect(() => {
     newRow()
+    // eslint-disable-next-line
   }, [quizRow])
   //...................................................................................
   //  Load Answers array with answer element

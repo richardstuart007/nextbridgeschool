@@ -65,6 +65,7 @@ export default function RegisterPwd() {
   //
   useEffect(() => {
     clientFirstTime()
+    // eslint-disable-next-line
   }, [])
   //
   //  Every Time

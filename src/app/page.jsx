@@ -48,6 +48,7 @@ export default function Home() {
   //
   useEffect(() => {
     clientFirstTime()
+    // eslint-disable-next-line
   }, [])
   //
   //  Screen size

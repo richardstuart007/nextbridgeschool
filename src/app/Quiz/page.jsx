@@ -67,6 +67,7 @@ export default function Quiz() {
   //
   useEffect(() => {
     clientFirstTime()
+    // eslint-disable-next-line
   }, [])
   //
   //  Every Time
