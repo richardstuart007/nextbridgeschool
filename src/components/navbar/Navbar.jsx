@@ -22,7 +22,7 @@ const debugModule = 'Navbar'
 //
 //  Constants
 //
-import { BACKGROUNDCOLOR_NAVBAR } from '@/services/appInit/AppConstants'
+import { CONST_DEFAULT, BACKGROUNDCOLOR_NAVBAR } from '@/services/appInit/AppConstants'
 //...........................................................................
 // Module Main Line
 //...........................................................................
@@ -77,8 +77,11 @@ export default function Navbar() {
     //
     //  BackgroundColor
     //
-    if (BACKGROUNDCOLOR_NAVBAR) SetBackgroundColor_Navbar(BACKGROUNDCOLOR_NAVBAR)
-    if (process.env.NEXT_PUBLIC_BACKGROUNDCOLOR_NAVBAR)
+    SetBackgroundColor_Navbar(BACKGROUNDCOLOR_NAVBAR)
+    if (
+      process.env.NEXT_PUBLIC_BACKGROUNDCOLOR_NAVBAR &&
+      process.env.NEXT_PUBLIC_BACKGROUNDCOLOR_NAVBAR !== CONST_DEFAULT
+    )
       SetBackgroundColor_Navbar(process.env.NEXT_PUBLIC_BACKGROUNDCOLOR_NAVBAR)
     //
     //  Small screen

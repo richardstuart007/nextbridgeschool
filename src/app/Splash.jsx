@@ -35,14 +35,14 @@ let App_URL
 //
 //  Constants
 //
-import { BACKGROUNDCOLOR_FORMPAPER } from '@/services/appInit/AppConstants'
+import { CONST_DEFAULT, BACKGROUNDCOLOR_FORMPAPER } from '@/services/appInit/AppConstants'
 //===================================================================================
 export default function Splash() {
   //
   // State
   //
-  const [server_message, setserver_message] = useState('')
   const [connection_message, setconnection_message] = useState('')
+  const [server_message, setserver_message] = useState('')
   const [database_message, setdatabase_message] = useState('')
   const [showContinue, setshowContinue] = useState(false)
   const [showConnect, setshowConnect] = useState(false)
@@ -72,7 +72,10 @@ export default function Splash() {
     //  BackgroundColor
     //
     SetBackgroudColor_FORMPAPER(BACKGROUNDCOLOR_FORMPAPER)
-    if (process.env.NEXT_PUBLIC_BACKGROUNDCOLOR_FORMPAPER)
+    if (
+      process.env.NEXT_PUBLIC_BACKGROUNDCOLOR_FORMPAPER &&
+      process.env.NEXT_PUBLIC_BACKGROUNDCOLOR_FORMPAPER !== CONST_DEFAULT
+    )
       SetBackgroudColor_FORMPAPER(process.env.NEXT_PUBLIC_BACKGROUNDCOLOR_FORMPAPER)
     //
     //  Screen Width
@@ -131,7 +134,7 @@ export default function Splash() {
       //
       if (!rtnObj) {
         const message = 'No response from the Server'
-        setserver_message(message)
+        setconnection_message(message)
         setshowConnect(true)
         return
       }
@@ -142,7 +145,7 @@ export default function Splash() {
         let message
         rtnObj.rtnCatch ? (message = rtnObj.rtnCatchMsg) : (message = rtnObj.rtnMessage)
         if (debugLog) console.log(consoleLogTime(debugModule, 'Error Message'), message)
-        setserver_message(message)
+        setconnection_message(message)
         setshowConnect(true)
         return
       }
@@ -171,6 +174,8 @@ export default function Splash() {
       //
       if (App_Session) {
         setconnection_message(`Connected (${App_Session.v_vid})`)
+      } else {
+        setconnection_message(`Connected`)
       }
       //
       //  Create Options
