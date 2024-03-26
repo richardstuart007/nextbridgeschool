@@ -8,15 +8,15 @@ import styles from './RegisterPwd.module.css'
 //
 //  services
 //
-import writeUsersPwd from '@/services/dbApi/writeUsersPwd'
-import sessionStorageSet from '@/services/sessionStorage/sessionStorageSet'
-import sessionStorageGet from '@/services/sessionStorage/sessionStorageGet'
+import writeUsersPwd from '/src//services/dbApi/writeUsersPwd'
+import sessionStorageSet from '/src//services/sessionStorage/sessionStorageSet'
+import sessionStorageGet from '/src//services/sessionStorage/sessionStorageGet'
 //
 //  Controls
 //
-import MyButton from '@/components/Controls/MyButton'
-import MyInput from '@/components/Controls/MyInput'
-import { useMyForm, MyForm } from '@/components/Controls/useMyForm'
+import MyButton from '/src//components/Controls/MyButton'
+import MyInput from '/src//components/Controls/MyInput'
+import { useMyForm, MyForm } from '/src//components/Controls/useMyForm'
 //
 //  Routing
 //
@@ -24,8 +24,8 @@ import { useRouter } from 'next/navigation'
 //
 //  Debug Settings
 //
-import debugSettings from '@/services/debug/debugSettings'
-import consoleLogTime from '@/services/debug/consoleLogTime'
+import debugSettings from '/src//services/debug/debugSettings'
+import consoleLogTime from '/src//services/debug/consoleLogTime'
 let debugLog
 const debugModule = 'RegisterPwd'
 //
@@ -38,7 +38,10 @@ const initialFValues = {
 //
 //  Constants
 //
-import { BACKGROUNDCOLOR_FORMPAPER, BACKGROUNDCOLOR_MYINPUT } from '@/services/appInit/AppConstants'
+import {
+  BACKGROUNDCOLOR_FORMPAPER,
+  BACKGROUNDCOLOR_MYINPUT,
+} from '/src//services/appInit/AppConstants'
 //...................................................................................
 //.  Main Line
 //...................................................................................

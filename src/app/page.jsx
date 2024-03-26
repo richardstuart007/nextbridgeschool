@@ -8,14 +8,14 @@ import useMediaQuery from '@mui/material/useMediaQuery'
 //
 //  services
 //
-import AppInit from '@/services/appInit/AppInit'
-import Splash from '@/app/Splash'
-import sessionStorageSet from '@/services/sessionStorage/sessionStorageSet'
+import AppInit from '/src/services/appInit/AppInit'
+import Splash from '/src//app/Splash'
+import sessionStorageSet from '/src//services/sessionStorage/sessionStorageSet'
 //
 //  Debug Settings
 //
-import debugSettings from '@/services/debug/debugSettings'
-import consoleLogTime from '@/services/debug/consoleLogTime'
+import debugSettings from '/src//services/debug/debugSettings'
+import consoleLogTime from '/src//services/debug/consoleLogTime'
 let debugLog = false
 const debugModule = 'Home'
 //...........................................................................

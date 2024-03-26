@@ -8,14 +8,14 @@ import styles from './Splash.module.css'
 //
 //  services
 //
-import apiAxios from '@/services/dbApi/apiAxios'
-import writeSession from '@/services/dbApi/writeSession'
-import apiCreateOptions from '@/services/dbApi/apiCreateOptions'
-import sessionStorageGet from '@/services/sessionStorage/sessionStorageGet'
+import apiAxios from '/src//services/dbApi/apiAxios'
+import writeSession from '/src//services/dbApi/writeSession'
+import apiCreateOptions from '/src//services/dbApi/apiCreateOptions'
+import sessionStorageGet from '/src//services/sessionStorage/sessionStorageGet'
 //
 //  Controls
 //
-import MyButton from '@/components/Controls/MyButton'
+import MyButton from '/src//components/Controls/MyButton'
 //
 //  Routing
 //
@@ -23,8 +23,8 @@ import { useRouter } from 'next/navigation'
 //
 //  Debug Settings
 //
-import debugSettings from '@/services/debug/debugSettings'
-import consoleLogTime from '@/services/debug/consoleLogTime'
+import debugSettings from '/src//services/debug/debugSettings'
+import consoleLogTime from '/src//services/debug/consoleLogTime'
 let debugLog = false
 const debugModule = 'Splash'
 //
@@ -36,7 +36,7 @@ let App_Session
 //
 //  Constants
 //
-import { CONST_DEFAULT, BACKGROUNDCOLOR_FORMPAPER } from '@/services/appInit/AppConstants'
+import { CONST_DEFAULT, BACKGROUNDCOLOR_FORMPAPER } from '/src//services/appInit/AppConstants'
 //===================================================================================
 export default function Splash() {
   //

@@ -7,7 +7,7 @@ import { Table, TableBody, Card } from '@mui/material'
 //
 //  services
 //
-import sessionStorageGet from '@/services/sessionStorage/sessionStorageGet'
+import sessionStorageGet from '/src//services/sessionStorage/sessionStorageGet'
 //
 //  Sub Components
 //

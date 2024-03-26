@@ -8,18 +8,18 @@ import styles from './RegisterUser.module.css'
 //
 //  services
 //
-import writeUsers from '@/services/dbApi/writeUsers'
-import writeUsersowner from '@/services/dbApi/writeUsersowner'
-import SelectCountry from '@/services/SelectCountry/SelectCountry'
-import sessionStorageGet from '@/services/sessionStorage/sessionStorageGet'
-import sessionStorageSet from '@/services/sessionStorage/sessionStorageSet'
+import writeUsers from '/src//services/dbApi/writeUsers'
+import writeUsersowner from '/src//services/dbApi/writeUsersowner'
+import SelectCountry from '/src//services/SelectCountry/SelectCountry'
+import sessionStorageGet from '/src//services/sessionStorage/sessionStorageGet'
+import sessionStorageSet from '/src//services/sessionStorage/sessionStorageSet'
 //
 //  Controls
 //
-import MyButton from '@/components/Controls/MyButton'
-import MyInput from '@/components/Controls/MyInput'
-import MySelect from '@/components/Controls/MySelect'
-import { useMyForm, MyForm } from '@/components/Controls/useMyForm'
+import MyButton from '/src//components/Controls/MyButton'
+import MyInput from '/src//components/Controls/MyInput'
+import MySelect from '/src//components/Controls/MySelect'
+import { useMyForm, MyForm } from '/src//components/Controls/useMyForm'
 //
 //  Routing
 //
@@ -27,8 +27,8 @@ import { useRouter } from 'next/navigation'
 //
 //  Debug Settings
 //
-import debugSettings from '@/services/debug/debugSettings'
-import consoleLogTime from '@/services/debug/consoleLogTime'
+import debugSettings from '/src//services/debug/debugSettings'
+import consoleLogTime from '/src//services/debug/consoleLogTime'
 let debugLog
 const debugModule = 'RegisterUser'
 //.............................................................................
@@ -51,7 +51,10 @@ let App_Env
 //
 //  Constants
 //
-import { BACKGROUNDCOLOR_FORMPAPER, BACKGROUNDCOLOR_MYINPUT } from '@/services/appInit/AppConstants'
+import {
+  BACKGROUNDCOLOR_FORMPAPER,
+  BACKGROUNDCOLOR_MYINPUT,
+} from '/src//services/appInit/AppConstants'
 //...................................................................................
 //.  Main Line
 //...................................................................................
