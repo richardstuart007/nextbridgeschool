@@ -73,12 +73,6 @@ export default function Signin() {
   const [BackgroundColor_FORMPAPER, SetBackgroundColor_FORMPAPER] =
     useState(BACKGROUNDCOLOR_FORMPAPER)
   const [BackgroundColor_MYINPUT, SetBackgroundColor_MYINPUT] = useState(BACKGROUNDCOLOR_MYINPUT)
-  //
-  //  Every Time
-  //
-  useEffect(() => {
-    clientEveryTime()
-  })
   //...........................................................................
   // First Time
   //...........................................................................
@@ -86,7 +80,7 @@ export default function Signin() {
     //
     //  Debug Settings
     //
-    debugLog = debugSettings(true)
+    debugLog = debugSettings()
     if (debugLog) console.log(consoleLogTime(debugModule, 'clientFirstTime'))
     //
     //  Application Environment Variables
@@ -101,7 +95,7 @@ export default function Signin() {
     SetBackgroundColor_FORMPAPER(App_Env.BACKGROUNDCOLOR_FORMPAPER)
     SetBackgroundColor_MYINPUT(App_Env.BACKGROUNDCOLOR_MYINPUT)
     //
-    //  Userpwd info
+    //  New Registered User
     //
     const User_Userspwd = sessionStorageGet({ caller: debugModule, itemName: 'User_Userspwd' })
     if (User_Userspwd) {
@@ -109,26 +103,6 @@ export default function Signin() {
       updValues.user = User_Userspwd.upuser
       setValues(updValues)
     }
-    //
-    //  Restore previous signin info
-    //
-    else {
-      const User_User = sessionStorageGet({
-        caller: debugModule,
-        itemName: 'User_User',
-      })
-      if (User_User) {
-        const updValues = { ...values }
-        updValues.user = User_User.u_user
-        setValues(updValues)
-      }
-    }
-  }
-  //...........................................................................
-  // Client Code
-  //...........................................................................
-  function clientEveryTime() {
-    if (debugLog) console.log(consoleLogTime(debugModule, 'clientEveryTime'))
   }
   //.............................................................................
   //.  Input field validation

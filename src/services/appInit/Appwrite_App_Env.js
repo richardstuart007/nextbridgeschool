@@ -134,8 +134,8 @@ export default function Appwrite_App_Env() {
   //
   //  Environment (Development/Production)
   //
-  if (process.env.NODE_ENV && process.env.NODE_ENV !== CONST_DEFAULT)
-    App_Env.NODE_ENV = process.env.NODE_ENV
+  if (process.env.NEXT_PUBLIC_NODE_ENV && process.env.NEXT_PUBLIC_NODE_ENV !== CONST_DEFAULT)
+    App_Env.NODE_ENV = process.env.NEXT_PUBLIC_NODE_ENV
   //
   //  Database Production (Env Variable)
   //
