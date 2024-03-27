@@ -5,8 +5,8 @@ import apiRowCrud from './apiRowCrud'
 //
 //  Debug Settings
 //
-import debugSettings from '/src/services/debug/debugSettings'
-import consoleLogTime from '/src/services/debug/consoleLogTime'
+import debugSettings from '@/services/debug/debugSettings'
+import consoleLogTime from '@/services/debug/consoleLogTime'
 let debugLog
 const debugModule = 'writeUsersowner'
 //===================================================================================

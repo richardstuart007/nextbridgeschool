@@ -7,17 +7,17 @@ import { Paper, Grid } from '@mui/material'
 //
 //  Controls
 //
-import MyButton from '/src/components/Controls/MyButton'
-import MyInput from '/src/components/Controls/MyInput'
-import MyCheckbox from '/src/components/Controls/MyCheckbox'
-import PageHeader from '/src/components/Controls/PageHeader'
-import { useMyForm, MyForm } from '/src/components/Controls/useMyForm'
+import MyButton from '@/components/Controls/MyButton'
+import MyInput from '@/components/Controls/MyInput'
+import MyCheckbox from '@/components/Controls/MyCheckbox'
+import PageHeader from '@/components/Controls/PageHeader'
+import { useMyForm, MyForm } from '@/components/Controls/useMyForm'
 //
 //  Services
 //
-import apiRowCrud from '/src/services/dbApi/apiRowCrud'
-import sessionStorageGet from '/src/services/sessionStorage/sessionStorageGet'
-import sessionStorageSet from '/src/services/sessionStorage/sessionStorageSet'
+import apiRowCrud from '@/services/dbApi/apiRowCrud'
+import sessionStorageGet from '@/services/sessionStorage/sessionStorageGet'
+import sessionStorageSet from '@/services/sessionStorage/sessionStorageSet'
 //
 //  Routing
 //
@@ -25,8 +25,8 @@ import { useRouter } from 'next/navigation'
 //
 //  Debug Settings
 //
-import debugSettings from '/src/services/debug/debugSettings'
-import consoleLogTime from '/src/services/debug/consoleLogTime'
+import debugSettings from '@/services/debug/debugSettings'
+import consoleLogTime from '@/services/debug/consoleLogTime'
 let debugLog = false
 const debugModule = 'UsersSettings'
 //
@@ -46,10 +46,7 @@ const initialFValues = {
 //
 //  Constants
 //
-import {
-  BACKGROUNDCOLOR_FORMPAPER,
-  BACKGROUNDCOLOR_MYINPUT,
-} from '/src/services/appInit/AppConstants'
+import { BACKGROUNDCOLOR_FORMPAPER, BACKGROUNDCOLOR_MYINPUT } from '@/services/appInit/AppConstants'
 //...................................................................................
 //.  Main Line
 //...................................................................................

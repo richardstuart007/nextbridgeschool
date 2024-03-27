@@ -21,17 +21,17 @@ import SwitchAccountIcon from '@mui/icons-material/SwitchAccount'
 //
 //  Controls
 //
-import MyButton from '/src/components/Controls/MyButton'
-import MyInput from '/src/components/Controls/MyInput'
-import MySelect from '/src/components/Controls/MySelect'
-import PageHeader from '/src/components/Controls/PageHeader'
-import useMyTable from '/src/components/Controls/useMyTable'
+import MyButton from '@/components/Controls/MyButton'
+import MyInput from '@/components/Controls/MyInput'
+import MySelect from '@/components/Controls/MySelect'
+import PageHeader from '@/components/Controls/PageHeader'
+import useMyTable from '@/components/Controls/useMyTable'
 //
 //  Services
 //
-import apiRowCrud from '/src/services/dbApi/apiRowCrud'
-import sessionStorageSet from '/src/services/sessionStorage/sessionStorageSet'
-import sessionStorageGet from '/src/services/sessionStorage/sessionStorageGet'
+import apiRowCrud from '@/services/dbApi/apiRowCrud'
+import sessionStorageSet from '@/services/sessionStorage/sessionStorageSet'
+import sessionStorageGet from '@/services/sessionStorage/sessionStorageGet'
 //
 //  Routing
 //
@@ -39,8 +39,8 @@ import { useRouter } from 'next/navigation'
 //
 //  Debug Settings
 //
-import debugSettings from '/src/services/debug/debugSettings'
-import consoleLogTime from '/src/services/debug/consoleLogTime'
+import debugSettings from '@/services/debug/debugSettings'
+import consoleLogTime from '@/services/debug/consoleLogTime'
 let debugLog
 const debugModule = 'SwitchUser'
 //
@@ -70,7 +70,7 @@ import {
   BACKGROUNDCOLOR_TABLEPAPER,
   BACKGROUNDCOLOR_MYINPUT,
   BACKGROUNDCOLOR_TABLEBODY,
-} from '/src/services/appInit/AppConstants'
+} from '@/services/appInit/AppConstants'
 //...................................................................................
 //.  Main Line
 //...................................................................................

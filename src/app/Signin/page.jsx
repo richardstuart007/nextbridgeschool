@@ -8,16 +8,16 @@ import styles from './Signin.module.css'
 //
 //  services
 //
-import apiAxios from '/src/services/dbApi/apiAxios'
-import buildDataUser from '/src/services/builds/buildDataUser'
-import sessionStorageGet from '/src/services/sessionStorage/sessionStorageGet'
-import sessionStorageSet from '/src/services/sessionStorage/sessionStorageSet'
+import apiAxios from '@/services/dbApi/apiAxios'
+import buildDataUser from '@/services/builds/buildDataUser'
+import sessionStorageGet from '@/services/sessionStorage/sessionStorageGet'
+import sessionStorageSet from '@/services/sessionStorage/sessionStorageSet'
 //
 //  Controls
 //
-import MyButton from '/src/components/Controls/MyButton'
-import MyInput from '/src/components/Controls/MyInput'
-import { useMyForm, MyForm } from '/src/components/Controls/useMyForm'
+import MyButton from '@/components/Controls/MyButton'
+import MyInput from '@/components/Controls/MyInput'
+import { useMyForm, MyForm } from '@/components/Controls/useMyForm'
 //
 //  Routing
 //
@@ -25,8 +25,8 @@ import { useRouter } from 'next/navigation'
 //
 //  Debug Settings
 //
-import debugSettings from '/src/services/debug/debugSettings'
-import consoleLogTime from '/src/services/debug/consoleLogTime'
+import debugSettings from '@/services/debug/debugSettings'
+import consoleLogTime from '@/services/debug/consoleLogTime'
 let debugLog
 const debugModule = 'Signin'
 //
@@ -41,10 +41,7 @@ let App_Env
 //
 //  Constants
 //
-import {
-  BACKGROUNDCOLOR_FORMPAPER,
-  BACKGROUNDCOLOR_MYINPUT,
-} from '/src/services/appInit/AppConstants'
+import { BACKGROUNDCOLOR_FORMPAPER, BACKGROUNDCOLOR_MYINPUT } from '@/services/appInit/AppConstants'
 //...................................................................................
 //.  Main Line
 //...................................................................................

@@ -8,21 +8,21 @@ import { usePathname, useRouter } from 'next/navigation'
 //
 //  Common Components
 //
-import MyButton from '/src/components/Controls/MyButton'
-import sessionStorageGet from '/src/services/sessionStorage/sessionStorageGet'
-import sessionStorageSet from '/src/services/sessionStorage/sessionStorageSet'
-import DarkModeToggle from '/src/components/Navbar/DarkModeToggle/DarkModeToggle'
+import MyButton from '@/components/Controls/MyButton'
+import sessionStorageGet from '@/services/sessionStorage/sessionStorageGet'
+import sessionStorageSet from '@/services/sessionStorage/sessionStorageSet'
+import DarkModeToggle from '@/components/Navbar/DarkModeToggle/DarkModeToggle'
 //
 //  Debug Settings
 //
-import debugSettings from '/src/services/debug/debugSettings'
-import consoleLogTime from '/src/services/debug/consoleLogTime'
+import debugSettings from '@/services/debug/debugSettings'
+import consoleLogTime from '@/services/debug/consoleLogTime'
 let debugLog
 const debugModule = 'Navbar'
 //
 //  Constants
 //
-import { CONST_DEFAULT, BACKGROUNDCOLOR_NAVBAR } from '/src/services/appInit/AppConstants'
+import { CONST_DEFAULT, BACKGROUNDCOLOR_NAVBAR } from '@/services/appInit/AppConstants'
 //...........................................................................
 // Module Main Line
 //...........................................................................

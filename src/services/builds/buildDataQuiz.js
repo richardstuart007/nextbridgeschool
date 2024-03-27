@@ -1,13 +1,13 @@
 //
 //  services
 //
-import sessionStorageGet from '/src/services/sessionStorage/sessionStorageGet'
-import sessionStorageSet from '/src/services/sessionStorage/sessionStorageSet'
+import sessionStorageGet from '@/services/sessionStorage/sessionStorageGet'
+import sessionStorageSet from '@/services/sessionStorage/sessionStorageSet'
 //
 //  Debug Settings
 //
-import debugSettings from '/src/services/debug/debugSettings'
-import consoleLogTime from '/src/services/debug/consoleLogTime'
+import debugSettings from '@/services/debug/debugSettings'
+import consoleLogTime from '@/services/debug/consoleLogTime'
 let debugLog
 const debugModule = 'buildDataQuiz'
 //

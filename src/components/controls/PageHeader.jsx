@@ -7,12 +7,12 @@ import styles from './PageHeader.module.css'
 //
 //  Services
 //
-import sessionStorageGet from '/src/services/sessionStorage/sessionStorageGet'
+import sessionStorageGet from '@/services/sessionStorage/sessionStorageGet'
 //
 //  Debug Settings
 //
-import debugSettings from '/src/services/debug/debugSettings'
-import consoleLogTime from '/src/services/debug/consoleLogTime'
+import debugSettings from '@/services/debug/debugSettings'
+import consoleLogTime from '@/services/debug/consoleLogTime'
 let debugLog = false
 const debugModule = 'PageHeader'
 //=====================================================================================
